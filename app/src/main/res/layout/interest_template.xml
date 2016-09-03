@@ -20,6 +20,7 @@
 
         <TextView
             android:id="@+id/filter_name"
+            android:layout_centerHorizontal="true"
             android:paddingTop="@dimen/template_name_padding_top"
             android:layout_below="@id/filter_img"
             android:layout_width="wrap_content"

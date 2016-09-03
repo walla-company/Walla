@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/event_height"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/event_details_container"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/event_time"
+                style="@style/event_time"
+                android:paddingTop="@dimen/time_padding_top"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sample_time" />
+
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_width="@dimen/category_box_width"
+                android:layout_height="@dimen/category_box_height"
+                android:background="@drawable/rounded_corners">
+
+                <TextView
+                    android:id="@+id/event_category"
+                    style="@style/event_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/sample_category" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:paddingLeft="@dimen/title_box_padding_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.75">
+
+            <TextView
+                android:id="@+id/event_title"
+                style="@style/event_title"
+                android:maxLines="1"
+                android:paddingTop="@dimen/title_padding_top"
+                android:text="Event Title Goes Here"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/event_creator"
+                android:layout_below="@id/event_title"
+                android:paddingTop="@dimen/creator_padding_top"
+                android:text="@string/sample_poster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

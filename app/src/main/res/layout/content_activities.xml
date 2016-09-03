@@ -38,11 +38,13 @@
 
     <RelativeLayout
         android:paddingLeft="@dimen/activities_list_padding"
+        android:paddingRight="@dimen/activities_list_padding"
         android:layout_below="@+id/interests_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ListView
+            android:id="@+id/events"
             android:background="@color/White"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

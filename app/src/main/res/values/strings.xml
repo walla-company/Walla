@@ -7,4 +7,7 @@
     <string name="write">Write</string>
     <string name="title_activity_activities">Activities</string>
     <string name="filter_title">Filter by interest</string>
+    <string name="sample_category">Other</string>
+    <string name="sample_poster">posted by Someone</string>
+    <string name="sample_time">12:00 AM</string>
 </resources>

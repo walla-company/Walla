@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 public class Activities extends AppCompatActivity implements View.OnClickListener {
 
     RecyclerView rv;
+    ListView lv;
     RelativeLayout profile;
 
     @Override
@@ -27,6 +29,8 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_activities);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        initUi();
 
     }
 
@@ -38,6 +42,15 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
         profile = (RelativeLayout) findViewById(R.id.profile_btn);
         profile.setOnClickListener(this);
+
+        lv = (ListView) findViewById(R.id.events);
+
+        List<Event> events = new ArrayList<>();
+        events.add(new Event("Event Title Goes Here", "Other", "12:00 AM", "Arya Stark"));
+
+        EventAdapter adp = new EventAdapter(this, R.layout.event_template, events);
+        lv.setAdapter(adp);
+
 
         List<Interests> interests = new ArrayList<>();
         interests.add(new Interests("All", R.drawable.ic_select_all));

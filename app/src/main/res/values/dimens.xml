@@ -27,7 +27,15 @@
     <dimen name="filters_width">50dp</dimen>
     <dimen name="interest_width">80dp</dimen>
     <dimen name="interest_img_size">50dp</dimen>
-    <dimen name="activities_list_padding">20dp</dimen>
+    <dimen name="activities_list_padding">15dp</dimen>
     <dimen name="template_name_padding_top">4dp</dimen>
+    <dimen name="event_height">80dp</dimen>
+    <dimen name="event_details_container">60dp</dimen>
+    <dimen name="time_padding_top">10dp</dimen>
+    <dimen name="category_box_width">70dp</dimen>
+    <dimen name="category_box_height">25dp</dimen>
+    <dimen name="title_box_padding_left">5dp</dimen>
+    <dimen name="title_padding_top">10dp</dimen>
+    <dimen name="creator_padding_top">15dp</dimen>
 
 </resources>
