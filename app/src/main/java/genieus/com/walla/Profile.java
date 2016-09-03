@@ -1,5 +1,6 @@
 package genieus.com.walla;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,10 +10,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
-public class Profile extends AppCompatActivity {
+public class Profile extends AppCompatActivity implements View.OnClickListener{
 
     ListView lv;
+    RelativeLayout activities;
     final String[] settings = new String[]{"My Calendar", "Account Settings", "Logout"};
 
     @Override
@@ -31,6 +34,9 @@ public class Profile extends AppCompatActivity {
         SettingsAdapter adapter = new SettingsAdapter(getBaseContext(), R.layout.settings_template, settings);
         lv.setAdapter(adapter);
 
+        activities = (RelativeLayout) findViewById(R.id.activities_btn);
+        activities.setOnClickListener(this);
+
     }
 
     @Override
@@ -48,5 +54,13 @@ public class Profile extends AppCompatActivity {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.activities_btn){
+            Intent intent = new Intent(this, Activities.class);
+            startActivity(intent);
+        }
     }
 }

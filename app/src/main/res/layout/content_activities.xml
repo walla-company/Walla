@@ -20,6 +20,8 @@
         android:layout_height="wrap_content" />
 
     <RelativeLayout
+        android:id="@+id/interests_container"
+        android:layout_marginBottom="@dimen/activities_list_padding"
         android:background="@color/white"
         android:layout_below="@id/filter_title"
         android:layout_width="match_parent"
@@ -33,6 +35,75 @@
 
     </RelativeLayout>
 
+
+    <RelativeLayout
+        android:paddingLeft="@dimen/activities_list_padding"
+        android:layout_below="@+id/interests_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:background="@color/White"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_nav_menu"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_bar_hieght"
+        android:layout_alignParentBottom="true"
+        android:background="@color/Black"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:id="@+id/activities_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/White"
+            android:paddingTop="@dimen/bottom_menu_padding">
+
+            <RelativeLayout
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_activities" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/White"
+            android:paddingTop="@dimen/bottom_menu_padding">
+
+            <RelativeLayout
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_profile_blank" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
 </RelativeLayout>
