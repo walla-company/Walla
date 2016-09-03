@@ -5,4 +5,6 @@
     <string name="default_email">netid@duke.edu</string>
     <string name="profile_activity_name">Profile</string>
     <string name="write">Write</string>
+    <string name="title_activity_activities">Activities</string>
+    <string name="filter_title">Filter by interest</string>
 </resources>

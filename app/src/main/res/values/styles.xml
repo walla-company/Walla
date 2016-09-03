@@ -32,4 +32,9 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="filter_title">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

@@ -36,7 +36,7 @@ public class SettingsAdapter extends ArrayAdapter<String> {
             setting_name.setText("Logout");
         }else{
             setting_name.setText(settings[position]);
-            setting_name.setTextColor(Color.parseColor("#d3d3d3"));
+            setting_name.setTextColor(Color.parseColor("#6F6F6F"));
         }
 
         return convertView;
