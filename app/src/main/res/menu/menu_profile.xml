@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="genieus.com.walla.Profile">
+
+    <item
+        android:icon="@drawable/ic_write"
+        android:id="@+id/action_write"
+        android:orderInCategory="100"
+        android:title="@string/write"
+        app:showAsAction="ifRoom" />
+</menu>

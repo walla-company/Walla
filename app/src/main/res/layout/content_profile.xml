@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/LightGrey"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="genieus.com.walla.Profile"
+    tools:showIn="@layout/activity_profile">
+
+    <RelativeLayout
+        android:id="@+id/user_info"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_idtab_height"
+        android:background="@color/White">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="@dimen/profile_pic_width"
+            android:layout_height="@dimen/profile_pic_height"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/profile_pic_left_margin"
+            android:background="@drawable/circle_image"
+            android:src="@mipmap/ic_logo" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/user_info_margin_left"
+            android:layout_toRightOf="@id/profile_pic">
+
+            <TextView
+                android:id="@+id/user_name"
+                style="@style/username_style"
+                android:layout_width="@dimen/name_width"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/default_username" />
+
+            <TextView
+                android:id="@+id/user_email"
+                style="@style/email"
+                android:layout_width="@dimen/name_width"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_name"
+                android:layout_marginTop="@dimen/email_padding_top"
+                android:maxLines="1"
+                android:text="@string/default_email" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/profile_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_info"
+        android:layout_marginTop="@dimen/optionslv_margin_top"
+        android:background="@color/White" />
+
+    <LinearLayout
+        android:id="@+id/bottom_nav_menu"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_bar_hieght"
+        android:layout_alignParentBottom="true"
+        android:background="@color/Black"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:id="@+id/activities_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/White"
+            android:paddingTop="@dimen/bottom_menu_padding">
+
+            <RelativeLayout
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_activities" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/White"
+            android:paddingTop="@dimen/bottom_menu_padding">
+
+            <RelativeLayout
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_profile_blank" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

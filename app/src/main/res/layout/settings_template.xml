@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/settings_template_height"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/setting_name"
+        style="@style/setting_option"
+        android:paddingLeft="@dimen/setting_left_padding"
+        android:text="sample"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
