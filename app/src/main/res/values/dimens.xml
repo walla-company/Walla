@@ -37,5 +37,8 @@
     <dimen name="title_box_padding_left">5dp</dimen>
     <dimen name="title_padding_top">10dp</dimen>
     <dimen name="creator_padding_top">15dp</dimen>
+    <dimen name="edit_text_inner_padding_left">8dp</dimen>
+    <dimen name="edit_text_height">50dp</dimen>
+    <dimen name="login_spacing">15dp</dimen>
 
 </resources>

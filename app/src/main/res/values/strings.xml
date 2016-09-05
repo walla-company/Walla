@@ -10,4 +10,9 @@
     <string name="sample_category">Other</string>
     <string name="sample_poster">posted by Someone</string>
     <string name="sample_time">12:00 AM</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_signup">Signup</string>
+    <string name="title_activity_create">Create</string>
+    <string name="login">Login</string>
+    <string name="signup_prompt"><u>Don\'t have an account? Sign up here</u></string>
 </resources>

@@ -9,10 +9,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-public class Profile extends AppCompatActivity implements View.OnClickListener{
+public class Profile extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     ListView lv;
     RelativeLayout activities;
@@ -37,6 +38,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
         activities = (RelativeLayout) findViewById(R.id.activities_btn);
         activities.setOnClickListener(this);
 
+        lv.setOnItemClickListener(this);
+    }
+
+    private void logout(){
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
     }
 
     @Override
@@ -61,6 +68,14 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
         if(v.getId() == R.id.activities_btn){
             Intent intent = new Intent(this, Activities.class);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch(settings[position]){
+            case "Logout":
+                logout();
         }
     }
 }
