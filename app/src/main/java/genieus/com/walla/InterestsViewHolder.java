@@ -2,6 +2,7 @@ package genieus.com.walla;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -11,12 +12,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class InterestsViewHolder extends RecyclerView.ViewHolder {
 
-    CircleImageView civ;
+    ImageView iv;
     TextView tv;
 
     public InterestsViewHolder(View itemView) {
         super(itemView);
-        civ = (CircleImageView) itemView.findViewById(R.id.filter_img);
+        iv = (ImageView) itemView.findViewById(R.id.filter_img);
         tv = (TextView) itemView.findViewById(R.id.filter_name);
     }
 }

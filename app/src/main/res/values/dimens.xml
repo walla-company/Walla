@@ -26,8 +26,8 @@
     <dimen name="filters_height">80dp</dimen>
     <dimen name="filters_width">50dp</dimen>
     <dimen name="interest_width">80dp</dimen>
-    <dimen name="interest_img_size">50dp</dimen>
-    <dimen name="activities_list_padding">15dp</dimen>
+    <dimen name="interest_img_size">40dp</dimen>
+    <dimen name="activities_list_padding">10dp</dimen>
     <dimen name="template_name_padding_top">4dp</dimen>
     <dimen name="event_height">80dp</dimen>
     <dimen name="event_details_container">60dp</dimen>

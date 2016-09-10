@@ -17,7 +17,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
     ListView lv;
     RelativeLayout activities;
-    final String[] settings = new String[]{"My Calendar", "Account Settings", "Logout"};
+    final String[] settings = new String[]{"My Interests", "My Calendar", "Account Settings", "Logout"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,16 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
     private void logout(){
         Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+    }
+
+    private void showInterests(){
+        Intent intent = new Intent(this, MyInterests.class);
+        startActivity(intent);
+    }
+
+    private void showSettings(){
+        Intent intent = new Intent(this, Settings.class);
         startActivity(intent);
     }
 
@@ -76,6 +86,13 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
         switch(settings[position]){
             case "Logout":
                 logout();
+                break;
+            case "My Interests":
+                showInterests();
+                break;
+            case "Account Settings":
+                showSettings();
         }
+
     }
 }

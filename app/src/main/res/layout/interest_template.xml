@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/filter_img"
             android:src="@mipmap/ic_games"
             android:layout_width="@dimen/interest_img_size"
@@ -21,7 +21,6 @@
         <TextView
             android:id="@+id/filter_name"
             android:layout_centerHorizontal="true"
-            android:paddingTop="@dimen/template_name_padding_top"
             android:layout_below="@id/filter_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -62,4 +62,22 @@
         <item name="android:textColor">@color/White</item>
     </style>
 
+    <style name="char_count">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="interest">
+        <item name="android:textColorHint">@color/colorPrimary</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="time">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="create_bottom_msgs">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
 </resources>

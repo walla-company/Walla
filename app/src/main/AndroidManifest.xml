@@ -33,6 +33,14 @@
         <activity
             android:name=".Create"
             android:label="@string/title_activity_create"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MyInterests"
+            android:label="@string/title_activity_my_interests"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -80,6 +80,11 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if(id == R.id.action_write){
+            Intent intent = new Intent(this, Create.class);
+            startActivity(intent);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

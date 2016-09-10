@@ -31,7 +31,7 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<InterestsViewHolder
     public void onBindViewHolder(InterestsViewHolder holder, int position) {
         Interests i = interests.get(position);
 
-        holder.civ.setImageResource(i.getImg());
+        holder.iv.setImageResource(i.getImg());
         holder.tv.setText(i.getName());
     }
 
