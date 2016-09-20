@@ -76,8 +76,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/White"
-            android:paddingTop="@dimen/bottom_menu_padding">
+            android:background="@color/White">
 
             <RelativeLayout
                 android:layout_centerHorizontal="true"
@@ -85,12 +84,54 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/act_img"
+                    android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_activities" />
 
+                <TextView
+                    android:id="@+id/activities_txt"
+                    android:textSize="11sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/act_img"
+                    android:text="Activities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
             </RelativeLayout>
 
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/calendar_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/White">
+
+            <RelativeLayout
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/cal_img"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_calendar" />
+
+                <TextView
+                    android:id="@+id/calendar_txt"
+                    android:textSize="11sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/cal_img"
+                    android:text="My Calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
@@ -100,17 +141,29 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/White"
-            android:paddingTop="@dimen/bottom_menu_padding">
+            android:paddingTop="0dp">
 
             <RelativeLayout
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/profile_img"
+                    android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_profile_blank" />
+
+                <TextView
+                    android:id="@+id/profile_txt"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="11sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/profile_img"
+                    android:text="Profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </RelativeLayout>
 

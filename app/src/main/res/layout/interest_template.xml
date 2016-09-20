@@ -4,31 +4,44 @@
     android:layout_height="@dimen/filters_height">
 
     <RelativeLayout
+        android:id="@+id/interest_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    
+
     <RelativeLayout
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        
-        <ImageView
-            android:id="@+id/filter_img"
-            android:src="@mipmap/ic_games"
-            android:layout_width="@dimen/interest_img_size"
-            android:layout_height="@dimen/interest_img_size" />
+
+        <RelativeLayout
+            android:id="@+id/container"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/circle_grey"
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+
+
+                <ImageView
+                    android:id="@+id/filter_img"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/games"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp" />
+
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/filter_name"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/filter_img"
+            android:layout_below="@id/container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="sample"/>
 
     </RelativeLayout>
 
-        
+
     </RelativeLayout>
 
 

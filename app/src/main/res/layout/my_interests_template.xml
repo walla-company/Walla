@@ -14,6 +14,7 @@
     
     <Switch
         android:id="@+id/interest_toggle"
+        android:backgroundTint="@color/colorPrimary"
         android:layout_alignParentRight="true"
         android:paddingRight="16dp"
         android:layout_centerVertical="true"

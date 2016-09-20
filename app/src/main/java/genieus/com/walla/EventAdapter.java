@@ -35,16 +35,16 @@ public class EventAdapter extends ArrayAdapter<String> {
         }
 
         TextView time = (TextView) convertView.findViewById(R.id.event_time);
-        TextView category = (TextView) convertView.findViewById(R.id.event_category);
         TextView title = (TextView) convertView.findViewById(R.id.event_title);
+        TextView date = (TextView) convertView.findViewById(R.id.event_date);
         TextView creator =  (TextView) convertView.findViewById(R.id.event_creator);
 
         Event event = events.get(position);
 
+        date.setText(event.getDatePosted());
         time.setText(event.getTimePosted());
-        category.setText(event.getEventCateogory());
         title.setText(event.getEventTitle());
-        creator.setText("Posted by " + event.getPostedBy());
+        creator.setText("posted by " + event.getPostedBy());
 
         return convertView;
     }

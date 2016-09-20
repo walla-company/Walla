@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "261500518113",
+    "firebase_url": "https://walla-launch.firebaseio.com",
+    "project_id": "walla-launch",
+    "storage_bucket": "walla-launch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261500518113:android:8460dd65bad53805",
+        "android_client_info": {
+          "package_name": "genieus.com.walla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "261500518113-peds7c73q0ku56a3qbrn82ge3fpcbq8l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-S5bGLJ-g-lJN6GmH7UarsVglXGaxBh4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

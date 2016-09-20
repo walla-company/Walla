@@ -34,7 +34,7 @@
 
     <style name="filter_title">
         <item name="android:textSize">17sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/DarkGray</item>
     </style>
 
     <style name="event_category">
@@ -43,12 +43,12 @@
     </style>
 
     <style name="event_time">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="event_title">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="login_btn">

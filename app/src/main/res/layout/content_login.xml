@@ -6,94 +6,61 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="genieus.com.walla.Login"
-    tools:showIn="@layout/activity_login">
+    tools:showIn="@layout/activity_login"
+    android:background="@color/colorPrimary">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:background="@mipmap/logo_walla"
-        tools:context=".Login">
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <android.support.v7.widget.CardView
+        <EditText
+            android:id="@+id/enter_email"
+            android:hint="Duke Email Address"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/enter_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:background="@color/white" />
+
+        <EditText
+            android:id="@+id/enter_pass"
+            android:hint="Password"
+            android:paddingLeft="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/enter_email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white" />
+
+        <Button
+            android:id="@+id/login"
+            android:textSize="20sp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/enter_pass"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:elevation="7dp">
-
-            <RelativeLayout
-                android:id="@+id/rl"
-                android:background="@color/colorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_email"
-                    android:background="@color/White"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/enter_email"
-                        android:paddingLeft="@dimen/edit_text_inner_padding_left"
-                        android:background="@android:color/transparent"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/edit_text_height"
-                        android:hint="Email"
-                        android:inputType="textEmailAddress"
-                        android:textColor="@color/Black"
-                        android:textColorHint="@color/Black" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_marginTop="@dimen/login_spacing"
-                    android:id="@+id/input_pass"
-                    android:background="@color/White"
-                    android:layout_below="@+id/input_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/enter_pass"
-                        android:paddingLeft="@dimen/edit_text_inner_padding_left"
-                        android:background="@android:color/transparent"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/edit_text_height"
-                        android:layout_centerVertical="true"
-                        android:hint="Password"
-                        android:inputType="textPassword"
-                        android:textColor="@color/Black"
-                        android:textColorHint="@color/Black" />
-                </android.support.design.widget.TextInputLayout>
-
-
-                <Button
-                    android:id="@+id/login_btn"
-                    style="@style/login_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/input_pass"
-                    android:layout_marginTop="@dimen/login_spacing"
-                    android:text="@string/login" />
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <TextView
-            android:id="@+id/signup"
-            style="@style/signup"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/signup_prompt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/rounded_db"
+            android:textColor="@color/white"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="Log in" />
 
     </RelativeLayout>
+
+    <Button
+        android:layout_alignParentBottom="true"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:background="@color/DodgerBlue"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="Sign up" />
 
 </RelativeLayout>
