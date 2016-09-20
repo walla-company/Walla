@@ -1,5 +1,6 @@
 package genieus.com.walla;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -22,16 +23,42 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<InterestsViewHolder
     List<View> all;
     List<Interests> interests;
     ItemClickListener listener;
+    Context context;
 
-    public InterestsRVAdapter(List<Interests> interests, ItemClickListener listener) {
+    public InterestsRVAdapter(List<Interests> interests, ItemClickListener listener, Context context) {
         this.interests = interests;
         this.listener = listener;
+        this.context = context;
 
         all = new ArrayList<>();
     }
 
     public interface ItemClickListener {
-        void onItemClicked(Interests event, View view, List<View> all);
+        void onItemClicked(Interests event, View view, List<View> all, int pos);
+    }
+
+    private String getColor(String category){
+        switch(category){
+            case "All":
+                return "#FFA160";
+            case "Art":
+                return "#E47E30";
+            case "School":
+                return "#F0C330";
+            case "Sports":
+                return "#3A99D8";
+            case "Rides":
+                return "#39CA74";
+            case "Games":
+                return "#FFBB9C";
+            case "Food":
+                return "#E54D42";
+            case "Other":
+                return "#9A5CB4";
+            default:
+                return null;
+
+        }
     }
 
     @Override
@@ -44,7 +71,7 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<InterestsViewHolder
     }
 
     @Override
-    public void onBindViewHolder(final InterestsViewHolder holder, int position) {
+    public void onBindViewHolder(final InterestsViewHolder holder, final int position) {
         if(!all.contains(holder.rl)){
             all.add(holder.rl);
         }
@@ -55,10 +82,30 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<InterestsViewHolder
 
         Log.d("color", i.getName());
 
+        if(position == 0){
+            Drawable background = holder.rl.getBackground();
+            if (background instanceof ShapeDrawable) {
+                ((ShapeDrawable)background).getPaint().setColor(Color.parseColor(getColor(i.getName())));
+            } else if (background instanceof GradientDrawable) {
+                ((GradientDrawable)background).setColor(Color.parseColor(getColor(i.getName())));
+            } else if (background instanceof ColorDrawable) {
+                ((ColorDrawable)background).setColor(Color.parseColor(getColor(i.getName())));
+            }
+        }else{
+            Drawable background = holder.rl.getBackground();
+            if (background instanceof ShapeDrawable) {
+                ((ShapeDrawable)background).getPaint().setColor(context.getResources().getColor(R.color.LightGrey));
+            } else if (background instanceof GradientDrawable) {
+                ((GradientDrawable)background).setColor(context.getResources().getColor(R.color.LightGrey));
+            } else if (background instanceof ColorDrawable) {
+                ((ColorDrawable)background).setColor(context.getResources().getColor(R.color.LightGrey));
+            }
+        }
+
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClicked(i, holder.rl, all);
+                listener.onItemClicked(i, holder.rl, all, position);
             }
         });
     }

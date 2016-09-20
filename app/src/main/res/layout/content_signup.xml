@@ -40,6 +40,7 @@
 
         <EditText
             android:id="@+id/enter_pass"
+            android:inputType="textPassword"
             android:hint="Password"
             android:paddingLeft="10dp"
             android:layout_marginLeft="16dp"
@@ -52,6 +53,7 @@
 
         <EditText
             android:id="@+id/confirm_pass"
+            android:inputType="textPassword"
             android:hint="Confirm Password"
             android:paddingLeft="10dp"
             android:layout_marginLeft="16dp"
@@ -77,6 +79,7 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/login"
         android:layout_alignParentBottom="true"
         android:textStyle="bold"
         android:textColor="@color/white"

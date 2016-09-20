@@ -2,10 +2,11 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/event_container"
         android:layout_width="match_parent"
         android:layout_height="135dp"
         android:orientation="horizontal">
@@ -16,91 +17,83 @@
             android:layout_weight=".7">
 
             <RelativeLayout
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/event_time"
-                style="@style/event_time"
-                android:paddingLeft="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sample_time" />
+                android:layout_centerInParent="true">
 
-            <TextView
-                android:id="@+id/event_date"
-                android:maxLines="1"
-                android:textStyle="bold"
-                android:textSize="17sp"
-                android:layout_below="@id/event_time"
-                android:layout_centerHorizontal="false"
-                android:paddingLeft="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sep 20" />
+                <TextView
+                    android:id="@+id/event_time"
+                    style="@style/event_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:text="@string/sample_time" />
 
-            <RelativeLayout
-                android:id="@+id/category_container"
-                android:background="@drawable/rounded_corners"
-                android:layout_below="@id/event_date"
-                android:layout_marginTop="4dp"
-                android:layout_marginLeft="8dp"
-                android:layout_width="70dp"
-                android:layout_height="25dp">
+                <TextView
+                    android:id="@+id/event_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/event_time"
+                    android:layout_centerHorizontal="false"
+                    android:maxLines="1"
+                    android:paddingLeft="8dp"
+                    android:text="Sep 20"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
                 <RelativeLayout
-                    android:id="@+id/bg_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:id="@+id/category_container"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
+                    android:layout_below="@id/event_date"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/rounded_corners">
 
                     <TextView
                         android:id="@+id/category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:text="Other"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:textSize="16sp" />
 
                 </RelativeLayout>
 
-            </RelativeLayout>
-
 
             </RelativeLayout>
-
 
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:paddingLeft="@dimen/title_box_padding_left"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.7">
+            android:layout_weight="1.7"
+            android:paddingLeft="@dimen/title_box_padding_left">
 
             <TextView
                 android:id="@+id/event_title"
-                android:paddingTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:textStyle="bold"
                 style="@style/event_title"
-                android:layout_marginTop="10dp"
-                android:text="You can enter the description of an activity"
+                android:lineSpacingMultiplier="0.85"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="17dp"
+                android:paddingTop="10dp"
+                android:text="You can enter the description of an activity" />
 
             <TextView
                 android:id="@+id/event_creator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:paddingBottom="8dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
                 android:paddingRight="10dp"
                 android:text="Someone invites you to"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp" />
 
 
         </RelativeLayout>

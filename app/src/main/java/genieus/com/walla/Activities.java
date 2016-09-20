@@ -31,17 +31,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 public class Activities extends AppCompatActivity implements View.OnClickListener, InterestsRVAdapter.ItemClickListener, ChildEventListener {
 
+    interface Filter{
+        public boolean meetsCriteria(Event event);
+    }
+
     private DatabaseReference mDatabase;
+    InterestsRVAdapter adapter;
     FirebaseUser user;
     RecyclerView rv;
     ListView lv;
     RelativeLayout profile;
     List<Event> events;
+    List<Event> events_copy;
     EventAdapter adp;
 
     @Override
@@ -61,6 +69,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         events = new ArrayList<>();
         lv = (ListView) findViewById(R.id.events);
         adp = new EventAdapter(Activities.this, R.layout.event_template, events);
+        adp.getFilter().filter("");
         lv.setAdapter(adp);
 
         rv = (RecyclerView) findViewById(R.id.interests);
@@ -99,7 +108,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         interests.add(new Interests("Food", R.mipmap.food));
         interests.add(new Interests("Other", R.mipmap.other));
 
-        InterestsRVAdapter adapter = new InterestsRVAdapter(interests, this);
+        adapter = new InterestsRVAdapter(interests, this, this);
         rv.setAdapter(adapter);
 
 
@@ -108,7 +117,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
     private void getFeed(){
         mDatabase.child("activities").orderByChild("activityTime")
-                .startAt((System.currentTimeMillis() / 1000) + 1800)
+                .startAt((System.currentTimeMillis() / 1000) - 18000)
                 .addChildEventListener(this);
 
     }
@@ -167,10 +176,24 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    @Override
-    public void onItemClicked(Interests event, View view, List<View> all) {
-        view.setBackgroundResource(R.drawable.circle_orange);
+    private void filter(List<Event> events, Filter f){
+        List<Event> filtered = new ArrayList<>();
+        for(Event event : events){
+            if(f.meetsCriteria(event)){
+                filtered.add(event);
+            }
+        }
 
+        for(Event ev : filtered){
+            if(!events.contains(ev)){
+                events.remove(ev);
+            }
+        }
+
+    }
+
+    @Override
+    public void onItemClicked(final Interests event, View view, List<View> all, int position) {
         Drawable background = view.getBackground();
         if (background instanceof ShapeDrawable) {
             ((ShapeDrawable)background).getPaint().setColor(Color.parseColor(getColor(event.getName())));
@@ -180,11 +203,22 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
             ((ColorDrawable)background).setColor(Color.parseColor(getColor(event.getName())));
         }
 
-        for(View v : all){
-            if(!v.equals(view)){
-                v.setBackgroundResource(R.drawable.circle_grey);
+        String search = event.getName().equals("All") ? "" : event.getName();
+        adp.getFilter().filter(search);
+
+        for(int i= 0; i < all.size(); i++){
+            if(i != position){
+                Drawable bg = all.get(i).getBackground();
+                if (bg instanceof ShapeDrawable) {
+                    ((ShapeDrawable)bg).getPaint().setColor(getResources().getColor(R.color.LightGrey));
+                } else if (bg instanceof GradientDrawable) {
+                    ((GradientDrawable)bg).setColor(getResources().getColor(R.color.LightGrey));
+                } else if (bg instanceof ColorDrawable) {
+                    ((ColorDrawable)bg).setColor(getResources().getColor(R.color.LightGrey));
+                }
             }
         }
+
     }
 
     @Override
@@ -195,8 +229,16 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
                 (String) act.get("interest"),
                 "" +  act.get("activityTime"),
                 "" + act.get("activityTime"),
-                (String) act.get("uid")));
+                (String) act.get("uid"),
+                (String) act.get("location"),
+                (long) act.get("numberGoing")));
 
+        Collections.sort(events, new Comparator<Event>() {
+            @Override
+            public int compare(Event lhs, Event rhs) {
+                return rhs.getTimePosted().compareTo(lhs.getTimePosted());
+            }
+        });
         adp.notifyDataSetChanged();
     }
 

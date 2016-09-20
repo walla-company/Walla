@@ -43,12 +43,12 @@
     </style>
 
     <style name="event_time">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">18.5sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="event_title">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">19sp</item>
     </style>
 
     <style name="login_btn">

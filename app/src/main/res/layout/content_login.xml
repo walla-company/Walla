@@ -29,6 +29,7 @@
 
         <EditText
             android:id="@+id/enter_pass"
+            android:inputType="textPassword"
             android:hint="Password"
             android:paddingLeft="10dp"
             android:layout_marginLeft="16dp"
@@ -54,6 +55,7 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/signup"
         android:layout_alignParentBottom="true"
         android:textStyle="bold"
         android:textColor="@color/white"

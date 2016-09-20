@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,7 +55,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
     RelativeLayout activities;
     TextView name, email;
     final String TAG = "msg";
-    final String[] settings = new String[]{"My Interests", "My Calendar", "Account Settings", "Logout"};
+    final String[] settings = new String[]{"My Interests", "Account Settings", "Logout"};
     final String[] profilePicSettings = new String[]{"Take Photo", "Choose from Library", "Cancel"};
     final int CAMERA_INTENT_RESULT = 1;
     final int GALLERY_INTENT_RESULT = 2;
@@ -122,7 +123,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://walla-launch.appspot.com");
 
-        final long ONE_MEGABYTE = 1024 * 1024;
+        final long ONE_MEGABYTE = 1024 * 1024 * 5;
         storageRef.child("profile_images").child(user.getUid() + ".jpg").getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {

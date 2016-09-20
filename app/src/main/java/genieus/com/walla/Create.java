@@ -7,20 +7,41 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Create extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, DialogInterface.OnClickListener{
     final String[] categories = new String[]{"Art", "School", "Sports", "Rides", "Games", "Food", "Other"};
     int year, month, day;
     TextView enter_time;
+    TextView char_count;
+    EditText title;
     TextView select_category;
+    EditText location;
+    Date date;
+    Button post;
+
+    private DatabaseReference mDatabase;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +56,35 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
     }
 
     private void initUi(){
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
         enter_time = (TextView) findViewById(R.id.enter_time);
+        char_count = (TextView) findViewById(R.id.char_count);
+        post = (Button) findViewById(R.id.post_btn);
+        location = (EditText) findViewById(R.id.enter_location);
+        title = (EditText) findViewById(R.id.enter_title);
         enter_time.setOnClickListener(this);
 
         select_category = (TextView) findViewById(R.id.select_category);
         select_category.setOnClickListener(this);
+
+        title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                char_count.setText("Character count: " + count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void showCategories(){
@@ -68,6 +113,26 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
         new TimePickerDialog(this, this, h, m, true).show();
     }
 
+    private void post(){
+        String doing = title.getText().toString();
+        String where = location.getText().toString();
+        String poster = user.getUid();
+        String category = select_category.getText().toString();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        String time = "" + cal.getTimeInMillis();
+
+        Map<String, Object> event = new HashMap<>();
+        event.put("activityTime", time);
+        event.put("description", doing);
+        event.put("interests", category);
+        event.put("location", where);
+        event.put("timePosted", System.currentTimeMillis());
+        event.put("key", user.getUid());
+        event.put("numberGoing", 1);
+        event.put("uid", user.getUid());
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -77,6 +142,9 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
                 break;
             case R.id.select_category:
                 showCategories();
+                break;
+            case R.id.post_btn:
+                post();
         }
     }
 

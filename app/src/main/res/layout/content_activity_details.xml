@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/LightGrey"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="genieus.com.walla.ActivityDetails"
+    tools:showIn="@layout/activity_activity_details">
+
+    <RelativeLayout
+        android:id="@+id/detail_container"
+        android:background="@color/white"
+        android:paddingBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/description"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Activity title would go here. This is just a bunch of filler text"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/time"
+            android:paddingLeft="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description"
+            android:layout_marginTop="8dp"
+            android:text="12:00 PM"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:id="@+id/cat_container"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/location"
+            android:background="@color/purple"
+            android:layout_width="80dp"
+            android:layout_height="28dp">
+
+            <RelativeLayout
+                android:layout_centerInParent="true"
+                android:background="@color/white"
+                android:layout_width="78dp"
+                android:layout_height="26dp">
+
+                <TextView
+                    android:id="@+id/category"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/purple"
+                    android:text="Other"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_below="@id/time"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="16dp"
+            android:textSize="15dp"
+            android:text="Location: Marketplace"
+            android:paddingRight="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/going"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="15sp"
+        android:layout_below="@id/detail_container"
+        android:text="People going: 2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_below="@id/going"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:src="@mipmap/logo_walla"
+            android:id="@+id/host_img"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+
+        <TextView
+            android:id="@+id/list_going"
+            android:layout_toRightOf="@+id/host_img"
+            android:textSize="18sp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="Bob Smit (host), Hannah Montana"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/interested_btn"
+        android:textSize="22sp"
+        android:layout_alignParentBottom="true"
+        android:text="I'm Interested!"
+        android:textColor="@color/white"
+        android:background="@color/DodgerBlue"
+        android:layout_width="match_parent"
+        android:layout_height="55dp" />
+
+</RelativeLayout>

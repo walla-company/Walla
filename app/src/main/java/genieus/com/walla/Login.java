@@ -24,7 +24,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     final String TAG = "msg";
     Button login;
     EditText email, pass;
-    TextView signup;
+    Button signup;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -87,8 +87,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     }
 
     private void initUi(){
-        //signup = (TextView) findViewById(R.id.signup);
-        //signup.setOnClickListener(this);
+        signup = (Button) findViewById(R.id.signup);
+        signup.setOnClickListener(this);
 
         email = (EditText) findViewById(R.id.enter_email);
         pass = (EditText) findViewById(R.id.enter_pass);

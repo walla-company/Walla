@@ -3,6 +3,7 @@ package genieus.com.walla;
 import android.graphics.Color;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -25,33 +26,40 @@ public class Event {
     private String eventCateogory;
     private String color;
 
-    public Event(String title, String category, String date, String time, String postedBy){
+    private String location;
+    private long people;
+
+    private boolean posterSet;
+
+    public Event(String title, String category, String date, String time, String postedBy, String location, long people){
         this.postedBy = postedBy;
         timePosted = parseTime(time);
         eventCateogory = category;
-        eventTitle = title;
+        eventTitle = title.trim();
         datePosted = parseDate(date);
         color = getColor(category);
+        this.location = location;
+        this.people = people;
     }
 
     private String getColor(String category){
         switch(category){
             case "All":
-                return "FFA160";
+                return "#FFA160";
             case "Art":
-                return "E47E30";
+                return "#E47E30";
             case "School":
-                return "F0C330";
+                return "#F0C330";
             case "Sports":
-                return "3A99D8";
+                return "#3A99D8";
             case "Rides":
-                return "39CA74";
+                return "#39CA74";
             case "Games":
-                return "FFBB9C";
+                return "#FFBB9C";
             case "Food":
-                return "E54D42";
+                return "#E54D42";
             case "Other":
-                return "9A5CB4";
+                return "#9A5CB4";
             default:
                 return null;
 
@@ -76,11 +84,27 @@ public class Event {
 
     private String parseTime(String t){
         double time = Double.parseDouble(t);
-        int time24 = (int) time % 24;
-        String timeStr = time24 > 12 ? (time24 % 12 + "PM") : (time24 + "AM");
-        return timeStr;
+        Date date = new Date((long) time * 1000);
+        int hr = date.getHours() % 12;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm aa");
+        String timeStr = dateFormat.format(date);
+        return hr + timeStr.substring(2);
+    }
 
+    public long getPeople() {
+        return people;
+    }
 
+    public void setPeople(long people) {
+        this.people = people;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
     public String getColor() {
         return color;
@@ -90,7 +114,12 @@ public class Event {
         return postedBy;
     }
 
+    public boolean usernamePresent(){
+        return posterSet;
+    }
+
     public void setPostedBy(String postedBy) {
+        posterSet = true;
         this.postedBy = postedBy;
     }
 
