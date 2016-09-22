@@ -1,5 +1,6 @@
 package genieus.com.walla;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity implements View.OnClickListener{
+    ProgressDialog loading;
     final String TAG = "msg";
     Button login;
     EditText email, pass;
@@ -38,10 +40,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         initUi();
         authenticate();
 
+
     }
 
     private void showFeed(){
         Intent intent = new Intent(this, Activities.class);
+        intent.putExtra("login", true);
         startActivity(intent);
     }
 
@@ -51,13 +55,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is signed in
+                    showFeed();
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
     }
@@ -69,7 +69,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-
+                        loading.cancel();
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -80,21 +80,29 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                         }else{
                             showFeed();
                         }
-
-                        // ...
                     }
                 });
     }
 
     private void initUi(){
+        loading = ProgressDialog.show(Login.this, "",
+                "Authenticating...", true);
+        loading.cancel();
+
         signup = (Button) findViewById(R.id.signup);
         signup.setOnClickListener(this);
 
         email = (EditText) findViewById(R.id.enter_email);
         pass = (EditText) findViewById(R.id.enter_pass);
 
+        pass.setTypeface(email.getTypeface());
+
         login = (Button) findViewById(R.id.login);
         login.setOnClickListener(this);
+    }
+
+    private boolean legit(String em, String pa){
+        return em != null & pa != null & pa.length() >= 5 && !em.isEmpty() && !pa.isEmpty();
     }
 
     private void switchToSignup(){
@@ -112,7 +120,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             case R.id.login:
                 String em = email.getText().toString();
                 String pa = pass.getText().toString();
-                signIn(em, pa);
+
+                if(legit(em, pa)) {
+                    loading.show();
+                    signIn(em, pa);
+                }else{
+                    Toast.makeText(this, "Authentication failed", Toast.LENGTH_LONG).show();
+
+                }
                 break;
         }
     }
@@ -131,4 +146,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        //nothing happens if back pressed on login screen
+    }
 }

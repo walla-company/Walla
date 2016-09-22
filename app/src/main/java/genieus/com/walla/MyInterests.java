@@ -6,8 +6,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,12 +35,14 @@ public class MyInterests extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     ListView lv;
+    ProgressBar loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_interests);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initUi();
     }
@@ -48,6 +52,8 @@ public class MyInterests extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         lv = (ListView) findViewById(R.id.my_interests);
+        loading = (ProgressBar) findViewById(R.id.loading);
+        loading.setVisibility(View.VISIBLE);
 
         getInterests();
     }
@@ -59,13 +65,14 @@ public class MyInterests extends AppCompatActivity {
                 Map<String, Boolean> s = (Map<String, Boolean>) dataSnapshot.getValue();
                 Log.d("bruh", s.toString());
                 Setting[] interests = new Setting[]{new Setting("Art", s.get("art")),
-                    new Setting("School", s.get("school")),
-                    new Setting("Sports", s.get("sports")),
-                    new Setting("Rides", s.get("rides")),
-                    new Setting("Games", s.get("games")),
-                    new Setting("Food", s.get("food")),
-                    new Setting("Other", s.get("other"))};
+                        new Setting("School", s.get("school")),
+                        new Setting("Sports", s.get("sports")),
+                        new Setting("Rides", s.get("rides")),
+                        new Setting("Games", s.get("games")),
+                        new Setting("Food", s.get("food")),
+                        new Setting("Other", s.get("other"))};
 
+                loading.setVisibility(View.GONE);
                 MyInterestsAdapter adapter = new MyInterestsAdapter(MyInterests.this, R.layout.my_interests_template, interests);
                 lv.setAdapter(adapter);
 
@@ -76,6 +83,18 @@ public class MyInterests extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if(id == android.R.id.home){
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

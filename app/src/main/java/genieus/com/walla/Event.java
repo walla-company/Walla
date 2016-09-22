@@ -25,13 +25,15 @@ public class Event {
     private String eventTitle;
     private String eventCateogory;
     private String color;
+    private String key;
+    private String posterUid;
 
     private String location;
     private long people;
 
     private boolean posterSet;
 
-    public Event(String title, String category, String date, String time, String postedBy, String location, long people){
+    public Event(String title, String category, String date, String time, String postedBy, String location, String key, long people){
         this.postedBy = postedBy;
         timePosted = parseTime(time);
         eventCateogory = category;
@@ -40,6 +42,16 @@ public class Event {
         color = getColor(category);
         this.location = location;
         this.people = people;
+        this.key = key;
+        posterUid = postedBy;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     private String getColor(String category){
@@ -121,6 +133,14 @@ public class Event {
     public void setPostedBy(String postedBy) {
         posterSet = true;
         this.postedBy = postedBy;
+    }
+
+    public String getPosterUid() {
+        return posterUid;
+    }
+
+    public void setPosterUid(String posterUid) {
+        this.posterUid = posterUid;
     }
 
     public String getTimePosted() {

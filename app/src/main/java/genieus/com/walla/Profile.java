@@ -66,6 +66,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initUi();
 
@@ -137,6 +138,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
 
     private void logout(){
+        FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
@@ -198,7 +200,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
     private byte[] compressToByteArray(Bitmap bmp){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byte_data = stream.toByteArray();
         return byte_data;
     }
@@ -251,7 +253,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        if(id == R.id.action_write){
+            Intent intent = new Intent(this, Profile.class);
+            startActivity(intent);
+        }else if(id == android.R.id.home){
+            onBackPressed();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -260,6 +267,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
         int id = v.getId();
         if(id == R.id.activities_btn){
             Intent intent = new Intent(this, Activities.class);
+            intent.putExtra("login", false);
             startActivity(intent);
         }else if(id == R.id.profile_pic){
             showProfilePicDialog();

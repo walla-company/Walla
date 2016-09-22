@@ -1,25 +1,35 @@
 package genieus.com.walla;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +40,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,8 +61,10 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
     ListView lv;
     RelativeLayout profile;
     List<Event> events;
-    List<Event> events_copy;
     EventAdapter adp;
+    ProgressBar loading;
+    TextView notice;
+    ImageView write;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +75,33 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
         initUi();
 
+        if(!hasActiveInternetConnection()){
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public static boolean hasActiveInternetConnection() {
+        //TODO implement
+        return true;
     }
 
     private void initUi(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        loading = (ProgressBar) findViewById(R.id.loading);
+        loading.setVisibility(View.VISIBLE);
+        startLoadingCounter();
+
         events = new ArrayList<>();
         lv = (ListView) findViewById(R.id.events);
         adp = new EventAdapter(Activities.this, R.layout.event_template, events);
         adp.getFilter().filter("");
         lv.setAdapter(adp);
 
+        write = (ImageView) findViewById(R.id.icon);
+        notice = (TextView) findViewById(R.id.notice);
         rv = (RecyclerView) findViewById(R.id.interests);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -79,6 +109,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
         profile = (RelativeLayout) findViewById(R.id.profile_btn);
         profile.setOnClickListener(this);
+        write.setOnClickListener(this);
 
         /*
         List<Event> events = new ArrayList<>();
@@ -113,6 +144,14 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
 
         getFeed();
+        Bundle ex = getIntent().getExtras();
+        if(ex.getBoolean("login")){
+            showWelcome();
+        }
+    }
+
+    private void startLoadingCounter(){
+
     }
 
     private void getFeed(){
@@ -120,6 +159,34 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
                 .startAt((System.currentTimeMillis() / 1000) - 18000)
                 .addChildEventListener(this);
 
+    }
+
+    private void showWelcome(){
+        mDatabase.child("users").child(user.getUid()).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> userInfo = (Map<String, Object>) dataSnapshot.getValue();
+
+                        Snackbar snack = Snackbar.make(profile, "Welcome back, " + userInfo.get("name") + "!", Snackbar.LENGTH_LONG);
+                        View view = snack.getView();
+                        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                        tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        snack.show();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("Cancelled", "getUser:onCancelled", databaseError.toException());
+                        // ...
+                    }
+                });
+    }
+
+    private void createPost(){
+        Intent intent = new Intent(this, Create.class);
+        startActivity(intent);
     }
 
     @Override
@@ -137,7 +204,9 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         int id = item.getItemId();
 
         if(id == R.id.action_write){
-            Intent intent = new Intent(this, Create.class);
+            createPost();
+        }else if(id == R.id.actions_notifs){
+            Intent intent = new Intent(this, MyInterests.class);
             startActivity(intent);
         }
 
@@ -146,9 +215,23 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        int id = v.getId();
         if(v.getId() == R.id.profile_btn){
             Intent intent = new Intent(this, Profile.class);
             startActivity(intent);
+        }else if(id == R.id.icon){
+            createPost();
+        }else if(id == android.R.id.home){
+            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                // This activity is NOT part of this app's task, so create a new task
+                // when navigating up, with a synthesized back stack.
+                TaskStackBuilder.create(this)
+                        // Add all of this activity's parents to the back stack
+                        .addNextIntentWithParentStack(upIntent)
+                        // Navigate up to the closest parent
+                        .startActivities();
+            }
         }
     }
 
@@ -174,22 +257,6 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
                 return null;
 
         }
-    }
-
-    private void filter(List<Event> events, Filter f){
-        List<Event> filtered = new ArrayList<>();
-        for(Event event : events){
-            if(f.meetsCriteria(event)){
-                filtered.add(event);
-            }
-        }
-
-        for(Event ev : filtered){
-            if(!events.contains(ev)){
-                events.remove(ev);
-            }
-        }
-
     }
 
     @Override
@@ -231,6 +298,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
                 "" + act.get("activityTime"),
                 (String) act.get("uid"),
                 (String) act.get("location"),
+                (String) act.get("key"),
                 (long) act.get("numberGoing")));
 
         Collections.sort(events, new Comparator<Event>() {
@@ -239,7 +307,19 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
                 return rhs.getTimePosted().compareTo(lhs.getTimePosted());
             }
         });
+        Collections.sort(events, new Comparator<Event>() {
+            @Override
+            public int compare(Event lhs, Event rhs) {
+                return rhs.getTimePosted().compareTo(lhs.getTimePosted());
+            }
+        });
+
         adp.notifyDataSetChanged();
+        adp.getFilter().filter("");
+
+        if(loading.getVisibility() == View.VISIBLE){
+            loading.setVisibility(View.GONE);
+        }
     }
 
     @Override

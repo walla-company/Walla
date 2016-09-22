@@ -37,6 +37,18 @@
             android:text="12:00 PM"
             android:textSize="18sp" />
 
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_below="@id/time"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="16dp"
+            android:textSize="15dp"
+            android:text="Location: Marketplace"
+            android:paddingRight="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <RelativeLayout
             android:id="@+id/cat_container"
             android:layout_marginLeft="16dp"
@@ -64,17 +76,6 @@
             </RelativeLayout>
 
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/location"
-            android:layout_below="@id/time"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="16dp"
-            android:textSize="15dp"
-            android:text="Location: Marketplace"
-            android:paddingRight="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 
@@ -116,6 +117,7 @@
     </RelativeLayout>
 
     <Button
+        android:visibility="gone"
         android:id="@+id/interested_btn"
         android:textSize="22sp"
         android:layout_alignParentBottom="true"

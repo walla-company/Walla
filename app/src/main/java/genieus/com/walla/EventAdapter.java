@@ -99,14 +99,13 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
         time.setText(event.getTimePosted());
         title.setText(event.getEventTitle());
 
-        if(!event.usernamePresent()){
-            mDatabase.child("users").child(event.getPostedBy()).addListenerForSingleValueEvent(
-                    new ValueEventListener() {
+        mDatabase.child("users").child(event.getPosterUid()).addListenerForSingleValueEvent(
+                new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Map<String, Object> userInfo = (Map<String, Object>) dataSnapshot.getValue();
-                            creator.setText("posted by " + (String) userInfo.get("name"));
-                            event.setPostedBy("posted by " + (String) userInfo.get("name"));
+                            creator.setText((String) userInfo.get("name") + " invites you");
+                            event.setPostedBy((String) userInfo.get("name"));
                         }
 
                         @Override
@@ -114,9 +113,6 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
                             // ...
                         }
                     });
-        }else{
-            event.setPostedBy(event.getPostedBy());
-        }
 
         ec.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +124,8 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
                 intent.putExtra("people", event.getPeople());
                 intent.putExtra("category", event.getEventCateogory());
                 intent.putExtra("color", event.getColor());
+                intent.putExtra("key", event.getKey());
+                intent.putExtra("poster", event.getPostedBy());
 
                 getContext().startActivity(intent);
 
