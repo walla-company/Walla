@@ -85,13 +85,24 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
 
         final Event event = getEventFromCategory(events, filtered.get(position));
 
-        Drawable background = container.getBackground();
-        if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable)background).getPaint().setColor(Color.parseColor(event.getColor()));
-        } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable)background).setColor(Color.parseColor(event.getColor()));
-        } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable)background).setColor(Color.parseColor(event.getColor()));
+        if(!event.isExpired()) {
+            Drawable background = container.getBackground();
+            if (background instanceof ShapeDrawable) {
+                ((ShapeDrawable) background).getPaint().setColor(Color.parseColor(event.getColor()));
+            } else if (background instanceof GradientDrawable) {
+                ((GradientDrawable) background).setColor(Color.parseColor(event.getColor()));
+            } else if (background instanceof ColorDrawable) {
+                ((ColorDrawable) background).setColor(Color.parseColor(event.getColor()));
+            }
+        }else{
+            Drawable bg = container.getBackground();
+            if (bg instanceof ShapeDrawable) {
+                ((ShapeDrawable)bg).getPaint().setColor(getContext().getResources().getColor(R.color.LightGrey));
+            } else if (bg instanceof GradientDrawable) {
+                ((GradientDrawable)bg).setColor(getContext().getResources().getColor(R.color.LightGrey));
+            } else if (bg instanceof ColorDrawable) {
+                ((ColorDrawable)bg).setColor(getContext().getResources().getColor(R.color.LightGrey));
+            }
         }
 
         category.setText(event.getEventCateogory());
@@ -126,6 +137,7 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
                 intent.putExtra("color", event.getColor());
                 intent.putExtra("key", event.getKey());
                 intent.putExtra("poster", event.getPostedBy());
+                intent.putExtra("uid", event.getPosterUid());
 
                 getContext().startActivity(intent);
 

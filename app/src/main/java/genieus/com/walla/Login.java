@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +27,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     final String TAG = "msg";
     Button login;
     EditText email, pass;
-    Button signup;
+    TextView signup;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -37,9 +38,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
         mAuth = FirebaseAuth.getInstance();
 
-        initUi();
         authenticate();
-
+        initUi();
 
     }
 
@@ -57,6 +57,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 if (user != null) {
                     showFeed();
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                }else{
+
                 }
             }
         };
@@ -89,7 +91,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 "Authenticating...", true);
         loading.cancel();
 
-        signup = (Button) findViewById(R.id.signup);
+        signup = (TextView) findViewById(R.id.signup);
         signup.setOnClickListener(this);
 
         email = (EditText) findViewById(R.id.enter_email);

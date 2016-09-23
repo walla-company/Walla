@@ -1,6 +1,7 @@
 package genieus.com.walla;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -50,10 +51,6 @@ import java.util.Map;
 
 public class Activities extends AppCompatActivity implements View.OnClickListener, InterestsRVAdapter.ItemClickListener, ChildEventListener {
 
-    interface Filter{
-        public boolean meetsCriteria(Event event);
-    }
-
     private DatabaseReference mDatabase;
     InterestsRVAdapter adapter;
     FirebaseUser user;
@@ -65,6 +62,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
     ProgressBar loading;
     TextView notice;
     ImageView write;
+    final double SECONDS_IN_DAY = 86400;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,10 +142,36 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
 
         getFeed();
-        Bundle ex = getIntent().getExtras();
-        if(ex.getBoolean("login")){
-            showWelcome();
+        try{
+            Bundle ex = getIntent().getExtras();
+            if(ex.getBoolean("first")){
+                showWelcome();
+            }
+        }catch (Exception e){
+
         }
+
+        try{
+            Bundle ex = getIntent().getExtras();
+            if(ex.getBoolean("first")){
+                showFirstTimeWelcome();
+            }
+        }catch (Exception e){
+
+        }
+
+    }
+
+    private void showFirstTimeWelcome(){
+        new AlertDialog.Builder(this)
+                .setTitle("Hello new wallaby!")
+                .setMessage("Welcome to Walla! You're now part of the Duke community that loves to spontaneously hangout. Too many emails about events? We agree, and that's why we made this app where you can simply openly invite everyone on campus to the cool activity you're hosting or attending. Just remember, spontaneous = within 24 hours only!\n")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
     }
 
     private void startLoadingCounter(){
@@ -156,7 +180,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
     private void getFeed(){
         mDatabase.child("activities").orderByChild("activityTime")
-                .startAt((System.currentTimeMillis() / 1000) - 18000)
+                .startAt((System.currentTimeMillis() / 1000) - SECONDS_IN_DAY)
                 .addChildEventListener(this);
 
     }
@@ -304,13 +328,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         Collections.sort(events, new Comparator<Event>() {
             @Override
             public int compare(Event lhs, Event rhs) {
-                return rhs.getTimePosted().compareTo(lhs.getTimePosted());
-            }
-        });
-        Collections.sort(events, new Comparator<Event>() {
-            @Override
-            public int compare(Event lhs, Event rhs) {
-                return rhs.getTimePosted().compareTo(lhs.getTimePosted());
+                return Double.compare(rhs.getRawTime(), lhs.getRawTime());
             }
         });
 

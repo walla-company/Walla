@@ -47,15 +47,16 @@ public class MyInterestsAdapter extends ArrayAdapter<String> {
 
         TextView tv = (TextView) convertView.findViewById(R.id.interest_name);
         final Switch sw = (Switch) convertView.findViewById(R.id.interest_toggle);
+        sw.setText(setting.name);
+        sw.setTextSize(0);
         tv.setText(setting.name);
         sw.setChecked(setting.state);
 
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mDatabase.child("notification_settings").child(user.getUid()).child(setting.name.toLowerCase()).setValue(isChecked);
+                mDatabase.child("notification_settings").child(user.getUid()).child(buttonView.getText().toString().toLowerCase()).setValue(isChecked);
                 Log.d("db", setting.name + " is now " + isChecked);
-
             }
         });
 

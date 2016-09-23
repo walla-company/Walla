@@ -15,54 +15,65 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
+      <ImageView
+          android:id="@+id/logo"
+          android:src="@mipmap/icon"
+          android:layout_centerHorizontal="true"
+          android:layout_width="100dp"
+          android:layout_height="100dp" />
+
         <EditText
             android:id="@+id/enter_email"
             android:hint="Duke Email Address"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:textColorHint="@color/LightGrey"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
             android:paddingLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_below="@+id/enter_name"
+            android:layout_marginTop="25dp"
+            android:layout_below="@+id/logo"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:background="@color/white" />
 
         <EditText
             android:id="@+id/enter_pass"
             android:inputType="textPassword"
             android:hint="Password"
+            android:textColorHint="@color/LightGrey"
             android:paddingLeft="10dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="8dp"
             android:layout_below="@+id/enter_email"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:background="@color/white" />
 
         <Button
             android:id="@+id/login"
             android:textSize="20sp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
             android:layout_marginTop="15dp"
             android:layout_below="@id/enter_pass"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/rounded_db"
+            android:background="@color/DodgerBlue"
             android:textColor="@color/white"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:text="Log in" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/signup"
+            android:text="Not a wallaby? Sign up now"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_below="@id/login"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/signup"
-        android:layout_alignParentBottom="true"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        android:background="@color/DodgerBlue"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="Sign up" />
+    </RelativeLayout>
 
 </RelativeLayout>

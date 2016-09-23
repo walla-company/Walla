@@ -85,7 +85,7 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                char_count.setText("Character count: " + count);
+                char_count.setText("Character count: " + title.getText().toString().length());
             }
 
             @Override
@@ -122,6 +122,11 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
     }
 
     private void post(){
+        if(date == null){
+            Toast.makeText(this, "Please select a date", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         date.setYear(new Date().getYear());
         String doing = title.getText().toString();
         String where = location.getText().toString();
@@ -131,6 +136,17 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         double time = cal.getTimeInMillis();
+
+        final double MILLI_SECONDS_IN_DAY = 8.64e+7;
+        if((time - MILLI_SECONDS_IN_DAY) > System.currentTimeMillis()){
+            Toast.makeText(this, "Events must be within 24 hours", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(time - System.currentTimeMillis() < 0){
+            Toast.makeText(this, "You cannot create an event in the past", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         Map<String, Object> event = new HashMap<>();
         event.put("activityTime", time / 1000);
@@ -158,12 +174,15 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
             Snackbar.make(post, "Post created successfully!", Snackbar.LENGTH_LONG).show();
 
             Snackbar snack = Snackbar.make(post, "Post created!", Snackbar.LENGTH_LONG);
-            snack.setAction("UNDO", new View.OnClickListener() {
+            /*snack.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //erase post
                 }
             });
+
+            */
+
             View view = snack.getView();
             TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
             tv.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -173,8 +192,6 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
         else{
             Toast.makeText(this, "Please enter all fields", Toast.LENGTH_LONG).show();
         }
-
-        Log.d("testy",event.toString());
     }
 
     @Override

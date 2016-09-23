@@ -21,6 +21,7 @@ public class Event {
         this.datePosted = datePosted;
     }
 
+    final private int MINUTES_30 = 1800;
     private String datePosted;
     private String eventTitle;
     private String eventCateogory;
@@ -30,6 +31,8 @@ public class Event {
 
     private String location;
     private long people;
+    private boolean expired;
+    private double rawTime;
 
     private boolean posterSet;
 
@@ -44,6 +47,8 @@ public class Event {
         this.people = people;
         this.key = key;
         posterUid = postedBy;
+        expired = checkExpired(date);
+        rawTime = Double.parseDouble(time);
     }
 
     public String getKey() {
@@ -78,6 +83,21 @@ public class Event {
         }
     }
 
+    private boolean checkExpired(String strDate){
+        double time = Double.parseDouble(strDate);
+        Date date = new Date((long) time * 1000);
+
+        long post = date.getTime() / 1000;
+        long now = System.currentTimeMillis() / 1000;
+
+        long diff = now - post;
+        if(diff > MINUTES_30){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     private String parseDate(String d){
         double time = Double.parseDouble(d);
         Date date = new Date((long) time * 1000);
@@ -101,6 +121,14 @@ public class Event {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm aa");
         String timeStr = dateFormat.format(date);
         return hr + timeStr.substring(2);
+    }
+
+    public double getRawTime() {
+        return rawTime;
+    }
+
+    public void setRawTime(double rawTime) {
+        this.rawTime = rawTime;
     }
 
     public long getPeople() {
@@ -133,6 +161,14 @@ public class Event {
     public void setPostedBy(String postedBy) {
         posterSet = true;
         this.postedBy = postedBy;
+    }
+
+    public boolean isExpired() {
+        return expired;
+    }
+
+    public void setExpired(boolean expired) {
+        this.expired = expired;
     }
 
     public String getPosterUid() {

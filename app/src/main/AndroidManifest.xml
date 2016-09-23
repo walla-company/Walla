@@ -13,43 +13,52 @@
         <activity
             android:name=".Profile"
             android:label="@string/profile_activity_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities"
             android:label="@string/title_activity_activities"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Login"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar" >
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Signup"
+            android:label="@string/title_activity_signup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity
-            android:name=".Signup"
-            android:label="@string/title_activity_signup"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Create"
             android:label="@string/title_activity_create"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MyInterests"
             android:label="@string/title_activity_my_interests"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityDetails"
             android:label="@string/title_activity_activity_details"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Terms"
+            android:label="@string/title_activity_terms"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

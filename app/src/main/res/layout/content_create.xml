@@ -84,7 +84,7 @@
         android:id="@+id/enter_time"
         style="@style/time"
         android:background="@color/WhiteSmoke"
-        android:hint="12:00 PM"
+        android:hint="Time"
         android:gravity="center|left"
         android:layout_below="@id/enter_location"
         android:layout_marginTop="24dp"
@@ -107,7 +107,7 @@
     <TextView
         android:id="@+id/edit_note"
         style="@style/create_bottom_msgs"
-        android:text="Be sure to check your entries! "
+        android:text="Be sure to check your entries, you can't edit after you post"
         android:layout_below="@id/disappear_msg"
         android:layout_marginTop="8dp"
         android:layout_centerHorizontal="true"
