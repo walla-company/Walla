@@ -2,6 +2,7 @@ package genieus.com.walla;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -52,7 +53,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
 
         mAuth = FirebaseAuth.getInstance();
 
-        authenticate(false);
+        authenticate(false, true);
         initUi();
     }
 
@@ -70,21 +71,22 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    private void  authenticate(final boolean first){
+    private void  authenticate(final boolean login, final boolean first){
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    showFeed(first);
+                    showFeed(login, first);
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 }
             }
         };
     }
 
-    private void showFeed(boolean first){
+    private void showFeed(boolean first, boolean login){
         Intent intent = new Intent(this, Activities.class);
+        intent.putExtra("login", login);
         intent.putExtra("first", first);
         startActivity(intent);
     }
@@ -107,8 +109,10 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void showTerms(){
-        Intent intent = new Intent(this, Terms.class);
-        startActivity(intent);
+        String url = "https://www.wallasquad.com/terms-and-conditions/";
+        Intent in = new Intent(Intent.ACTION_VIEW);
+        in.setData(Uri.parse(url));
+        startActivity(in);
     }
 
     private void loginUser(){
@@ -136,7 +140,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
                             mDatabase = FirebaseDatabase.getInstance().getReference();
 
                             Map<String, Object> info = new HashMap<>();
-                            info.put("name", name.getText().toString());
+                            info.put("name", name.getText().toString().trim());
                             info.put("profile_image", "");
                             info.put("emailVerificationSent", false);
                             info.put("timeCreated", System.currentTimeMillis() / 1000);
@@ -148,7 +152,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
                             }
 
 
-                            authenticate(true);
+                            authenticate(true, false);
 
 
                         }
@@ -177,9 +181,9 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
             case R.id.signup:
                 if(verified()) {
                     try {
-                        createUser(email.getText().toString(), pass.getText().toString());
+                        createUser(email.getText().toString().trim(), pass.getText().toString());
                     }catch(Exception e){
-                        authenticate(true);
+                        authenticate(true, false);
                     }
                 }else{
                     Toast.makeText(this, "email or password could not be verified", Toast.LENGTH_LONG).show();

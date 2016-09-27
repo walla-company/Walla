@@ -1,5 +1,6 @@
 package genieus.com.walla;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,15 +8,18 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -38,6 +42,7 @@ public class ActivityDetails extends AppCompatActivity {
     private DatabaseReference mDatabase;
     String description, time, location, category, color, key, poster, uid;
     long people;
+    boolean expired;
 
     TextView desc_tv, time_tv, location_tv, category_tv, people_tv, peopleList_tv;
     Button interested;
@@ -63,10 +68,10 @@ public class ActivityDetails extends AppCompatActivity {
             key = extras.getString("key");
             poster = extras.getString("poster");
             uid = extras.getString("uid");
+            expired = extras.getBoolean("expired");
         }
 
         initUi();
-
     }
 
     private void initUi(){
@@ -89,6 +94,13 @@ public class ActivityDetails extends AppCompatActivity {
         people_tv.setText("People going: " + people);
         container.setBackgroundColor(Color.parseColor(color));
         category_tv.setTextColor(Color.parseColor(color));
+
+        interested.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rsvp();
+            }
+        });
 
         getHostPic();
         getAttendees();
@@ -147,6 +159,33 @@ public class ActivityDetails extends AppCompatActivity {
         */
     }
 
+    private void rsvp(){
+        Toast.makeText(ActivityDetails.this, "You have been added to the attendance list", Toast.LENGTH_LONG).show();
+    }
+
+    private void showFlagConfirm(){
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_flag)
+                .setTitle("Flag")
+                .setMessage("Are you sure you want to flag this post?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(ActivityDetails.this, "The issue has been sent to the administration for review", Toast.LENGTH_LONG).show();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_details, menu);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -155,6 +194,10 @@ public class ActivityDetails extends AppCompatActivity {
         int id = item.getItemId();
         if(id == android.R.id.home){
             onBackPressed();
+        }else if(id == R.id.action_flag){
+            showFlagConfirm();
+        }else if(id == R.id.action_star){
+            rsvp();
         }
         return super.onOptionsItemSelected(item);
     }

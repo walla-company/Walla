@@ -73,27 +73,37 @@
             android:layout_weight="1.7"
             android:paddingLeft="@dimen/title_box_padding_left">
 
-            <TextView
-                android:id="@+id/event_title"
-                style="@style/event_title"
-                android:lineSpacingMultiplier="0.85"
+            <RelativeLayout
+                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="17dp"
-                android:paddingTop="10dp"
-                android:text="You can enter the description of an activity" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/event_title"
+                    style="@style/event_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:lineSpacingMultiplier="0.85"
+                    android:paddingRight="8dp"
+                    android:maxLines="5"
+                    android:text="You can enter the description of an activity" />
+
+                <TextView
+                    android:id="@+id/event_creator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/event_title"
+                    android:text=" ___ inites you"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/event_creator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:paddingBottom="8dp"
-                android:paddingRight="10dp"
-                android:text="Someone invites you to"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp" />
+                android:id="@+id/uid"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
 
 
         </RelativeLayout>

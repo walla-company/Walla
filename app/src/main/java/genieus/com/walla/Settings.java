@@ -42,8 +42,10 @@ public class Settings extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0: //share walla
+                        shareWalla();
                         break;
                     case 1: //review walla
+                        review();
                         break;
                     case 2: //visit website
                         visitSite();
@@ -72,7 +74,18 @@ public class Settings extends AppCompatActivity {
     }
 
     private void shareWalla(){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out the Walla app at: https://play.google.com/store/apps/details?id=genieus.com.walla");
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
 
+    private void review(){
+        Intent i = new Intent(android.content.Intent.ACTION_VIEW);
+        i.setData(Uri.parse("https://play.google.com/store/apps/details?id=genieus.com.walla"));
+        startActivity(i);
     }
 
     @Override

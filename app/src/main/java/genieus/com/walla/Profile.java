@@ -254,7 +254,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id == R.id.action_write){
-            Intent intent = new Intent(this, Profile.class);
+            Intent intent = new Intent(this, Create.class);
             startActivity(intent);
         }else if(id == android.R.id.home){
             onBackPressed();

@@ -42,7 +42,8 @@
             <TextView
                 android:id="@+id/user_email"
                 style="@style/email"
-                android:layout_width="@dimen/name_width"
+                android:layout_width="match_parent"
+                android:layout_marginRight="8dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/user_name"
                 android:layout_marginTop="@dimen/email_padding_top"
@@ -70,15 +71,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/welcome"
-        android:layout_centerInParent="true"
-        android:textSize="18sp"
-        android:text="Hey there, wallaby! You're now part of the Duke community that loves to spontaneously hangout. Too many emails about events? We agree, and that's why we made this app where you can openly invite everyone on campus to the cool activity you're doing. Just remember, spontaneous = within 24 hours. Well, hop on!
-"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     </RelativeLayout>
 
 
@@ -87,12 +79,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_bar_hieght"
         android:layout_alignParentBottom="true"
-        android:background="@color/Black"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
 
         <RelativeLayout
             android:id="@+id/activities_btn"
+            android:layout_marginTop="1dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -125,6 +118,7 @@
 
         <RelativeLayout
             android:id="@+id/profile_btn"
+            android:layout_marginTop="1dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

@@ -144,7 +144,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         getFeed();
         try{
             Bundle ex = getIntent().getExtras();
-            if(ex.getBoolean("first")){
+            if(ex.getBoolean("login")){
                 showWelcome();
             }
         }catch (Exception e){

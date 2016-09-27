@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:icon="@drawable/ic_flag2"
+        android:id="@+id/action_flag"
+        android:orderInCategory="100"
+        android:title="Flag as inappropriate"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:icon="@drawable/ic_star"
+        android:id="@+id/action_star"
+        android:orderInCategory="100"
+        android:title="I'm Interested!"
+        app:showAsAction="ifRoom" />
+
+</menu>

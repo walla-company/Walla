@@ -2,9 +2,16 @@ package genieus.com.walla;
 
 import android.graphics.Color;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by Anesu on 9/3/2016.
@@ -28,6 +35,7 @@ public class Event {
     private String color;
     private String key;
     private String posterUid;
+    DatabaseReference mDatabase;
 
     private String location;
     private long people;
@@ -37,6 +45,7 @@ public class Event {
     private boolean posterSet;
 
     public Event(String title, String category, String date, String time, String postedBy, String location, String key, long people){
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         this.postedBy = postedBy;
         timePosted = parseTime(time);
         eventCateogory = category;
@@ -49,6 +58,23 @@ public class Event {
         posterUid = postedBy;
         expired = checkExpired(date);
         rawTime = Double.parseDouble(time);
+        getName();
+    }
+
+    public void getName(){
+        mDatabase.child("users").child(getPosterUid()).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> userInfo = (Map<String, Object>) dataSnapshot.getValue();
+                        setPostedBy((String) userInfo.get("name"));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // ...
+                    }
+                });
     }
 
     public String getKey() {
@@ -118,6 +144,8 @@ public class Event {
         double time = Double.parseDouble(t);
         Date date = new Date((long) time * 1000);
         int hr = date.getHours() % 12;
+        if(hr == 0)
+            hr = 12;
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm aa");
         String timeStr = dateFormat.format(date);
         return hr + timeStr.substring(2);

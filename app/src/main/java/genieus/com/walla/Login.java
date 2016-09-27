@@ -104,7 +104,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     }
 
     private boolean legit(String em, String pa){
-        return em != null & pa != null & pa.length() >= 5 && !em.isEmpty() && !pa.isEmpty();
+        return em != null && pa != null && !em.isEmpty() && !pa.isEmpty();
     }
 
     private void switchToSignup(){
@@ -120,7 +120,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 switchToSignup();
                 break;
             case R.id.login:
-                String em = email.getText().toString();
+                String em = email.getText().toString().trim();
                 String pa = pass.getText().toString();
 
                 if(legit(em, pa)) {

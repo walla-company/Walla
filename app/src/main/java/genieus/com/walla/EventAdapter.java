@@ -17,6 +17,7 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -80,6 +81,7 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
         TextView time = (TextView) convertView.findViewById(R.id.event_time);
         TextView title = (TextView) convertView.findViewById(R.id.event_title);
         TextView date = (TextView) convertView.findViewById(R.id.event_date);
+        TextView uid = (TextView) convertView.findViewById(R.id.uid);
         final TextView creator =  (TextView) convertView.findViewById(R.id.event_creator);
         RelativeLayout container = (RelativeLayout) convertView.findViewById(R.id.category_container);
 
@@ -109,40 +111,49 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
         date.setText(event.getDatePosted());
         time.setText(event.getTimePosted());
         title.setText(event.getEventTitle());
+        creator.setVisibility(View.GONE);
+        creator.setText(event.getPosterUid());
 
-        mDatabase.child("users").child(event.getPosterUid()).addListenerForSingleValueEvent(
+        mDatabase.child("users").child(creator.getText().toString()).addListenerForSingleValueEvent(
                 new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Map<String, Object> userInfo = (Map<String, Object>) dataSnapshot.getValue();
-                            creator.setText((String) userInfo.get("name") + " invites you");
-                            event.setPostedBy((String) userInfo.get("name"));
-                        }
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> userInfo = (Map<String, Object>) dataSnapshot.getValue();
+                        creator.setVisibility(View.VISIBLE);
+                        creator.setText((String) userInfo.get("name") + " invites you");
+                    }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            // ...
-                        }
-                    });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // ...
+                    }
+                });
 
-        ec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ActivityDetails.class);
-                intent.putExtra("description", event.getEventTitle());
-                intent.putExtra("time", event.getTimePosted());
-                intent.putExtra("location", event.getLocation());
-                intent.putExtra("people", event.getPeople());
-                intent.putExtra("category", event.getEventCateogory());
-                intent.putExtra("color", event.getColor());
-                intent.putExtra("key", event.getKey());
-                intent.putExtra("poster", event.getPostedBy());
-                intent.putExtra("uid", event.getPosterUid());
+            ec.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(event.isExpired()){
+                        Toast.makeText(getContext(), "This event has expired", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Intent intent = new Intent(getContext(), ActivityDetails.class);
+                        intent.putExtra("description", event.getEventTitle());
+                        intent.putExtra("time", event.getTimePosted());
+                        intent.putExtra("location", event.getLocation());
+                        intent.putExtra("people", event.getPeople());
+                        intent.putExtra("category", event.getEventCateogory());
+                        intent.putExtra("color", event.getColor());
+                        intent.putExtra("key", event.getKey());
+                        intent.putExtra("poster", event.getPostedBy());
+                        intent.putExtra("uid", event.getPosterUid());
+                        intent.putExtra("expired", event.isExpired());
 
-                getContext().startActivity(intent);
+                        getContext().startActivity(intent);
+                    }
 
-            }
-        });
+                }
+            });
+
 
 
         return convertView;
