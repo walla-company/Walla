@@ -20,7 +20,7 @@
 
 
         </RelativeLayout>
-
+c
     </FrameLayout>
 
     <RelativeLayout
@@ -43,38 +43,29 @@
 
         <TextView
             android:id="@+id/time"
+            android:gravity="center_vertical"
             android:paddingLeft="16dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:layout_below="@id/description"
             android:layout_marginTop="8dp"
             android:text="12:00 PM"
             android:textSize="18sp" />
 
-
-        <TextView
-            android:id="@+id/location"
-            android:layout_below="@id/time"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="16dp"
-            android:textSize="15dp"
-            android:text="Location: Marketplace"
-            android:paddingRight="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
         <RelativeLayout
             android:id="@+id/cat_container"
-            android:layout_marginLeft="16dp"
+            android:layout_below="@id/description"
             android:layout_marginTop="8dp"
-            android:layout_below="@id/location"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
             android:background="@color/purple"
+            android:layout_marginLeft="16dp"
             android:layout_width="80dp"
             android:layout_height="32dp">
 
             <RelativeLayout
-                android:layout_centerInParent="true"
                 android:background="@color/white"
+                android:layout_centerInParent="true"
                 android:layout_width="78dp"
                 android:layout_height="30dp">
 
@@ -91,16 +82,39 @@
 
         </RelativeLayout>
 
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_below="@id/time"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="16dp"
+            android:textSize="15dp"
+            android:text="Location: Marketplace"
+            android:paddingRight="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/interested_btn"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_db"
+            android:text="I'm Interested!"
+            android:layout_below="@+id/location"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_width="200dp"
+            android:layout_height="40dp" />
+
     </RelativeLayout>
 
     <TextView
         android:id="@+id/going"
-        android:visibility="invisible"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:textSize="15sp"
         android:layout_below="@id/detail_container"
-        android:text="People going: 2"
+        android:text="People going"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -130,15 +144,5 @@
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/interested_btn"
-        android:textSize="22sp"
-        android:layout_alignParentBottom="true"
-        android:text="I'm Interested!"
-        android:textColor="@color/white"
-        android:background="@color/DodgerBlue"
-        android:layout_width="match_parent"
-        android:layout_height="55dp" />
 
 </RelativeLayout>

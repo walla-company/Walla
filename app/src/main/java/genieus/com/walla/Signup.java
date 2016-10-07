@@ -151,6 +151,19 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
                                 mDatabase.child("notification_settings").child(id).child(i.toLowerCase()).setValue(true);
                             }
 
+                            /*
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                            user.sendEmailVerification()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "Email sent.");
+                                            }
+                                        }
+                                    });
+                            */
 
                             authenticate(true, false);
 

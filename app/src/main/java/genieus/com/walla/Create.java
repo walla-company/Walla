@@ -24,15 +24,20 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Create extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, DialogInterface.OnClickListener{
@@ -47,6 +52,8 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
 
     private DatabaseReference mDatabase;
     FirebaseUser user;
+
+    List<String> posts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,26 +175,41 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
                 key.isEmpty() || poster == null ||
                 poster.isEmpty();
 
+        Map<String, Object> simple = new HashMap<>();
+        simple.put("activityTime", time / 1000);
+        simple.put("description", doing);
+        simple.put("interest", category);
+        simple.put("location", where);
+        simple.put("timePosted", System.currentTimeMillis() / 1000);
+        simple.put("key", key);
+        simple.put("uid", poster);
+
 
         if(!invalid) {
-            mDatabase.child("activities/" + key).setValue(event);
-            Snackbar.make(post, "Post created successfully!", Snackbar.LENGTH_LONG).show();
+            if(!posts.contains(doing)) {
+                posts.add(doing);
+                mDatabase.child("activities/" + key).setValue(event);
+                mDatabase.child("user_activities/" + poster + "/" + key).setValue(simple);
 
-            Snackbar snack = Snackbar.make(post, "Post created!", Snackbar.LENGTH_LONG);
-            /*snack.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //erase post
-                }
-            });
 
-            */
+                Snackbar.make(post, "Post created successfully!", Snackbar.LENGTH_LONG).show();
 
-            View view = snack.getView();
-            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-            tv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-            snack.show();
+                Snackbar snack = Snackbar.make(post, "Post created!", Snackbar.LENGTH_LONG);
+                /*snack.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //erase post
+                    }
+                });
+
+                */
+
+                View view = snack.getView();
+                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                snack.show();
+            }
         }
         else{
             Toast.makeText(this, "Please enter all fields", Toast.LENGTH_LONG).show();

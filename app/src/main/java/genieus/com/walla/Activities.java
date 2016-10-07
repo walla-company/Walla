@@ -1,5 +1,6 @@
 package genieus.com.walla;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,10 +16,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
@@ -49,7 +52,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class Activities extends AppCompatActivity implements View.OnClickListener, InterestsRVAdapter.ItemClickListener, ChildEventListener {
+public class Activities extends AppCompatActivity implements View.OnClickListener, InterestsRVAdapter.ItemClickListener, ChildEventListener, SearchView.OnQueryTextListener {
 
     private DatabaseReference mDatabase;
     InterestsRVAdapter adapter;
@@ -57,11 +60,14 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
     RecyclerView rv;
     ListView lv;
     RelativeLayout profile;
+    RelativeLayout calendar;
     List<Event> events;
     EventAdapter adp;
     ProgressBar loading;
     TextView notice;
     ImageView write;
+    ImageView icon;
+    SearchView mSearchView;
     final double SECONDS_IN_DAY = 86400;
 
     @Override
@@ -98,6 +104,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         adp.getFilter().filter("");
         lv.setAdapter(adp);
 
+        icon = (ImageView) findViewById(R.id.act_img);
         write = (ImageView) findViewById(R.id.icon);
         notice = (TextView) findViewById(R.id.notice);
         rv = (RecyclerView) findViewById(R.id.interests);
@@ -105,8 +112,10 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rv.setLayoutManager(layoutManager);
 
+        calendar = (RelativeLayout) findViewById(R.id.calendar_btn);
         profile = (RelativeLayout) findViewById(R.id.profile_btn);
         profile.setOnClickListener(this);
+        calendar.setOnClickListener(this);
         write.setOnClickListener(this);
 
         /*
@@ -160,6 +169,13 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
         }
 
+        startService(new Intent(this, NotificationListener.class));
+
+    }
+
+    private void setIconColor(){
+        int color = Color.parseColor("#ffa160"); //The color u want
+        icon.setColorFilter(color);
     }
 
     private void showFirstTimeWelcome(){
@@ -217,6 +233,21 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_activities, menu);
+
+        /*
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        // Get the SearchView and set the searchable configuration
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);//MenuItemCompat.getActionView(searchItem);//menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setIconifiedByDefault(true); // Do not iconify the widget; expand it by default
+
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setVisibility(View.GONE);
+        */
+
         return true;
     }
 
@@ -256,6 +287,9 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
                         // Navigate up to the closest parent
                         .startActivities();
             }
+        }else if(id == R.id.calendar_btn){
+            Intent intent = new Intent(this, Calendar.class);
+            startActivity(intent);
         }
     }
 
@@ -295,7 +329,7 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         }
 
         String search = event.getName().equals("All") ? "" : event.getName();
-        adp.getFilter().filter(search);
+        filterEvents(search);
 
         for(int i= 0; i < all.size(); i++){
             if(i != position){
@@ -312,32 +346,54 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
     }
 
+    private void filterEvents(String str){
+        adp.getFilter().filter(str);
+    }
+
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Map<Object, Object> act = (Map<Object, Object>) dataSnapshot.getValue();
-        events.add(new Event(
-                (String) act.get("description"),
-                (String) act.get("interest"),
-                "" +  act.get("activityTime"),
-                "" + act.get("activityTime"),
-                (String) act.get("uid"),
-                (String) act.get("location"),
-                (String) act.get("key"),
-                (long) act.get("numberGoing")));
+        final Map<Object, Object> act = (Map<Object, Object>) dataSnapshot.getValue();
+        String uid =  (String) act.get("uid");
 
-        Collections.sort(events, new Comparator<Event>() {
-            @Override
-            public int compare(Event lhs, Event rhs) {
-                return Double.compare(rhs.getRawTime(), lhs.getRawTime());
-            }
-        });
+        mDatabase.child("users").child(uid).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> userInfo = (Map<String, Object>) dataSnapshot.getValue();
+                        String name = (String) userInfo.get("name");
 
-        adp.notifyDataSetChanged();
-        adp.getFilter().filter("");
+                        events.add(new Event(
+                                (String) act.get("description"),
+                                (String) act.get("interest"),
+                                "" +  act.get("activityTime"),
+                                "" + act.get("activityTime"),
+                                (String) act.get("uid"),
+                                name,
+                                (String) act.get("location"),
+                                (String) act.get("key"),
+                                (long) act.get("numberGoing")));
 
-        if(loading.getVisibility() == View.VISIBLE){
-            loading.setVisibility(View.GONE);
-        }
+                        Collections.sort(events, new Comparator<Event>() {
+                            @Override
+                            public int compare(Event lhs, Event rhs) {
+                                return Double.compare(rhs.getRawTime(), lhs.getRawTime());
+                            }
+                        });
+
+                        adp.notifyDataSetChanged();
+                        adp.getFilter().filter("");
+
+                        if(loading.getVisibility() == View.VISIBLE){
+                            loading.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("ErrorUser", "getUser:onCancelled", databaseError.toException());
+                        // ...
+                    }
+                });
     }
 
     @Override
@@ -358,5 +414,16 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filterEvents(newText);
+        return true;
     }
 }

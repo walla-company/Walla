@@ -114,28 +114,13 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
         creator.setVisibility(View.GONE);
         creator.setText(event.getPosterUid());
 
-        mDatabase.child("users").child(creator.getText().toString()).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Map<String, Object> userInfo = (Map<String, Object>) dataSnapshot.getValue();
-                        creator.setVisibility(View.VISIBLE);
-                        creator.setText((String) userInfo.get("name") + " invites you");
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // ...
-                    }
-                });
+        creator.setVisibility(View.VISIBLE);
+        creator.setText(event.getPostedBy() +  " invites you");
 
             ec.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(event.isExpired()){
-                        Toast.makeText(getContext(), "This event has expired", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+
                         Intent intent = new Intent(getContext(), ActivityDetails.class);
                         intent.putExtra("description", event.getEventTitle());
                         intent.putExtra("time", event.getTimePosted());
@@ -149,7 +134,7 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
                         intent.putExtra("expired", event.isExpired());
 
                         getContext().startActivity(intent);
-                    }
+
 
                 }
             });

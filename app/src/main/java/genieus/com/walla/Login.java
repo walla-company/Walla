@@ -27,7 +27,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     final String TAG = "msg";
     Button login;
     EditText email, pass;
-    TextView signup;
+    TextView signup, forgot;
+
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -91,7 +92,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 "Authenticating...", true);
         loading.cancel();
 
+        forgot = (TextView) findViewById(R.id.forgot);
         signup = (TextView) findViewById(R.id.signup);
+        forgot.setOnClickListener(this);
         signup.setOnClickListener(this);
 
         email = (EditText) findViewById(R.id.enter_email);
@@ -109,6 +112,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
     private void switchToSignup(){
         Intent intent = new Intent(this, Signup.class);
+        startActivity(intent);
+    }
+
+    private void resetPassword(){
+        Intent intent = new Intent(this, ResetPassword.class);
         startActivity(intent);
     }
 
@@ -131,6 +139,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
                 }
                 break;
+            case R.id.forgot:
+                resetPassword();
         }
     }
 

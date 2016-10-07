@@ -44,9 +44,9 @@ public class Event {
 
     private boolean posterSet;
 
-    public Event(String title, String category, String date, String time, String postedBy, String location, String key, long people){
+    public Event(String title, String category, String date, String time, String postedBy, String name, String location, String key, long people){
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        this.postedBy = postedBy;
+        this.postedBy = name;
         timePosted = parseTime(time);
         eventCateogory = category;
         eventTitle = title.trim();
@@ -58,23 +58,6 @@ public class Event {
         posterUid = postedBy;
         expired = checkExpired(date);
         rawTime = Double.parseDouble(time);
-        getName();
-    }
-
-    public void getName(){
-        mDatabase.child("users").child(getPosterUid()).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Map<String, Object> userInfo = (Map<String, Object>) dataSnapshot.getValue();
-                        setPostedBy((String) userInfo.get("name"));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // ...
-                    }
-                });
     }
 
     public String getKey() {

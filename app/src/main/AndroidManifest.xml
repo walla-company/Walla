@@ -3,6 +3,7 @@
     package="genieus.com.walla">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -24,7 +25,7 @@
             android:name=".Login"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Signup"
             android:label="@string/title_activity_signup"
@@ -59,6 +60,31 @@
         <activity
             android:name=".Terms"
             android:label="@string/title_activity_terms"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver
+            android:name=".AutoStart"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="500">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".NotificationListener"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".Calendar"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_calendar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ResetPassword"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
