@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:lineSpacingMultiplier="0.85"
-                    android:paddingRight="8dp"
+                    android:layout_marginRight="8dp"
                     android:maxLines="5"
                     android:text="You can enter the description of an activity" />
 

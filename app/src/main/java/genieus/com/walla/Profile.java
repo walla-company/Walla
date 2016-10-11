@@ -54,6 +54,8 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
     ListView lv;
     RelativeLayout activities;
     TextView name, email;
+    private static Bitmap prof_img;
+
     final String TAG = "msg";
     final String[] settings = new String[]{"My Interests", "Account Settings", "Logout"};
     final String[] profilePicSettings = new String[]{"Take Photo", "Choose from Library", "Cancel"};
@@ -97,7 +99,11 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
         profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
         profile_pic.setOnClickListener(this);
-        getProfilePic();
+
+        if(prof_img == null)
+            getProfilePic();
+        else
+            profile_pic.setImageBitmap(prof_img);
 
 
 
@@ -168,6 +174,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
     }
 
     private void setProfilePic(Bitmap bmp){
+        prof_img = bmp;
         profile_pic.setImageBitmap(bmp);
 
         FirebaseStorage storage = FirebaseStorage.getInstance();

@@ -118,24 +118,6 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         calendar.setOnClickListener(this);
         write.setOnClickListener(this);
 
-        /*
-        List<Event> events = new ArrayList<>();
-        events.add(new Event("Event Title Goes Here", "Other","Jan. 1", "12:00 AM", "Arya Stark"));
-        events.add(new Event("Event Title Goes Here", "Other","May. 1", "12:00 AM", "Jon Snow"));
-        events.add(new Event("Event Title Goes Here", "Other","Feb. 1", "12:00 AM", "Dat Boi"));
-        events.add(new Event("Event Title Goes Here", "Other","Jan. 1", "12:00 AM", "Chicken Sandwich"));
-        events.add(new Event("Event Title Goes Here", "Other","Jan. 1", "12:00 AM", "Dank Memes"));
-        events.add(new Event("Event Title Goes Here", "Other","Jan. 1", "12:00 AM", "Timmy Boy"));
-        events.add(new Event("Event Title Goes Here", "Other","Sept. 1", "12:00 AM", "Harry Something"));
-        events.add(new Event("Event Title Goes Here", "Other","Jan. 1", "12:00 AM", "Ayy Lmfao"));
-        events.add(new Event("Event Title Goes Here", "Other","Dec. 1", "12:00 AM", "No Name"));
-
-        EventAdapter adp = new EventAdapter(this, R.layout.event_template, events);
-        lv.setAdapter(adp);
-        */
-
-
-
         List<Interests> interests = new ArrayList<>();
         interests.add(new Interests("All", R.mipmap.all));
         interests.add(new Interests("Art", R.mipmap.art));

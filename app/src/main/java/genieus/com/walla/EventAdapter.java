@@ -132,6 +132,7 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
                         intent.putExtra("poster", event.getPostedBy());
                         intent.putExtra("uid", event.getPosterUid());
                         intent.putExtra("expired", event.isExpired());
+                        intent.putExtra("rawTime", event.getRawTime());
 
                         getContext().startActivity(intent);
 

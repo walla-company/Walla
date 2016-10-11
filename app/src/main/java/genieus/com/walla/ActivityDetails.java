@@ -50,13 +50,15 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ActivityDetails extends AppCompatActivity {
+public class ActivityDetails extends AppCompatActivity implements View.OnClickListener{
     private DatabaseReference mDatabase;
     FirebaseUser user;
     String description, time, location, category, color, key, poster, uid;
+    double rawTime;
     long people;
     boolean expired;
     boolean userSignedUp;
+    boolean canEdit;
 
     final private int EXPIRED = 2;
     final private int PRESSED = 1;
@@ -65,7 +67,7 @@ public class ActivityDetails extends AppCompatActivity {
     private Map<String, Object> attendees;
 
     TextView desc_tv, time_tv, location_tv, category_tv, people_tv, peopleList_tv;
-    Button interested;
+    Button action;
     CircleImageView hostPic;
     RelativeLayout container;
     @Override
@@ -80,6 +82,7 @@ public class ActivityDetails extends AppCompatActivity {
         if (extras != null) {
             description = extras.getString("description");
             time = extras.getString("time");
+            rawTime = extras.getDouble("rawTime");
             location = extras.getString("location");
             category = extras.getString("category");
             people = extras.getLong("people");
@@ -91,6 +94,10 @@ public class ActivityDetails extends AppCompatActivity {
         }
 
         initUi();
+        if(isMadeByUser()){
+            action.setText("Edit Post");
+            canEdit = true;
+        }
     }
 
     private void initUi(){
@@ -98,6 +105,7 @@ public class ActivityDetails extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         userSignedUp = false;
+        canEdit = false;
 
         desc_tv = (TextView) findViewById(R.id.description);
         time_tv = (TextView) findViewById(R.id.time);
@@ -105,7 +113,7 @@ public class ActivityDetails extends AppCompatActivity {
         category_tv = (TextView) findViewById(R.id.category);
         people_tv = (TextView) findViewById(R.id.going);
         peopleList_tv = (TextView) findViewById(R.id.list_going);
-        interested = (Button) findViewById(R.id.interested_btn);
+        action = (Button) findViewById(R.id.interested_btn);
         container = (RelativeLayout) findViewById(R.id.cat_container);
         hostPic = (CircleImageView) findViewById(R.id.host_img);
 
@@ -117,26 +125,30 @@ public class ActivityDetails extends AppCompatActivity {
         category_tv.setTextColor(Color.parseColor(color));
 
         attendees = new HashMap<>();
-        if(expired) {
-            changeBtnColor(EXPIRED);
-        }
-        else{
-            interested.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(userSignedUp)
-                        unrsvp();
-                    else
-                        rsvp();
-                }
-            });
-        }
+
+        action.setOnClickListener(this);
 
         changeBtnColor(NOT_PRESSED);
 
 
         getHostPic();
         getAttendees();
+    }
+
+    private boolean isMadeByUser(){
+        return user.getUid().equals(uid);
+    }
+
+    private void showEditActivity(){
+        Intent intent = new Intent(ActivityDetails.this, Create.class);
+
+        intent.putExtra("description", description);
+        intent.putExtra("interest", category);
+        intent.putExtra("location", location);
+        intent.putExtra("key", key);
+        intent.putExtra("rawTime", rawTime);
+
+        startActivity(intent);
     }
 
     private void getHostPic(){
@@ -221,7 +233,7 @@ public class ActivityDetails extends AppCompatActivity {
 
     private void changeBtnColor(int state){
         if(state == PRESSED) {
-            Drawable background = interested.getBackground();
+            Drawable background = action.getBackground();
             if (background instanceof ShapeDrawable) {
                 ((ShapeDrawable) background).getPaint().setColor(getResources().getColor(R.color.DodgerBlue));
             } else if (background instanceof GradientDrawable) {
@@ -230,9 +242,9 @@ public class ActivityDetails extends AppCompatActivity {
                 ((ColorDrawable) background).setColor(getResources().getColor(R.color.DodgerBlue));
             }
 
-            interested.setTextColor(Color.WHITE);
+            action.setTextColor(Color.WHITE);
         }else if(state == NOT_PRESSED){
-            Drawable background = interested.getBackground();
+            Drawable background = action.getBackground();
             if (background instanceof ShapeDrawable) {
                 ((ShapeDrawable) background).getPaint().setColor(getResources().getColor(R.color.white));
             } else if (background instanceof GradientDrawable) {
@@ -241,10 +253,10 @@ public class ActivityDetails extends AppCompatActivity {
                 ((ColorDrawable) background).setColor(getResources().getColor(R.color.white));
             }
 
-            interested.setTextColor(Color.BLACK);
+            action.setTextColor(Color.BLACK);
         }
         else if(state == EXPIRED){
-            Drawable background = interested.getBackground();
+            Drawable background = action.getBackground();
             if (background instanceof ShapeDrawable) {
                 ((ShapeDrawable) background).getPaint().setColor(getResources().getColor(R.color.LightGrey));
             } else if (background instanceof GradientDrawable) {
@@ -253,23 +265,42 @@ public class ActivityDetails extends AppCompatActivity {
                 ((ColorDrawable) background).setColor(getResources().getColor(R.color.LightGrey));
             }
 
-            interested.setTextColor(Color.WHITE);
+            action.setTextColor(Color.WHITE);
         }
     }
 
     private void unrsvp(){
-        changeBtnColor(NOT_PRESSED);
-        mDatabase.child("attendees/" + key + "/" + user.getUid()).removeValue();
-        mDatabase.child("user_attending/" + user.getUid() + "/" + key).removeValue();
-        userSignedUp = false;
-        int i = peopleList_tv.getText().toString().lastIndexOf(",");
-        if(i >= 0)
-            peopleList_tv.setText(peopleList_tv.getText().toString().substring(0,i));
+        if(!expired) {
+            changeBtnColor(NOT_PRESSED);
+            mDatabase.child("attendees/" + key + "/" + user.getUid()).removeValue();
+            mDatabase.child("user_attending/" + user.getUid() + "/" + key).removeValue();
+            userSignedUp = false;
+            int i = peopleList_tv.getText().toString().lastIndexOf(",");
+            if(i >= 0)
+                peopleList_tv.setText(peopleList_tv.getText().toString().substring(0,i));
+        }else{
+            Toast.makeText(this, "This event has already happened", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void rsvp(){
-        mDatabase.child("attendees/" + key + "/" + user.getUid()).setValue(System.currentTimeMillis() / 1000);
-        mDatabase.child("user_attending/" + user.getUid() + "/" + key).setValue(System.currentTimeMillis() / 1000);
+        if(!expired) {
+            mDatabase.child("attendees/" + key + "/" + user.getUid()).setValue(System.currentTimeMillis() / 1000);
+            mDatabase.child("user_attending/" + user.getUid() + "/" + key).setValue(System.currentTimeMillis() / 1000);
+        }else{
+            Toast.makeText(this, "This event has already happened", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void actionClicked(){
+        if(canEdit){
+            showEditActivity();
+        }else {
+            if (userSignedUp)
+                unrsvp();
+            else
+                rsvp();
+        }
     }
 
     private void showFlagConfirm(){
@@ -312,6 +343,16 @@ public class ActivityDetails extends AppCompatActivity {
                 rsvp();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch(id){
+            case R.id.interested_btn:
+                actionClicked();
+                break;
+        }
     }
 }
 

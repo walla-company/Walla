@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -50,6 +51,9 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
     Date date;
     Button post;
 
+    private boolean creating;
+    private String postKey;
+
     private DatabaseReference mDatabase;
     FirebaseUser user;
 
@@ -63,8 +67,24 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initUi();
-
+        try{
+            Bundle ex = getIntent().getExtras();
+            if(ex.containsKey("description")){
+                creating = false;
+                postKey = ex.getString("key");
+                initAsUpdate(ex.getString("description"),
+                        ex.getString("interest"),
+                        ex.getString("location"),
+                        ex.getDouble("rawTime"));
+            }else{
+                creating = true;
+                initUi();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            creating = true;
+            initUi();
+        }
 
     }
 
@@ -83,6 +103,7 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
 
         select_category = (TextView) findViewById(R.id.select_category);
         select_category.setOnClickListener(this);
+        select_category.setTextColor(getResources().getColor(R.color.colorPrimary));
 
         title.addTextChangedListener(new TextWatcher() {
             @Override
@@ -101,6 +122,72 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
             }
         });
     }
+
+    private void initAsUpdate(String desc, String interest, String loc, double time){
+        getSupportActionBar().setTitle("Edit");
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        date = new Date();
+
+        enter_time = (TextView) findViewById(R.id.enter_time);
+        char_count = (TextView) findViewById(R.id.char_count);
+        post = (Button) findViewById(R.id.post_btn);
+        location = (EditText) findViewById(R.id.enter_location);
+        title = (EditText) findViewById(R.id.enter_title);
+
+        post.setText("Update Post");
+
+        enter_time.setOnClickListener(this);
+        post.setOnClickListener(this);
+
+        select_category = (TextView) findViewById(R.id.select_category);
+        select_category.setTextColor(getResources().getColor(R.color.colorPrimary));
+        select_category.setOnClickListener(this);
+
+        title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                char_count.setText("Character count: " + title.getText().toString().length());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        String timeStr = getTimeString(time);
+
+        enter_time.setText(timeStr);
+        title.setText(desc);
+        select_category.setText(interest);
+        location.setText(loc);
+    }
+
+    private String getTimeString(double time){
+        String timeStr = "";
+        Date activityDate = new Date((long) time * 1000);
+        int mon = activityDate.getMonth();
+        int day = activityDate.getDate();
+        timeStr += getMonthName(mon) + " "  + day;
+
+        int hr = activityDate.getHours() % 12;
+        if(hr == 0)
+            hr = 12;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm aa");
+        String timeFormated = dateFormat.format(activityDate);
+
+        timeStr += ", " + hr + timeFormated.substring(2);
+        return timeStr;
+    }
+
 
     private void showCategories(){
          new AlertDialog.Builder(this)
@@ -126,6 +213,43 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
         int m = cal.get(Calendar.MINUTE);
 
         new TimePickerDialog(this, this, h, m, true).show();
+    }
+
+    private void update(){
+        String doing = title.getText().toString();
+        String where = location.getText().toString();
+        String poster = user.getUid();
+        String category = select_category.getText().toString();
+
+        mDatabase.child("activities/" + postKey + "/description").setValue(doing);
+        mDatabase.child("user_activities/" + poster + "/" + postKey + "/description").setValue(doing);
+
+        mDatabase.child("activities/" + postKey + "/interest").setValue(category);
+        mDatabase.child("user_activities/" + poster + "/" + postKey + "/interest").setValue(category);
+
+        mDatabase.child("activities/" + postKey + "/location").setValue(where);
+        mDatabase.child("user_activities/" + poster + "/" + postKey + "/location").setValue(where);
+
+        mDatabase.child("activities/" + postKey + "/activityTime").setValue(3);
+        mDatabase.child("user_activities/" + poster + "/" + postKey + "/activityTime").setValue(3);
+    }
+
+    private void deletePost(){
+        new android.support.v7.app.AlertDialog.Builder(Create.this)
+                .setTitle("Delete")
+                .setMessage("Are you sure you want to delete this post?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mDatabase.child("activities/" + postKey).removeValue();
+                        mDatabase.child("user_activities/" + user.getUid() + "/" + postKey).removeValue();
+
+                        Toast.makeText(Create.this, "Post has been deleted", Toast.LENGTH_LONG).show();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     private void post(){
@@ -227,7 +351,10 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
                 showCategories();
                 break;
             case R.id.post_btn:
-                post();
+                if(creating)
+                    post();
+                else
+                    update();
                 break;
         }
     }
@@ -298,7 +425,19 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
     @Override
     public void onClick(DialogInterface dialog, int which) {
         select_category.setText(categories[which]);
-        select_category.setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_create, menu);
+        if(creating){
+            MenuItem delete = menu.findItem(R.id.action_delete);
+            delete.setVisible(false);
+            invalidateOptionsMenu();
+        }
+
+        return true;
     }
 
     @Override
@@ -307,8 +446,14 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if(id == android.R.id.home){
-            onBackPressed();
+        switch(id){
+            case R.id.home:
+                onBackPressed();
+                break;
+            case R.id.action_delete:
+                if(!creating)
+                    deletePost();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
