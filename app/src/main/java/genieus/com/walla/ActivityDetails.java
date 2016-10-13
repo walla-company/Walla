@@ -242,6 +242,8 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
                 ((ColorDrawable) background).setColor(getResources().getColor(R.color.DodgerBlue));
             }
 
+            action.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_done, 0, 0, 0);
+            action.setCompoundDrawablePadding(-30);
             action.setTextColor(Color.WHITE);
         }else if(state == NOT_PRESSED){
             Drawable background = action.getBackground();
@@ -252,6 +254,8 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
             } else if (background instanceof ColorDrawable) {
                 ((ColorDrawable) background).setColor(getResources().getColor(R.color.white));
             }
+
+            action.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 
             action.setTextColor(Color.BLACK);
         }

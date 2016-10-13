@@ -139,10 +139,63 @@ c
             android:textSize="18sp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="8dp"
             android:text="Bob Smit (host), Hannah Montana"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+
+        <RelativeLayout
+            android:layout_weight="5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:textSize="16sp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:background="@android:color/transparent"
+                android:paddingLeft="16dp"
+                android:paddingRight="8dp"
+                android:hint="Join the discussion!"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_centerInParent="true"
+                android:background="@drawable/circle"
+                android:layout_width="45dp"
+                android:layout_height="45dp">
+
+
+                <ImageView
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_send"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
 
 </RelativeLayout>
