@@ -46,6 +46,11 @@ public class Calendar extends AppCompatActivity implements View.OnClickListener{
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user.getEmail().trim().endsWith("@sandiego.edu")){
+            mDatabase = mDatabase.child("sandiego-*-edu");
+        }
+
         lv = (ListView) findViewById(R.id.events);
         profile = (RelativeLayout)findViewById(R.id.profile_btn);
         activities = (RelativeLayout) findViewById(R.id.activities_btn);

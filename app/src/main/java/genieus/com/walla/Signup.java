@@ -39,6 +39,7 @@ import java.util.Map;
 public class Signup extends AppCompatActivity implements View.OnClickListener {
     Button signup;
     TextView login;
+
     TextView terms;
     EditText name, email, pass;
     final String TAG = "msg";
@@ -88,6 +89,9 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
         Intent intent = new Intent(this, Activities.class);
         intent.putExtra("login", login);
         intent.putExtra("first", first);
+
+
+
         startActivity(intent);
     }
 
@@ -139,6 +143,10 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
                             String id = task.getResult().getUser().getUid();
                             mDatabase = FirebaseDatabase.getInstance().getReference();
 
+                            if(e.trim().endsWith("@sandiego.edu")){
+                                mDatabase = mDatabase.child("sandiego-*-edu");
+                            }
+
                             Map<String, Object> info = new HashMap<>();
                             info.put("name", name.getText().toString().trim());
                             info.put("profile_image", "");
@@ -183,7 +191,8 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
             return false;
         }
 
-        return email != null && email.getText().toString().endsWith("@duke.edu")
+        //// TODO: 11/1/2016 fix ugly fix for USD
+        return email != null && (email.getText().toString().endsWith("@duke.edu") || email.getText().toString().endsWith("@sandiego.edu"))
             && pass != null;
     }
 

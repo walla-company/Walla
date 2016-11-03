@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +38,7 @@ import java.util.Map;
  */
 public class EventAdapter extends ArrayAdapter<String> implements Filterable {
 
+    private FirebaseUser user;
     private DatabaseReference mDatabase;
     List<Event> events;
     List<String> filtered;
@@ -47,6 +50,14 @@ public class EventAdapter extends ArrayAdapter<String> implements Filterable {
         this.events = events;
         this.resource = resource;
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mDatabase = mDatabase.child("sandiego");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user.getEmail().trim().endsWith("@sandiego.edu")){
+            mDatabase = mDatabase.child("sandiego-*-edu");
+        }
+
         filtered = new ArrayList<>();
         mFilter = new ItemFilter();
     }

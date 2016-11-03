@@ -95,7 +95,7 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
 
         initUi();
         if(isMadeByUser()){
-            action.setText("Edit Post");
+            action.setText("Host");
             canEdit = true;
         }
     }
@@ -103,6 +103,10 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
     private void initUi(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user.getEmail().trim().endsWith("@sandiego.edu")){
+            mDatabase = mDatabase.child("sandiego-*-edu");
+        }
 
         userSignedUp = false;
         canEdit = false;
@@ -166,7 +170,7 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                storageRef.child("profile_images").child(uid + ".pnh").getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                storageRef.child("profile_images").child(uid + ".jpg").getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Log.d("ppic", "pic found");
@@ -298,7 +302,8 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
 
     private void actionClicked(){
         if(canEdit){
-            showEditActivity();
+            //// TODO: 11/2/2016 temporarily disabled
+            //showEditActivity();
         }else {
             if (userSignedUp)
                 unrsvp();

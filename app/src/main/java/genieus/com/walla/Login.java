@@ -2,6 +2,8 @@ package genieus.com.walla;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +24,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
 
 public class Login extends AppCompatActivity implements View.OnClickListener{
     ProgressDialog loading;
@@ -30,6 +39,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     EditText email, pass;
     TextView signup, forgot;
 
+    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -38,10 +48,43 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+
+        checkVersion();
 
         authenticate();
         initUi();
+
+    }
+
+    private void checkVersion(){
+        mDatabase.child("minimumVersion").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> versions = (Map<String, Object>) dataSnapshot.getValue();
+                String version = (String) versions.get("Android");
+                String appVersion = "";
+                try {
+                    PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    appVersion = pInfo.versionName;
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                Log.wtf("version", appVersion + " and " + version);
+
+                if(appVersion.compareTo(version) < 0){
+                    Intent intent  = new Intent(Login.this, OutdatedVersion.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

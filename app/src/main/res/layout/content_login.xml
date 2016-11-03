@@ -24,7 +24,7 @@
 
         <EditText
             android:id="@+id/enter_email"
-            android:hint="Duke Email Address"
+            android:hint="Email Address"
             android:textColorHint="@color/LightGrey"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"

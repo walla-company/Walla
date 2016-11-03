@@ -30,6 +30,10 @@ public class MyInterestsAdapter extends ArrayAdapter<String> {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        if(user.getEmail().trim().endsWith("@sandiego.edu")){
+            mDatabase = mDatabase.child("sandiego-*-edu");
+        }
     }
 
     @Override

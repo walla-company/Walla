@@ -91,6 +91,11 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
     private void initUi(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user.getEmail().trim().endsWith("@sandiego.edu")){
+            mDatabase = mDatabase.child("sandiego-*-edu");
+        }
+
         date = new Date();
 
         enter_time = (TextView) findViewById(R.id.enter_time);
@@ -245,6 +250,7 @@ public class Create extends AppCompatActivity implements View.OnClickListener, D
                         mDatabase.child("user_activities/" + user.getUid() + "/" + postKey).removeValue();
 
                         Toast.makeText(Create.this, "Post has been deleted", Toast.LENGTH_LONG).show();
+                        onBackPressed();
                     }
 
                 })

@@ -57,10 +57,6 @@
             android:label="@string/title_activity_activity_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Terms"
-            android:label="@string/title_activity_terms"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
             android:name=".AutoStart"
@@ -78,40 +74,31 @@
 
         <activity
             android:name=".Calendar"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_calendar"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ResetPassword"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_reset_password"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service android:name=".NotificationService">
-
             <intent-filter>
-
-                <action android:name="com.google.firebase.INSTANCE_EVENT_ID">
-
-                </action>
-
+                <action android:name="com.google.firebase.INSTANCE_EVENT_ID"></action>
             </intent-filter>
-
         </service>
-
         <service android:name=".FCMService">
-
             <intent-filter>
-
-                <action android:name="com.google.firebase.MESSAGING_EVENT">
-
-                </action>
-
+                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
             </intent-filter>
-
         </service>
+
+        <activity
+            android:name=".OutdatedVersion"
+            android:label="@string/title_activity_outdated_version"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

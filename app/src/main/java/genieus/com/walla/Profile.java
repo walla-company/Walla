@@ -52,12 +52,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
     FirebaseUser user;
     CircleImageView profile_pic;
     ListView lv;
-    RelativeLayout activities;
+    RelativeLayout activities, calendar;
     TextView name, email;
     private static Bitmap prof_img;
 
     final String TAG = "msg";
-    final String[] settings = new String[]{"My Interests", "Account Settings", "Logout"};
+    String[] settings = new String[]{"My Interests", "Account Settings", "Logout"};
     final String[] profilePicSettings = new String[]{"Take Photo", "Choose from Library", "Cancel"};
     final int CAMERA_INTENT_RESULT = 1;
     final int GALLERY_INTENT_RESULT = 2;
@@ -77,6 +77,10 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        if(user.getEmail().trim().endsWith("@sandiego.edu")){
+            mDatabase = mDatabase.child("sandiego-*-edu");
+            settings = new String[]{"Account Settings", "Logout"};
+        }
 
         name = (TextView) findViewById(R.id.user_name);
         email = (TextView) findViewById(R.id.user_email);
@@ -94,6 +98,8 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
 
         activities = (RelativeLayout) findViewById(R.id.activities_btn);
         activities.setOnClickListener(this);
+        calendar = (RelativeLayout) findViewById(R.id.calendar_btn);
+        calendar.setOnClickListener(this);
 
         lv.setOnItemClickListener(this);
 
@@ -278,6 +284,9 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
             startActivity(intent);
         }else if(id == R.id.profile_pic){
             showProfilePicDialog();
+        }else if(id == R.id.calendar_btn){
+            Intent intent = new Intent(this, Calendar.class);
+            startActivity(intent);
         }
     }
 

@@ -51,6 +51,10 @@ public class MyInterests extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        if(user.getEmail().trim().endsWith("@sandiego.edu")){
+            mDatabase = mDatabase.child("sandiego-*-edu");
+        }
+
         lv = (ListView) findViewById(R.id.my_interests);
         loading = (ProgressBar) findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
@@ -63,7 +67,6 @@ public class MyInterests extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Boolean> s = (Map<String, Boolean>) dataSnapshot.getValue();
-                Log.d("bruh", s.toString());
                 Setting[] interests = new Setting[]{new Setting("Art", s.get("art")),
                         new Setting("School", s.get("school")),
                         new Setting("Sports", s.get("sports")),

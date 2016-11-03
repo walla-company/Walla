@@ -94,6 +94,10 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        if(user.getEmail().trim().endsWith("@sandiego.edu")){
+            mDatabase = mDatabase.child("sandiego-*-edu");
+        }
+
         loading = (ProgressBar) findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
         startLoadingCounter();
@@ -229,6 +233,11 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setVisibility(View.GONE);
         */
+
+        if(user.getEmail().trim().endsWith("@sandiego.edu")){
+            MenuItem notifs = menu.findItem(R.id.actions_notifs);
+            notifs.setVisible(false);
+        }
 
         return true;
     }

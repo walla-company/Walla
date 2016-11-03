@@ -147,6 +147,7 @@ c
     </RelativeLayout>
 
     <LinearLayout
+        android:visibility="invisible"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:orientation="horizontal"
