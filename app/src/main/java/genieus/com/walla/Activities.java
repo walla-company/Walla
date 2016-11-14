@@ -1,9 +1,13 @@
 package genieus.com.walla;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,6 +19,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -51,6 +56,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Calendar;
 
 public class Activities extends AppCompatActivity implements View.OnClickListener, InterestsRVAdapter.ItemClickListener, ChildEventListener, SearchView.OnQueryTextListener {
 
@@ -67,8 +73,10 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
     TextView notice;
     ImageView write;
     ImageView icon;
-    SearchView mSearchView;
     final double SECONDS_IN_DAY = 86400;
+    static AlarmManager am;
+    private SharedPreferences prefs;
+    private final String LOGIN_TIME_KEY = "last_login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +87,54 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
 
         initUi();
 
+        if(am == null){
+            am = (AlarmManager) getSystemService(ALARM_SERVICE);
+            setupNotifications();
+        }
+
         if(!hasActiveInternetConnection()){
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
         }
 
+        prefs = this.getSharedPreferences(
+                "genieus.com.walla", Context.MODE_PRIVATE);
+
+    }
+
+    private void setupNotifications(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 11);
+        cal.set(Calendar.MINUTE, 45);
+        cal.set(Calendar.SECOND, 0);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 16);
+        cal.set(Calendar.MINUTE, 45);
+        cal.set(Calendar.SECOND, 0);
+
+        Intent intent = new Intent(this, NotificationReciever.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        am.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, cal2.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        /*
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Intent rintent = new Intent(this, Activities.class);
+        rintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pIntent = PendingIntent.getActivity(this, 100, rintent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setContentIntent(pIntent)
+                .setSmallIcon(R.drawable.ic_notif_logo)
+                .setContentTitle("Walla")
+                .setContentText("There have been some posts on walla")
+                .setAutoCancel(true);
+
+        nm.notify(100, builder.build());
+        */
     }
 
     public static boolean hasActiveInternetConnection() {
@@ -416,5 +468,11 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
     public boolean onQueryTextChange(String newText) {
         filterEvents(newText);
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        prefs.edit().putLong(LOGIN_TIME_KEY, System.currentTimeMillis() / 1000);
     }
 }

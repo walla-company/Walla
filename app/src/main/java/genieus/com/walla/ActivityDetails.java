@@ -1,5 +1,7 @@
 package genieus.com.walla;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -60,9 +62,14 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
     boolean userSignedUp;
     boolean canEdit;
 
+    PendingIntent pendingIntent;
+    AlarmManager am;
+
     final private int EXPIRED = 2;
     final private int PRESSED = 1;
     final private int NOT_PRESSED = 0;
+
+    final private long MILLISECONDS_IN_MINUTE = 60000;
 
     private Map<String, Object> attendees;
 
@@ -107,6 +114,8 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
         if(user.getEmail().trim().endsWith("@sandiego.edu")){
             mDatabase = mDatabase.child("sandiego-*-edu");
         }
+
+        am = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         userSignedUp = false;
         canEdit = false;
@@ -286,6 +295,8 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
             int i = peopleList_tv.getText().toString().lastIndexOf(",");
             if(i >= 0)
                 peopleList_tv.setText(peopleList_tv.getText().toString().substring(0,i));
+
+            cancelAlarm();
         }else{
             Toast.makeText(this, "This event has already happened", Toast.LENGTH_LONG).show();
         }
@@ -295,6 +306,7 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
         if(!expired) {
             mDatabase.child("attendees/" + key + "/" + user.getUid()).setValue(System.currentTimeMillis() / 1000);
             mDatabase.child("user_attending/" + user.getUid() + "/" + key).setValue(System.currentTimeMillis() / 1000);
+            setAlarm();
         }else{
             Toast.makeText(this, "This event has already happened", Toast.LENGTH_LONG).show();
         }
@@ -346,10 +358,7 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
         }else if(id == R.id.action_flag){
             showFlagConfirm();
         }else if(id == R.id.action_star){
-            if(userSignedUp)
-                unrsvp();
-            else
-                rsvp();
+            actionClicked();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -361,6 +370,33 @@ public class ActivityDetails extends AppCompatActivity implements View.OnClickLi
             case R.id.interested_btn:
                 actionClicked();
                 break;
+        }
+    }
+
+    private void setAlarm(){
+        Intent intent = new Intent(this, EventReceiver.class);
+
+        intent.putExtra("description", description);
+        intent.putExtra("time", time);
+        intent.putExtra("location", location);
+        intent.putExtra("people", people);
+        intent.putExtra("category", category);
+        intent.putExtra("color", color);
+        intent.putExtra("key", key);
+        intent.putExtra("poster", poster);
+        intent.putExtra("uid",uid);
+        intent.putExtra("expired", expired);
+        intent.putExtra("rawTime", rawTime);
+
+        pendingIntent = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long time  = (((long) rawTime) * 1000) - (15 * MILLISECONDS_IN_MINUTE);
+        am.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+    }
+
+    private void cancelAlarm(){
+        if(pendingIntent != null && am != null){
+            am.cancel(pendingIntent);
         }
     }
 }

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="genieus.com.walla">
 
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -81,16 +83,11 @@
             android:name=".ResetPassword"
             android:label="@string/title_activity_reset_password"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <service android:name=".NotificationService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_EVENT_ID"></action>
-            </intent-filter>
-        </service>
         <service android:name=".FCMService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
@@ -99,6 +96,9 @@
             android:label="@string/title_activity_outdated_version"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <receiver android:name=".NotificationReciever" />
+        <receiver android:name=".EventReceiver"/>
     </application>
 
 </manifest>
