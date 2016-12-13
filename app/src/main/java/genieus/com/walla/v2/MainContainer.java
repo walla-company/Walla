@@ -23,7 +23,7 @@ import android.widget.Toast;
 import genieus.com.walla.R;
 
 public class MainContainer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, View.OnClickListener {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -80,6 +80,19 @@ public class MainContainer extends AppCompatActivity
         com.github.clans.fab.FloatingActionButton createPost = new com.github.clans.fab.FloatingActionButton(this);
         createPost.setLabelText("Create an event");
         createPost.setImageResource(R.drawable.ic_create);
+
+        createPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainContainer.this, Create.class));
+            }
+        });
+        createGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         fab.addMenuButton(createPost);
         fab.addMenuButton(createGroup);
@@ -223,6 +236,12 @@ public class MainContainer extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
 
     }
 }
