@@ -32,13 +32,7 @@
             android:name=".Signup"
             android:label="@string/title_activity_signup"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Create"
             android:label="@string/title_activity_create"
@@ -95,10 +89,29 @@
             android:name=".OutdatedVersion"
             android:label="@string/title_activity_outdated_version"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver android:name=".NotificationReciever" />
-        <receiver android:name=".EventReceiver"/>
+        <receiver android:name=".EventReceiver" />
+
+        <activity
+            android:name=".v2.Main"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".v2.MainContainer"
+            android:label="@string/title_activity_main_container"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".v2.Search"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

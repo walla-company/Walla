@@ -27,4 +27,15 @@
     <string name="title_activity_calendar">Calendar</string>
     <string name="title_activity_reset_password">ResetPassword</string>
     <string name="title_activity_outdated_version">OutdatedVersion</string>
+    <string name="title_activity_main">Main</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="title_activity_main_container">MainContainer</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_search">Search</string>
 </resources>
