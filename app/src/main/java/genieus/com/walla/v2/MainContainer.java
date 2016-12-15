@@ -228,6 +228,10 @@ public class MainContainer extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        switch(id){
+            case R.id.nav_my_interests:
+                startActivity(new Intent(this, InterestsView.class));
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -4,7 +4,7 @@
     android:id="@+id/container"
     android:layout_width="100dp"
     android:layout_height="30dp"
-    android:background="@drawable/rounded_corners"
+    android:background="@drawable/rounded_dodger_blue"
     android:orientation="horizontal"
     android:paddingLeft="10dp"
     android:layout_marginLeft="10dp"
@@ -19,6 +19,7 @@
 
         <TextView
             android:id="@+id/title"
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

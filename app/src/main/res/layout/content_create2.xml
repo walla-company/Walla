@@ -61,6 +61,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/body_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cv_container1"
@@ -222,7 +223,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/location_pin_container"
-                        android:layout_marginBottom="16dp"
                         android:layout_marginTop="8dp">
 
                         <TextView
@@ -247,11 +247,101 @@
 
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/host_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/details_container"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:id="@+id/host_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@id/title_in"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="Host on behalf of a group (optional)" />
+
+                        <EditText
+                            android:id="@+id/host_in"
+                            android:layout_width="match_parent"
+                            android:layout_height="32dp"
+                            android:layout_below="@+id/host_label"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/rounded_corners" />
+
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/body_2"
+                android:layout_marginTop="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:id="@+id/interests_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:id="@+id/interests_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@id/title_in"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="Interest(s)" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/interests_label">
+
+                            <ImageButton
+                                android:background="@drawable/rounded_green"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/add"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginLeft="16dp"
+                                android:src="@drawable/ic_add" />
+
+                            <android.support.v7.widget.RecyclerView
+                                android:layout_centerVertical="true"
+                                android:id="@+id/interests_rv"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_toRightOf="@id/add"
+                                android:background="@drawable/rounded_corners" />
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
 
                 </RelativeLayout>
 
 
             </android.support.v7.widget.CardView>
+
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
