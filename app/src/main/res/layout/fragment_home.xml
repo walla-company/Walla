@@ -4,17 +4,27 @@
     android:layout_height="match_parent"
     tools:context="genieus.com.walla.v2.Home">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/filter_rv"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
+    <RelativeLayout
+        android:id="@+id/interests_container"
         android:layout_width="match_parent"
-        android:layout_height="43dp">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/filter_title"
+        android:layout_marginBottom="@dimen/activities_list_padding"
+        android:background="@color/white">
+
+        <android.support.v7.widget.CardView
+            android:elevation="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/interests_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
 
 
-
-    </android.support.v7.widget.RecyclerView>
-
-
-</FrameLayout>
+    </FrameLayout>

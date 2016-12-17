@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/interest_width"
-    android:layout_height="@dimen/filters_height">
+    android:layout_width="90dp"
+    android:layout_height="90dp">
 
     <RelativeLayout
         android:id="@+id/interest_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <RelativeLayout
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:background="#f1f1f1">
 
         <RelativeLayout
-            android:id="@+id/container"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/circle_grey"
-            android:layout_width="40dp"
-            android:layout_height="40dp">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <RelativeLayout
+                android:id="@+id/container"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/circle_grey">
 
 
                 <ImageView
                     android:id="@+id/filter_img"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/games"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp" />
+                    android:src="@mipmap/games" />
 
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/filter_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/container"
+                android:layout_centerHorizontal="true"
+                android:text="sample" />
 
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/filter_name"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="sample"/>
-
-    </RelativeLayout>
 
 
     </RelativeLayout>

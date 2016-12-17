@@ -200,6 +200,9 @@ public class MainContainer extends AppCompatActivity
             case R.id.action_search:
                 switchToSearchActivity();
                 break;
+            case R.id.action_filter:
+                Home.showFilter();
+                break;
             default:
                 break;
         }

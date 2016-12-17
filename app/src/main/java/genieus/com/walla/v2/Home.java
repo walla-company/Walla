@@ -1,18 +1,30 @@
 package genieus.com.walla.v2;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import genieus.com.walla.Interests;
 import genieus.com.walla.R;
 
 /**
@@ -23,15 +35,16 @@ import genieus.com.walla.R;
  * Use the {@link Home#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Home extends Fragment {
+public class Home extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String[] filters;
-    private RecyclerView filter_rv;
-    private RVAdapterFilter adapter;
+    private RecyclerView interest_rv;
+    private InterestsRVAdapter adapter;
+    private List<Interests> interests;
+    private static Dialog dialog;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -71,21 +84,76 @@ public class Home extends Fragment {
     }
 
     private void initUi() {
-        filters = new String[]{"All","Art", "School", "Sports", "Rides", "Games", "Food", "Other"};
+        interests = new ArrayList<>();
+        interests.add(new Interests("All", R.mipmap.all));
+        interests.add(new Interests("Movies", R.mipmap.other));
+        interests.add(new Interests("Food", R.mipmap.food));
+        interests.add(new Interests("Academics", R.mipmap.other));
+        interests.add(new Interests("Study", R.mipmap.other));
+        interests.add(new Interests("Sports", R.mipmap.other));
+        interests.add(new Interests("Exhibition", R.mipmap.other));
+        interests.add(new Interests("Music", R.mipmap.other));
+        interests.add(new Interests("Games", R.mipmap.games));
+        interests.add(new Interests("Dance", R.mipmap.other));
+        interests.add(new Interests("Socialize", R.mipmap.other));
+        interests.add(new Interests("Other", R.mipmap.other));
 
-        adapter = new RVAdapterFilter(new ArrayList<>(Arrays.asList(filters)), new RVAdapterFilter.ItemClickListener() {
+        dialog.setTitle("Filter activities");
+
+        //LinearLayoutManager horizontal
+               // = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        GridLayoutManager grid
+                = new GridLayoutManager(getContext(), 4);
+
+        adapter = new InterestsRVAdapter(interests, new InterestsRVAdapter.ItemClickListener() {
             @Override
-            public void onItemClicked(String filter, int pos) {
-
+            public void onItemClicked(Interests event, View view, List<View> all, int pos) {
+                changeColorOfFilters(event, view, all, pos);
             }
         }, getContext());
 
-        LinearLayoutManager horizontal
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        interest_rv.setLayoutManager(grid);
+        interest_rv.setAdapter(adapter);
 
-        filter_rv.setLayoutManager(horizontal);
-        filter_rv.setAdapter(adapter);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
 
+        dialog.getWindow().setAttributes(lp);
+    }
+
+    private void changeColorOfFilters(Interests event, View view, List<View> all, int pos) {
+        Drawable background = view.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable)background).getPaint().setColor(getResources().getColor(R.color.colorPrimary));
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable)background).setColor(getResources().getColor(R.color.colorPrimary));
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable)background).setColor(getResources().getColor(R.color.colorPrimary));
+        }
+
+        //String search = event.getName().equals("All") ? "" : event.getName();
+        //filterEvents(search);
+
+        for(int i= 0; i < all.size(); i++){
+            if(i != pos){
+                Drawable bg = all.get(i).getBackground();
+                if (bg instanceof ShapeDrawable) {
+                    ((ShapeDrawable)bg).getPaint().setColor(getResources().getColor(R.color.LightGrey));
+                } else if (bg instanceof GradientDrawable) {
+                    ((GradientDrawable)bg).setColor(getResources().getColor(R.color.LightGrey));
+                } else if (bg instanceof ColorDrawable) {
+                    ((ColorDrawable)bg).setColor(getResources().getColor(R.color.LightGrey));
+                }
+            }
+        }
+    }
+
+    public static void showFilter(){
+        dialog.show();
     }
 
     @Override
@@ -93,7 +161,10 @@ public class Home extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        filter_rv = (RecyclerView) view.findViewById(R.id.filter_rv);
+        dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.filter_popup);
+        interest_rv = (RecyclerView) dialog.findViewById(R.id.interests_rv);
 
         initUi();
         return view;

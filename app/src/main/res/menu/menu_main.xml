@@ -9,14 +9,6 @@
         android:title="filter"
         android:icon="@drawable/ic_filter"
         app:showAsAction="ifRoom">
-        <menu>
-            <item
-                android:id="@+id/menuSortNewest"
-                android:title="Sort by newest" />
-            <item
-                android:id="@+id/menuSortRating"
-                android:title="Sort by rating" />
-        </menu>
     </item>
 
     <item
