@@ -1,5 +1,7 @@
 package genieus.com.walla.v2;
 
+import java.util.List;
+
 /**
  * Created by Anesu on 12/17/2016.
  */
@@ -16,8 +18,9 @@ public class Event {
     private String endTime;
     private int interested;
     private int going;
+    private List<String> tabs;
 
-    public Event(String category, int hoursDiff, String title, Type type, String startTime, String endTime, int interested, int going) {
+    public Event(String category, int hoursDiff, String title, Type type, String startTime, String endTime, int interested, int going, List<String> tabs) {
         this.category = category;
         this.hoursDiff = hoursDiff;
         this.title = title;
@@ -26,6 +29,7 @@ public class Event {
         this.endTime = endTime;
         this.interested = interested;
         this.going = going;
+        this.tabs = tabs;
     }
 
     public String getCategory() {
@@ -90,5 +94,13 @@ public class Event {
 
     public void setGoing(int going) {
         this.going = going;
+    }
+
+    public List<String> getTabs() {
+        return tabs;
+    }
+
+    public void setTabs(List<String> tabs) {
+        this.tabs = tabs;
     }
 }
