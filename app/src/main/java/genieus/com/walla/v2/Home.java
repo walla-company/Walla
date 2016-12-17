@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,7 @@ public class Home extends Fragment  {
     private static final String ARG_PARAM2 = "param2";
 
     private RecyclerView interest_rv;
+    private ListView events_lv;
     private InterestsRVAdapter adapter;
     private List<Interests> interests;
     private static Dialog dialog;
@@ -84,6 +86,16 @@ public class Home extends Fragment  {
     }
 
     private void initUi() {
+        initFilter();
+        initEvents();
+    }
+
+    private void initEvents() {
+        EventsLVAdapter adapter = new EventsLVAdapter(getContext(), R.layout.single_activity);
+        events_lv.setAdapter(adapter);
+    }
+
+    private void initFilter() {
         interests = new ArrayList<>();
         interests.add(new Interests("All", R.mipmap.all));
         interests.add(new Interests("Movies", R.mipmap.other));
@@ -101,7 +113,7 @@ public class Home extends Fragment  {
         dialog.setTitle("Filter activities");
 
         //LinearLayoutManager horizontal
-               // = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        // = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
         GridLayoutManager grid
                 = new GridLayoutManager(getContext(), 4);
@@ -165,6 +177,7 @@ public class Home extends Fragment  {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.filter_popup);
         interest_rv = (RecyclerView) dialog.findViewById(R.id.interests_rv);
+        events_lv = (ListView) view.findViewById(R.id.events);
 
         initUi();
         return view;
