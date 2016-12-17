@@ -91,7 +91,15 @@ public class Home extends Fragment  {
     }
 
     private void initEvents() {
-        EventsLVAdapter adapter = new EventsLVAdapter(getContext(), R.layout.single_activity);
+        List<Event> list = new ArrayList<>();
+
+        list.add(new Event("Dance", 4, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.", Event.Type.LIT, "6:45 PM", "7:55 PM",2, 11));
+        list.add(new Event("Academics", 6, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.", Event.Type.CHILL, "3:45 PM", "4:30 PM", 4, 2));
+        list.add(new Event("Food", 6, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.", Event.Type.CHILL, "8:45 AM", "10:00 AM", 7, 5));
+        list.add(new Event("Music", 7, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.", Event.Type.LIT, "12:45 PM", "2:30 PM", 3, 13));
+        list.add(new Event("Socialize", 11, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.", Event.Type.CHILL, "11:00 AM", "1:55 PM", 7, 4));
+
+        EventsLVAdapter adapter = new EventsLVAdapter(getContext(), R.layout.single_activity, list);
         events_lv.setAdapter(adapter);
     }
 
