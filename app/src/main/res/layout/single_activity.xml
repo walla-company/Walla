@@ -26,8 +26,74 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:src="@drawable/ic_lit"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+
+                <RelativeLayout
+                    android:paddingLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_centerVertical="true"
+                        android:id="@+id/icon"
+                        android:src="@mipmap/musicicon"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp" />
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/icon"
+                        android:text="Music · In 6 hours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:paddingLeft="16dp"
+                        android:layout_weight="0"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+
+                        <TextView
+                            android:textStyle="bold"
+                            android:layout_centerVertical="true"
+                            android:textSize="17sp"
+                            android:text="6:30 PM\nto 8:30"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_weight="10"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:text="Movie Night at Bryan Center Free Popcorn and drinks"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
 
             </RelativeLayout>
@@ -40,6 +106,71 @@
                 android:layout_marginTop="1.5dp"
                 android:layout_weight="3"
                 android:background="@color/white">
+
+
+                <RelativeLayout
+                    android:id="@+id/interested"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/interested_icon"
+                        android:src="@drawable/ic_star2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/interested_icon"
+                        android:text="7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/going"
+                    android:layout_toRightOf="@id/interested"
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/going_icon"
+                        android:src="@drawable/ic_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/going_icon"
+                        android:text="5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:gravity="right"
+                    android:layout_toRightOf="@id/going"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_time"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:text="6:30 PM - 9:30 PM"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                </RelativeLayout>
+
 
 
             </RelativeLayout>
