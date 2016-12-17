@@ -72,6 +72,8 @@ public class MainContainer extends AppCompatActivity
 
     private void setupFab() {
         fab = (com.github.clans.fab.FloatingActionMenu) findViewById(R.id.fab);
+        fab.setMenuButtonColorNormal(getResources().getColor(R.color.colorPrimary));
+        fab.setClosedOnTouchOutside(true);
 
         com.github.clans.fab.FloatingActionButton createGroup = new com.github.clans.fab.FloatingActionButton(this);
         createGroup.setLabelText("Create a group");
@@ -81,16 +83,20 @@ public class MainContainer extends AppCompatActivity
         createPost.setLabelText("Create an event");
         createPost.setImageResource(R.drawable.ic_create);
 
+        createGroup.setColorNormal(getResources().getColor(R.color.colorPrimary));
+        createPost.setColorNormal(getResources().getColor(R.color.colorPrimary));
+
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fab.close(true);
                 startActivity(new Intent(MainContainer.this, Create.class));
             }
         });
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fab.close(true);
             }
         });
 

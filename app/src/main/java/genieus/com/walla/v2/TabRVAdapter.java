@@ -1,6 +1,7 @@
 package genieus.com.walla.v2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -39,6 +40,12 @@ public class TabRVAdapter extends RecyclerView.Adapter<TabHolder> {
     @Override
     public void onBindViewHolder(TabHolder holder, int position) {
         holder.tabName.setText(list.get(position));
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, Group.class));
+            }
+        });
         /*
         if(isGroup(list.get(position))){
             Drawable background = holder.container.getBackground();

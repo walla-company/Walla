@@ -141,6 +141,10 @@
         <activity
             android:name=".v2.InterestsView"
             android:label="@string/title_activity_interests_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".v2.Group"
+            android:label="@string/title_activity_group"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

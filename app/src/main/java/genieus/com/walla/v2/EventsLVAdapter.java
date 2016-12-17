@@ -23,12 +23,19 @@ import genieus.com.walla.R;
  * Created by Anesu on 12/17/2016.
  */
 public class EventsLVAdapter extends ArrayAdapter {
+    enum Type{
+        GROUP,
+        MAIN_VIEW
+    }
+
     int resource;
     List<Event> events;
+    Type type;
     public EventsLVAdapter(Context context, int resource, List<Event> events) {
         super(context, resource);
         this.resource = resource;
         this.events = events;
+        this.type = type;
     }
 
     @Override
@@ -38,7 +45,7 @@ public class EventsLVAdapter extends ArrayAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
 
