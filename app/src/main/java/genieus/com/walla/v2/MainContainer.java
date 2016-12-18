@@ -20,6 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import genieus.com.walla.R;
 
 public class MainContainer extends AppCompatActivity
@@ -72,7 +79,8 @@ public class MainContainer extends AppCompatActivity
 
     private void setupFab() {
         fab = (com.github.clans.fab.FloatingActionMenu) findViewById(R.id.fab);
-        fab.setMenuButtonColorNormal(getResources().getColor(R.color.colorPrimary));
+        fab.setMenuButtonColorNormal(getResources().getColor(R.color.DodgerBlue));
+        fab.setMenuButtonColorPressed(getResources().getColor(R.color.DodgerBlue));
         fab.setClosedOnTouchOutside(true);
 
         com.github.clans.fab.FloatingActionButton createGroup = new com.github.clans.fab.FloatingActionButton(this);
@@ -83,8 +91,10 @@ public class MainContainer extends AppCompatActivity
         createPost.setLabelText("Create an event");
         createPost.setImageResource(R.drawable.ic_create);
 
-        createGroup.setColorNormal(getResources().getColor(R.color.colorPrimary));
-        createPost.setColorNormal(getResources().getColor(R.color.colorPrimary));
+        createGroup.setColorNormal(getResources().getColor(R.color.DodgerBlue));
+        createPost.setColorNormal(getResources().getColor(R.color.DodgerBlue));
+        createGroup.setColorPressed(getResources().getColor(R.color.DodgerBlue));
+        createPost.setColorPressed(getResources().getColor(R.color.DodgerBlue));
 
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
