@@ -1,6 +1,7 @@
 package genieus.com.walla.v2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.Image;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,12 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
@@ -22,25 +26,38 @@ import genieus.com.walla.R;
 /**
  * Created by Anesu on 12/17/2016.
  */
-public class EventsLVAdapter extends ArrayAdapter {
-    enum Type{
-        GROUP,
-        MAIN_VIEW
-    }
-
+public class EventsLVAdapter extends ArrayAdapter implements Filterable{
     int resource;
     List<Event> events;
-    Type type;
+    List<String> filtered;
+    Filter filter;
+
     public EventsLVAdapter(Context context, int resource, List<Event> events) {
         super(context, resource);
         this.resource = resource;
         this.events = events;
-        this.type = type;
+
+        filtered = new ArrayList<>();
+        filter = new ItemFilter();
+    }
+
+    private Event getEvent(List<Event> events, String query){
+        for(Event event : events){
+            if((event.getTabs().toString() + event.getTitle() + event.getStartTime()).equals(query)){
+                return event;
+            }
+        }
+
+        return null;
+    }
+
+    public Filter getFilter() {
+        return filter;
     }
 
     @Override
     public int getCount() {
-        return events.size();
+        return filtered.size();
     }
 
     @Override
@@ -60,7 +77,7 @@ public class EventsLVAdapter extends ArrayAdapter {
         TextView duration = (TextView) convertView.findViewById(R.id.duration);
         RecyclerView tabs = (RecyclerView) convertView.findViewById(R.id.tabs_rv);
 
-        Event event = events.get(position);
+        Event event = getEvent(events, filtered.get(position));
 
         LinearLayoutManager horizontal
             = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -79,6 +96,49 @@ public class EventsLVAdapter extends ArrayAdapter {
         duration.setText(event.getStartTime() + "\nto " + event.getEndTime());
         duration.setTypeface(robotoMedium);
 
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getContext().startActivity(new Intent(getContext(), Details.class));
+            }
+        });
+
         return convertView;
+    }
+
+    private class ItemFilter extends Filter {
+        @Override
+        protected Filter.FilterResults performFiltering(CharSequence constraint) {
+
+            String filterString = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final List<Event> list = events;
+
+            int count = list.size();
+            final ArrayList<String> nlist = new ArrayList<>(count);
+
+            String filterableString;
+
+            for (int i = 0; i < count; i++) {
+                filterableString = list.get(i).getTabs().toString() + list.get(i).getTitle() + list.get(i).getStartTime();
+                if (filterableString.toLowerCase().contains(filterString)) {
+                    nlist.add(filterableString);
+                }
+            }
+
+            results.values = nlist;
+            results.count = nlist.size();
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filtered = (ArrayList<String>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }

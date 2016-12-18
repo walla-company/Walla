@@ -2,19 +2,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context="genieus.com.walla.v2.Home">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:layout_marginBottom="4dp"
+            android:id="@+id/filter_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_fitler_darker"
+            android:gravity="center_vertical"
+            android:text="Showing type events"
+            android:textStyle="bold" />
+
         <ListView
             android:id="@+id/events"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/filter_label"
             android:divider="@android:color/transparent"
             android:dividerHeight="16dp"
-            android:padding="16dp"
             android:scrollbars="none" />
 
     </RelativeLayout>

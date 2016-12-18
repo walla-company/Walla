@@ -20,6 +20,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,8 +48,10 @@ public class Home extends Fragment  {
     private RecyclerView interest_rv;
     private ListView events_lv;
     private InterestsRVAdapter adapter;
+    private EventsLVAdapter adapterEvents;
     private List<Interests> interests;
     private static Dialog dialog;
+    private TextView filter_tv;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -99,8 +104,9 @@ public class Home extends Fragment  {
         list.add(new Event("Music", 7, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", Event.Type.LIT, "12:45 PM", "2:30", 3, 13, new ArrayList<String>(Arrays.asList("Free Food"))));
         list.add(new Event("Socialize", 11, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", Event.Type.CHILL, "11:00 AM", "1:55", 7, 4, new ArrayList<String>(Arrays.asList("Music","Dab Squad"))));
 
-        EventsLVAdapter adapter = new EventsLVAdapter(getContext(), R.layout.single_activity, list);
-        events_lv.setAdapter(adapter);
+        adapterEvents = new EventsLVAdapter(getContext(), R.layout.single_activity, list);
+        events_lv.setAdapter(adapterEvents);
+        adapterEvents.getFilter().filter("");
     }
 
     private void initFilter() {
@@ -129,7 +135,9 @@ public class Home extends Fragment  {
         adapter = new InterestsRVAdapter(interests, new InterestsRVAdapter.ItemClickListener() {
             @Override
             public void onItemClicked(Interests event, View view, List<View> all, int pos) {
-                changeColorOfFilters(event, view, all, pos);
+                String query = event.getName().equals("All") ? "" : event.getName();
+                filterEvents(query);
+                changeColorOfFilters(view, all, pos);
             }
         }, getContext());
 
@@ -145,7 +153,7 @@ public class Home extends Fragment  {
         dialog.getWindow().setAttributes(lp);
     }
 
-    private void changeColorOfFilters(Interests event, View view, List<View> all, int pos) {
+    private void changeColorOfFilters(View view, List<View> all, int pos) {
         Drawable background = view.getBackground();
         if (background instanceof ShapeDrawable) {
             ((ShapeDrawable)background).getPaint().setColor(getResources().getColor(R.color.colorPrimary));
@@ -175,6 +183,16 @@ public class Home extends Fragment  {
     public static void showFilter(){
         dialog.show();
     }
+    private void filterEvents(String query){
+        if(query.equals("")) filter_tv.setVisibility(View.GONE);
+        else {
+            filter_tv.setVisibility(View.VISIBLE);
+            filter_tv.setText(String.format("Showing %s events", query.toLowerCase()));
+        }
+
+        adapterEvents.getFilter().filter(query);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -186,6 +204,8 @@ public class Home extends Fragment  {
         dialog.setContentView(R.layout.filter_popup);
         interest_rv = (RecyclerView) dialog.findViewById(R.id.interests_rv);
         events_lv = (ListView) view.findViewById(R.id.events);
+        filter_tv = (TextView) view.findViewById(R.id.filter_label);
+        filter_tv.setVisibility(View.GONE);
 
         initUi();
         return view;
