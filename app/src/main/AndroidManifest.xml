@@ -149,6 +149,10 @@
         <activity
             android:name=".v2.Details"
             android:label="@string/title_activity_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".v2.EditProfile"
+            android:label="@string/title_activity_edit_profile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

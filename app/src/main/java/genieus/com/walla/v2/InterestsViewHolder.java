@@ -13,15 +13,14 @@ import genieus.com.walla.R;
  */
 public class InterestsViewHolder extends RecyclerView.ViewHolder {
 
-    ImageView iv;
-    TextView tv;
-    RelativeLayout rl, container;
+    ImageView icon;
+    TextView label;
+    RelativeLayout container;
 
     public InterestsViewHolder(View itemView) {
         super(itemView);
-        iv = (ImageView) itemView.findViewById(R.id.filter_img);
-        tv = (TextView) itemView.findViewById(R.id.filter_name);
-        rl = (RelativeLayout) itemView.findViewById(R.id.container);
-        container = (RelativeLayout) itemView.findViewById(R.id.interest_container);
+        icon = (ImageView) itemView.findViewById(R.id.interests_icon);
+        label = (TextView) itemView.findViewById(R.id.interests_label);
+        container = (RelativeLayout) itemView.findViewById(R.id.interests_container);
     }
 }

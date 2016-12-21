@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import genieus.com.walla.Interests;
+import genieus.com.walla.InterestsRVAdapter;
 import genieus.com.walla.R;
 
 /**

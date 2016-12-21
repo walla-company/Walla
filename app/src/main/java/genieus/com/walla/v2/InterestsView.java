@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.GridView;
@@ -19,7 +21,9 @@ import genieus.com.walla.InterestsViewHolder;
 import genieus.com.walla.R;
 
 public class InterestsView extends AppCompatActivity implements View.OnClickListener {
-    RelativeLayout movies, food, academic, study, sports, rides, exhibition, music, games, dance, socialize, other;
+    RecyclerView interests_rv;
+    InterestsViewRVAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,31 +36,30 @@ public class InterestsView extends AppCompatActivity implements View.OnClickList
     }
 
     private void initUi() {
-        movies = (RelativeLayout) findViewById(R.id.movies);
-        food = (RelativeLayout) findViewById(R.id.food);
-        academic = (RelativeLayout) findViewById(R.id.academic);
-        study = (RelativeLayout) findViewById(R.id.study);
-        sports = (RelativeLayout) findViewById(R.id.sports);
-        rides = (RelativeLayout) findViewById(R.id.rides);
-        exhibition = (RelativeLayout) findViewById(R.id.exhibition);
-        music = (RelativeLayout) findViewById(R.id.music);
-        games = (RelativeLayout) findViewById(R.id.games);
-        dance = (RelativeLayout) findViewById(R.id.dance);
-        socialize = (RelativeLayout) findViewById(R.id.socialize);
-        other = (RelativeLayout) findViewById(R.id.other);
+        List<InterestInfo> data = new ArrayList<>();
+        data.add(new InterestInfo("Movies", R.mipmap.movieicon));
+        data.add(new InterestInfo("Food", R.mipmap.foodicon));
+        data.add(new InterestInfo("Academics", R.mipmap.academicicon));
+        data.add(new InterestInfo("Study", R.mipmap.studyicon));
+        data.add(new InterestInfo("Sports", R.mipmap.sportsicon));
+        data.add(new InterestInfo("Rides", R.mipmap.ridesicon));
+        data.add(new InterestInfo("Exhibition", R.mipmap.exhibitionicon));
+        data.add(new InterestInfo("Music", R.mipmap.musicicon));
+        data.add(new InterestInfo("Games", R.mipmap.gamesicon));
+        data.add(new InterestInfo("Dance", R.mipmap.danceicon));
+        data.add(new InterestInfo("Socialize", R.mipmap.socializeicon));
+        data.add(new InterestInfo("Volunteer", R.mipmap.volunteeringicon));
+        data.add(new InterestInfo("Other", R.mipmap.othericon));
 
-        movies.setOnClickListener(this);
-        food.setOnClickListener(this);
-        academic.setOnClickListener(this);
-        study.setOnClickListener(this);
-        sports.setOnClickListener(this);
-        rides.setOnClickListener(this);
-        exhibition.setOnClickListener(this);
-        music.setOnClickListener(this);
-        games.setOnClickListener(this);
-        dance.setOnClickListener(this);
-        socialize.setOnClickListener(this);
-        other.setOnClickListener(this);
+        GridLayoutManager grid
+                = new GridLayoutManager(this, 3);
+
+        interests_rv = (RecyclerView) findViewById(R.id.interests_rv);
+        interests_rv.setLayoutManager(grid);
+
+        adapter = new InterestsViewRVAdapter(this, data);
+        interests_rv.setAdapter(adapter);
+
     }
 
     @Override
