@@ -18,9 +18,9 @@
             android:title="My Interests" />
 
         <item
-            android:id="@+id/nav_my_freinds"
+            android:id="@+id/nav_my_friends"
             android:icon="@drawable/ic_mat_group"
-            android:title="My Freinds" />
+            android:title="My Friends" />
         <item
             android:id="@+id/nav_my_groups"
             android:icon="@drawable/ic_mat_group_plus"

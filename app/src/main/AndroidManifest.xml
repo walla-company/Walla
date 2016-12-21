@@ -153,6 +153,10 @@
         <activity
             android:name=".v2.EditProfile"
             android:label="@string/title_activity_edit_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".v2.Friends"
+            android:label="@string/title_activity_friends"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

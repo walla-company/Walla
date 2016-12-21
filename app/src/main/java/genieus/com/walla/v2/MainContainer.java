@@ -253,6 +253,10 @@ public class MainContainer extends AppCompatActivity
                 break;
             case R.id.nav_edit_profile:
                 startActivity(new Intent(this, EditProfile.class));
+                break;
+            case R.id.nav_my_friends:
+                startActivity(new Intent(this, Friends.class));
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

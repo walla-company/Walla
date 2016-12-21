@@ -6,15 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="genieus.com.walla.v2.EditProfile"
     tools:showIn="@layout/activity_edit_profile">
 
 
-    <android.support.v7.widget.CardView
+    <RelativeLayout
+        android:id="@+id/profile_picture_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -22,166 +21,148 @@
         android:layout_alignParentTop="true">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:id="@+id/profile_picture_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/profile_picture_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="4dp"
-                        android:text="Profile picture" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/_in"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_below="@+id/profile_picture_label"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="4dp"
-                        android:src="@color/LightGrey" />
-
-                </RelativeLayout>
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/year_container"
+            <TextView
+                android:id="@+id/profile_picture_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/profile_picture_container"
-                android:layout_marginTop="16dp">
+                android:paddingLeft="16dp"
+                android:paddingTop="4dp"
+                android:text="Profile picture" />
 
-                <TextView
-                    android:id="@+id/year_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="4dp"
-                    android:text="Year" />
-
-                <EditText
-                    android:id="@+id/year_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:layout_below="@+id/year_label"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/rounded_corners"
-                    android:paddingLeft="8dp"
-                    android:text="2020" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/major_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/year_container"
-                android:layout_marginTop="16dp">
-
-                <TextView
-                    android:id="@+id/major_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="4dp"
-                    android:text="Major" />
-
-                <EditText
-                    android:id="@+id/major_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:layout_below="@+id/major_label"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/rounded_corners"
-                    android:paddingLeft="8dp"
-                    android:text="Computer Science" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_below="@id/major_container"
-                android:layout_marginTop="16dp"
-                android:id="@+id/hometown_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/hometown_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="4dp"
-                    android:text="Where are you from?" />
-
-                <EditText
-                    android:paddingLeft="8dp"
-                    android:text="Shanghai, China"
-                    android:id="@+id/hometown_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:layout_below="@+id/hometown_label"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/rounded_corners" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_below="@id/hometown_container"
-                android:layout_marginTop="16dp"
-                android:id="@+id/description_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/description_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="4dp"
-                    android:text="Describe yourself in a paragraph" />
-
-                <EditText
-                    android:paddingLeft="8dp"
-                    android:gravity="start"
-                    android:minHeight="124dp"
-                    android:id="@+id/description_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/description_label"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/rounded_corners" />
-
-            </RelativeLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/_in"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_below="@+id/profile_picture_label"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="4dp"
+                android:src="@color/LightGrey" />
 
         </RelativeLayout>
 
 
-    </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/year_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_picture_container"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/year_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingTop="4dp"
+            android:text="Year" />
+
+        <EditText
+            android:id="@+id/year_in"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_below="@+id/year_label"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/rounded_corners"
+            android:paddingLeft="8dp"
+            android:text="2020" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/major_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/year_container"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/major_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingTop="4dp"
+            android:text="Major" />
+
+        <EditText
+            android:id="@+id/major_in"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_below="@+id/major_label"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/rounded_corners"
+            android:paddingLeft="8dp"
+            android:text="Computer Science" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/hometown_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/major_container"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/hometown_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingTop="4dp"
+            android:text="Where are you from?" />
+
+        <EditText
+            android:id="@+id/hometown_in"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_below="@+id/hometown_label"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/rounded_corners"
+            android:paddingLeft="8dp"
+            android:text="Shanghai, China" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/description_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hometown_container"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/description_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingTop="4dp"
+            android:text="Describe yourself in a paragraph" />
+
+        <EditText
+            android:id="@+id/description_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/description_label"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/rounded_corners"
+            android:gravity="start"
+            android:minHeight="124dp"
+            android:paddingLeft="8dp" />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>
