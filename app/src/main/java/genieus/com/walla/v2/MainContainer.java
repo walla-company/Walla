@@ -1,6 +1,8 @@
 package genieus.com.walla.v2;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -257,11 +259,55 @@ public class MainContainer extends AppCompatActivity
             case R.id.nav_my_friends:
                 startActivity(new Intent(this, Friends.class));
                 break;
+            case R.id.nav_share:
+                shareWalla();
+                break;
+            case R.id.nav_contact:
+                contactWalla();
+                break;
+            case R.id.nav_logout:
+                logout();
+                break;
+            default:
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void logout() {
+        //TODO don't forget
+    }
+
+    private void contactWalla() {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:hollawalladuke@gmail.com"));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Walla v" + getVersion() + " Android, Report a Problem");
+
+        startActivity(Intent.createChooser(intent, "Send Email"));
+    }
+
+    private void shareWalla() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "Hey check out the Walla app at: https://play.google.com/store/apps/details?id=genieus.com.walla");
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
+    private String getVersion(){
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
+        String version = pInfo.versionName;
+        return version;
     }
 
     @Override

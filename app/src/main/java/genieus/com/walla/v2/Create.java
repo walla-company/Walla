@@ -123,7 +123,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     }
 
     private void setMarker(LatLng place){
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(place , 14);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(place , 17);
         mMap.addMarker(new MarkerOptions().position(place).title("Event location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
         mMap.animateCamera(cameraUpdate);

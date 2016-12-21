@@ -31,6 +31,8 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
     List<Event> events;
     List<String> filtered;
     Filter filter;
+    Typeface robotoMedium;
+    Typeface robotoBold;
 
     public EventsLVAdapter(Context context, int resource, List<Event> events) {
         super(context, resource);
@@ -39,6 +41,9 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
         filtered = new ArrayList<>();
         filter = new ItemFilter();
+
+        robotoMedium = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Medium.ttf");
+        robotoBold = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Bold.ttf");
     }
 
     private Event getEvent(List<Event> events, String query){
@@ -65,9 +70,6 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
-
-        Typeface robotoMedium = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Medium.ttf");
-        Typeface robotoBold = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Bold.ttf");
 
         ImageView categoryIcon = (ImageView) convertView.findViewById(R.id.icon);
         ImageView visibility = (ImageView) convertView.findViewById(R.id.visibility);
