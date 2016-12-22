@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="genieus.com.walla.Create"
+    tools:context="genieus.com.walla.v1.Create"
     tools:showIn="@layout/activity_create"
     android:background="@color/LightGrey">
 

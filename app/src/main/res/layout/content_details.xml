@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="genieus.com.walla.v2.Details"
+    tools:context="genieus.com.walla.v2.activity.Details"
     tools:showIn="@layout/activity_details">
 
     <android.support.v4.widget.NestedScrollView
@@ -369,6 +369,7 @@
                 android:layout_marginTop="16dp">
 
                 <RelativeLayout
+                    android:id="@+id/host_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingLeft="16dp">
@@ -412,7 +413,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/host_name"
                                 android:text="Freshman ·  Computer Science"
-                                android:textSize="11sp" />
+                                android:textSize="13sp" />
 
                         </RelativeLayout>
 

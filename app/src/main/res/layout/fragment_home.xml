@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="genieus.com.walla.v2.Home">
+    tools:context="genieus.com.walla.v2.fragment.Home">
 
     <RelativeLayout
         android:layout_width="match_parent"

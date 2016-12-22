@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/LightGrey"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="genieus.com.walla.ActivityDetails"
+    tools:context="genieus.com.walla.v1.ActivityDetails"
     tools:showIn="@layout/activity_activity_details">
 
     <FrameLayout
