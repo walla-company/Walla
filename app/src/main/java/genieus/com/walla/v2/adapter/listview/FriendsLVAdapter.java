@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.info.FriendInfo;
 
@@ -41,7 +42,7 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
 
         FriendInfo friend = data.get(position);
 
-        ImageView image = (ImageView) convertView.findViewById(R.id.profile_picture);
+        CircleImageView image = (CircleImageView) convertView.findViewById(R.id.profile_picture);
         TextView name = (TextView) convertView.findViewById(R.id.name);
         TextView details = (TextView) convertView.findViewById(R.id.details);
 

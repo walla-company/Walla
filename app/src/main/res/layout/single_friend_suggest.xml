@@ -37,7 +37,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_dodger_blue"
+        android:background="@drawable/rounded"
         android:text="Add friend"
         android:textColor="@color/white" />
 

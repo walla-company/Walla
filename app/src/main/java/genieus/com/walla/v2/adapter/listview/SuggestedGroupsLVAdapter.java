@@ -12,14 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 
 /**
@@ -29,11 +27,14 @@ import genieus.com.walla.v2.info.GroupInfo;
 public class SuggestedGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
     private List<GroupInfo> data;
     private int resource;
+    private Fonts fonts;
 
     public SuggestedGroupsLVAdapter(Context context, int resource, List<GroupInfo> data) {
         super(context, resource);
         this.data = data;
         this.resource = resource;
+
+        fonts = new Fonts(context);
     }
 
     @NonNull
@@ -49,6 +50,10 @@ public class SuggestedGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
         TextView abbr = (TextView) convertView.findViewById(R.id.group_abbr);
         TextView groupName = (TextView) convertView.findViewById(R.id.group_name);
         TextView members = (TextView) convertView.findViewById(R.id.members_info);
+
+        groupName.setTypeface(fonts.AzoSansMedium);
+        members.setTypeface(fonts.AzoSansRegular);
+        abbr.setTypeface(fonts.AzoSansRegular);
 
         abbr.setText(info.getAbbr());
         groupName.setText(info.getName());

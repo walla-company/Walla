@@ -21,17 +21,18 @@ import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.Details;
 import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.adapter.recyclerview.TabRVAdapter;
+import genieus.com.walla.v2.info.Fonts;
 
 /**
  * Created by Anesu on 12/17/2016.
  */
 public class EventsLVAdapter extends ArrayAdapter implements Filterable{
-    int resource;
-    List<EventInfo> events;
-    List<String> filtered;
-    Filter filter;
-    Typeface robotoMedium;
-    Typeface robotoBold;
+    private int resource;
+    private List<EventInfo> events;
+    private List<String> filtered;
+    private Filter filter;
+    private Fonts fonts;
+
 
     public EventsLVAdapter(Context context, int resource, List<EventInfo> events) {
         super(context, resource);
@@ -40,9 +41,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
         filtered = new ArrayList<>();
         filter = new ItemFilter();
-
-        robotoMedium = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Medium.ttf");
-        robotoBold = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Bold.ttf");
+        fonts = new Fonts(context);
     }
 
     private EventInfo getEvent(List<EventInfo> events, String query){
@@ -70,12 +69,12 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
 
-        ImageView categoryIcon = (ImageView) convertView.findViewById(R.id.icon);
         ImageView visibility = (ImageView) convertView.findViewById(R.id.visibility);
         TextView title = (TextView) convertView.findViewById(R.id.title);
-        TextView interested = (TextView) convertView.findViewById(R.id.interested_tv);
-        TextView going = (TextView) convertView.findViewById(R.id.going_tv);
+        //TextView interested = (TextView) convertView.findViewById(R.id.interested);
+        //TextView going = (TextView) convertView.findViewById(R.id.going);
         TextView duration = (TextView) convertView.findViewById(R.id.duration);
+        TextView attendees_description = (TextView) convertView.findViewById(R.id.attendees_description);
         RecyclerView tabs = (RecyclerView) convertView.findViewById(R.id.tabs_rv);
 
         EventInfo event = getEvent(events, filtered.get(position));
@@ -91,11 +90,14 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
         visibility.setImageResource(event.getType() == EventInfo.Type.CHILL ? R.drawable.ic_chill_gray : R.drawable.ic_lit_gray);
         title.setText(event.getTitle());
-        title.setTypeface(robotoBold);
+        title.setTypeface(fonts.AzoSansMedium);
         //interested.setText(event.getInterested());
+        //interested.setTypeface(fonts.AzoSansRegular);
         //going.setText(event.getGoing());
+        //going.setTypeface(fonts.AzoSansRegular);
         duration.setText(event.getStartTime() + "\nto " + event.getEndTime());
-        duration.setTypeface(robotoMedium);
+        duration.setTypeface(fonts.AzoSansRegular);
+        attendees_description.setTypeface(fonts.AzoSansRegular);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
