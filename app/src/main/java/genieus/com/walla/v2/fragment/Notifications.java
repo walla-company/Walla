@@ -14,6 +14,7 @@ import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.NotificationInfoLVAdapter;
+import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.NotificationInfo;
 
 /**

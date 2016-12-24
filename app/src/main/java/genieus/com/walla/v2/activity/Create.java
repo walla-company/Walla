@@ -1,7 +1,9 @@
 package genieus.com.walla.v2.activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,17 +51,23 @@ import java.util.*;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.info.Fonts;
 
-public class Create extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener {
+public class Create extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, DialogInterface.OnClickListener {
+    private static final int INVITEFRIENDS = 2;
+    private static final int INVITEGROUPS = 3;
     private GoogleMap mMap;
     private TextView start_time, end_time, location, visibility_label, title_label, start_time_label,
             end_time_label, location_label, details_label, host_label, group_label, interest_label,
-            friends_label, guests_label;
+            friends_label, guests_label, friends_in, visibility_in, title_in, guests_in, group_in;
     private RelativeLayout map_container;
     private Button post;
     private GoogleApiClient mGoogleApiClient;
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private static final String TAG = "Places";
     private String BUTTONBLUE = "#63CAF9";
+    private AlertDialog.Builder builder, guestInviteBuilder;
+    private AlertDialog alert, guestInviteAlert;
+    private CharSequence[] visibilityOptions = {"Lit (Everyone can see it)", "Chill (Only invited people)"};
+    private CharSequence[] guestsInviteOptions = {"Yes", "No"};
 
     private Fonts fonts;
 
@@ -119,6 +128,38 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         post = (Button) findViewById(R.id.post_btn);
         changeBackgroundColor(post, BUTTONBLUE);
 
+        builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder.setSingleChoiceItems(visibilityOptions, 0, this);
+        alert = builder.create();
+
+        guestInviteBuilder = new AlertDialog.Builder(this);
+        guestInviteBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        guestInviteBuilder.setSingleChoiceItems(guestsInviteOptions, 0, this);
+        guestInviteAlert = guestInviteBuilder.create();
+
         visibility_label = (TextView) findViewById(R.id.visibility_label);
         visibility_label.setTypeface(fonts.AzoSansRegular);
         title_label = (TextView) findViewById(R.id.title_label);
@@ -139,6 +180,23 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         friends_label.setTypeface(fonts.AzoSansRegular);
         guests_label = (TextView) findViewById(R.id.guests_label);
         guests_label.setTypeface(fonts.AzoSansRegular);
+        host_label = (TextView) findViewById(R.id.host_label);
+        host_label.setTypeface(fonts.AzoSansRegular);
+
+        friends_in = (TextView) findViewById(R.id.friends_in);
+        friends_in.setTypeface(fonts.AzoSansRegular);
+        friends_in.setOnClickListener(this);
+        visibility_in = (TextView) findViewById(R.id.visibility_in);
+        visibility_in.setTypeface(fonts.AzoSansRegular);
+        visibility_in.setOnClickListener(this);
+        title_in = (TextView) findViewById(R.id.title_in);
+        title_in.setTypeface(fonts.AzoSansRegular);
+        guests_in = (TextView) findViewById(R.id.guests_in);
+        guests_in.setTypeface(fonts.AzoSansRegular);
+        guests_in.setOnClickListener(this);
+        group_in = (TextView) findViewById(R.id.group_in);
+        group_in.setTypeface(fonts.AzoSansRegular);
+        group_in.setOnClickListener(this);
 
     }
 
@@ -216,15 +274,61 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
+        }else if(requestCode == INVITEFRIENDS){
+            if(resultCode == RESULT_OK){
+                initFriends(data);
+            }
+        }else if(requestCode == INVITEGROUPS){
+            if(resultCode == RESULT_OK){
+                initGroups(data);
+            }
         }
     }
 
+    private void initGroups(Intent data) {
+        String info = data.getStringExtra("result");
+        group_in.setText(info);
+    }
+
+    private void initFriends(Intent data) {
+        String info = data.getStringExtra("result");
+        friends_in.setText(info);
+    }
+
     private void initLocation(Place place) {
-        map_container.setVisibility(View.VISIBLE );
+        map_container.setVisibility(View.VISIBLE);
         LatLng loc = place.getLatLng();
         setMarker(loc);
         location.setText(place.getName());
     }
+
+    private void initVisibility(int which) {
+        visibility_in.setText(visibilityOptions[which]);
+    }
+
+
+    private void initGuestInvitations(int which) {
+        guests_in.setText(guestsInviteOptions[which]);
+    }
+
+    private void inviteFriends(){
+        Intent intent = new Intent(this, Friends.class);
+        startActivityForResult(intent, INVITEFRIENDS);
+    }
+
+    private void inviteGroups(){
+        Intent intent = new Intent(this, MyGroups.class);
+        startActivityForResult(intent, INVITEGROUPS);
+    }
+
+    private void showVisibilityOptions() {
+        alert.show();
+    }
+
+    private void showGuestInviteOptions() {
+        guestInviteAlert.show();
+    }
+
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -240,5 +344,33 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch(id){
+            case R.id.friends_in:
+                inviteFriends();
+                break;
+            case R.id.group_in:
+                inviteGroups();
+                break;
+            case R.id.visibility_in:
+                showVisibilityOptions();
+                break;
+            case R.id.guests_in:
+                showGuestInviteOptions();
+                break;
+
+        }
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        if(dialog.equals(alert))
+            initVisibility(which);
+        else if(dialog.equals(guestInviteAlert))
+            initGuestInvitations(which);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.NotificationInfo;
 
 /**
@@ -22,13 +23,13 @@ import genieus.com.walla.v2.info.NotificationInfo;
 public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
     private List<NotificationInfo> data;
     private int resource;
-    private Typeface robotoMedium;
+    private Fonts fonts;
     public NotificationInfoLVAdapter(Context context, int resource, List<NotificationInfo> data) {
         super(context, resource);
         this.data = data;
         this.resource = resource;
 
-        robotoMedium = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Medium.ttf");
+        fonts = new Fonts(context);
     }
 
     @NonNull
@@ -44,7 +45,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
         TextView info = (TextView) convertView.findViewById(R.id.info);
 
         info.setText(notification.getMessage());
-        info.setTypeface(robotoMedium);
+        info.setTypeface(fonts.AzoSansRegular);
 
         return convertView;
     }

@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,14 +23,21 @@ import genieus.com.walla.v2.info.FriendInfo;
 
 public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
 
+    public interface OnFriendStateListener{
+        public void onFriendStateChanged(String name, boolean checked);
+    }
+
+
     private List<FriendInfo> data;
     private int resource;
     private Fonts fonts;
+    private OnFriendStateListener listener;
 
-    public FriendsLVAdapter(Context context, int resource, List<FriendInfo> data) {
+    public FriendsLVAdapter(Context context, OnFriendStateListener listener, int resource, List<FriendInfo> data) {
         super(context, resource);
         this.data = data;
         this.resource = resource;
+        this.listener = listener;
 
         fonts = new Fonts(context);
     }
@@ -44,7 +53,17 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
 
-        FriendInfo friend = data.get(position);
+        final FriendInfo friend = data.get(position);
+
+        CheckBox check = (CheckBox) convertView.findViewById(R.id.check);
+        if(check != null){
+            check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    listener.onFriendStateChanged(friend.getName(), isChecked);
+                }
+            });
+        }
 
         CircleImageView image = (CircleImageView) convertView.findViewById(R.id.profile_picture);
         TextView name = (TextView) convertView.findViewById(R.id.name);

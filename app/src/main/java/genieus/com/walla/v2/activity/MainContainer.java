@@ -251,6 +251,9 @@ public class MainContainer extends AppCompatActivity
             case R.id.nav_my_friends:
                 startActivity(new Intent(this, Friends.class));
                 break;
+            case R.id.nav_my_groups:
+                startActivity(new Intent(this, MyGroups.class));
+                break;
             case R.id.nav_share:
                 shareWalla();
                 break;

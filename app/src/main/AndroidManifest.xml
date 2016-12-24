@@ -165,6 +165,10 @@
         <activity
             android:name=".v2.activity.ViewProfile"
             android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".v2.activity.MyGroups"
+            android:label="@string/title_activity_my_groups"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

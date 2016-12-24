@@ -50,12 +50,16 @@
                         <TextView
                             android:id="@+id/visibility_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/visibility_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
-                            android:background="@drawable/rounded_corners" />
+                            android:background="@drawable/rounded_corners"
+                            android:gravity="center_vertical"
+                            android:minHeight="32dp"
+                            android:paddingLeft="8dp"
+                            android:textSize="16sp" />
 
                     </RelativeLayout>
 
@@ -94,15 +98,19 @@
                             android:id="@+id/title_in"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/title_label"
+                            android:layout_below="@id/title_label"
+                            android:layout_centerHorizontal="true"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
                             android:hint="Let's play basketball!"
                             android:minHeight="32dp"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
                     </RelativeLayout>
 
@@ -133,8 +141,11 @@
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
                             android:minHeight="32dp"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
 
                     </RelativeLayout>
@@ -166,8 +177,11 @@
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
                             android:minHeight="32dp"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
 
                     </RelativeLayout>
@@ -200,8 +214,11 @@
                             android:background="@drawable/rounded_corners"
                             android:gravity="center_vertical"
                             android:minHeight="32dp"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
 
                     </RelativeLayout>
@@ -253,14 +270,18 @@
                             android:id="@+id/details_in"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/details_label"
+                            android:layout_below="@id/details_label"
+                            android:layout_centerHorizontal="true"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
                             android:minHeight="32dp"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
 
                     </RelativeLayout>
@@ -293,8 +314,11 @@
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
                             android:minHeight="32dp"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
 
                     </RelativeLayout>
@@ -333,16 +357,20 @@
                             android:textSize="17sp" />
 
                         <TextView
-                            android:id="@+id/nterests_in"
+                            android:id="@+id/interests_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
-                            android:layout_below="@+id/interests_label"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/interests_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
+                            android:minHeight="32dp"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
                     </RelativeLayout>
 
@@ -366,14 +394,18 @@
                         <TextView
                             android:id="@+id/group_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/groups_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
+                            android:minHeight="32dp"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
 
                     </RelativeLayout>
@@ -398,14 +430,19 @@
                         <TextView
                             android:id="@+id/friends_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/friends_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
+                            android:gravity="center_vertical"
+                            android:minHeight="32dp"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
                     </RelativeLayout>
 
@@ -436,8 +473,12 @@
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp" />
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
                     </RelativeLayout>
 

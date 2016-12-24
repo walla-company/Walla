@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="82dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@color/LightGrey" />
+
+    <RelativeLayout
+        android:id="@+id/info_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_toEndOf="@id/profile_picture"
+        android:layout_toRightOf="@id/profile_picture">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Joseph Dechicchis"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:text="Freshman · Computer Science"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <CheckBox
+        android:layout_centerVertical="true"
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"/>
+
+
+</RelativeLayout>

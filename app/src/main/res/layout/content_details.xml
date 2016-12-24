@@ -107,7 +107,6 @@
                                     android:id="@+id/title"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginTop="20dp"
                                     android:gravity="center_vertical"
                                     android:paddingBottom="8dp"
                                     android:paddingLeft="8dp"
@@ -115,7 +114,10 @@
                                     android:paddingTop="8dp"
                                     android:text="Movie Night at Bryan Center Free Popcorn and drinks"
                                     android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentStart="true" />
 
 
                             </RelativeLayout>
@@ -193,206 +195,205 @@
                 android:layout_marginTop="16dp">
 
                 <RelativeLayout
-                    android:paddingTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/going_label"
+                    <RelativeLayout
+                        android:id="@+id/interactions_subcontainer1"
+                        android:paddingTop="8dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:paddingLeft="16dp"
-                        android:text="Who's going"
-                        android:textSize="17sp" />
+                        android:layout_height="wrap_content">
 
+                        <TextView
+                            android:id="@+id/going_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:paddingLeft="16dp"
+                            android:text="Who's going"
+                            android:textSize="17sp" />
+
+
+                        <RelativeLayout
+                            android:layout_below="@id/going_label"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="120dp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:paddingLeft="16dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2">
+
+                                        <ImageView
+                                            android:id="@+id/interested_icon"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:src="@mipmap/star" />
+
+                                        <TextView
+                                            android:id="@+id/interested_tv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerVertical="true"
+                                            android:layout_toRightOf="@id/interested_icon"
+                                            android:text="7" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="9">
+
+                                        <TextView
+                                            android:id="@+id/interested_in"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Ben Yang, Albert Pujols and 5 others are interested"
+                                            android:textSize="15sp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:paddingLeft="16dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="2">
+
+                                        <ImageView
+                                            android:id="@+id/going_icon"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:src="@mipmap/check" />
+
+                                        <TextView
+                                            android:id="@+id/going_tv"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerVertical="true"
+                                            android:layout_toRightOf="@id/going_icon"
+                                            android:text="5" />
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="9">
+
+                                        <TextView
+                                            android:id="@+id/going_in"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true"
+                                            android:layout_centerVertical="true"
+                                            android:text="JoJo Dechiccis, Judy Zhu and 3 others are going"
+                                            android:textSize="15sp" />
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
 
                     <RelativeLayout
-                        android:layout_below="@id/going_label"
+                        android:layout_below="@id/interactions_subcontainer1"
+                        android:paddingBottom="8dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <LinearLayout
+                            android:id="@+id/actions"
                             android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:orientation="vertical">
+                            android:layout_height="100dp"
+                            android:orientation="horizontal"
+                            android:padding="0dp">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
+                            <ImageButton
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:orientation="horizontal"
-                                android:paddingLeft="16dp">
+                                android:background="@android:color/transparent"
+                                android:src="@mipmap/interestedbtn" />
 
-                                <RelativeLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="2">
-
-                                    <ImageView
-                                        android:id="@+id/interested_icon"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:src="@mipmap/star" />
-
-                                    <TextView
-                                        android:id="@+id/interested_tv"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:layout_toRightOf="@id/interested_icon"
-                                        android:text="7" />
-
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="9">
-
-                                    <TextView
-                                        android:id="@+id/interested_in"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Ben Yang, Albert Pujols and 5 others are interested"
-                                        android:textSize="15sp"
-                                        android:layout_centerVertical="true"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true" />
-
-                                </RelativeLayout>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
+                            <ImageButton
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:orientation="horizontal"
-                                android:paddingLeft="16dp">
+                                android:background="@android:color/transparent"
+                                android:src="@mipmap/goingbtn" />
 
-                                <RelativeLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="2">
+                            <ImageButton
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@mipmap/invitebtn" />
 
-                                    <ImageView
-                                        android:id="@+id/going_icon"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:src="@mipmap/check" />
+                            <ImageButton
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:src="@mipmap/sharebtn" />
 
-                                    <TextView
-                                        android:id="@+id/going_tv"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:layout_toRightOf="@id/going_icon"
-                                        android:text="5" />
-
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="9">
-
-                                    <TextView
-                                        android:id="@+id/going_in"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true"
-                                        android:layout_centerVertical="true"
-                                        android:text="JoJo Dechiccis, Judy Zhu and 3 others are going"
-                                        android:textSize="15sp" />
-
-                                </RelativeLayout>
-
-                            </LinearLayout>
 
                         </LinearLayout>
 
-                    </RelativeLayout>
-
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/actions_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/interactions_details"
-                android:layout_marginTop="16dp">
-
-                <RelativeLayout
-                    android:paddingBottom="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:id="@+id/actions"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:orientation="horizontal"
-                        android:padding="0dp">
-
-                        <ImageButton
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:src="@mipmap/interestedbtn" />
-
-                        <ImageButton
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:src="@mipmap/goingbtn" />
-
-                        <ImageButton
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:src="@mipmap/invitebtn" />
-
-                        <ImageButton
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:src="@mipmap/sharebtn" />
-
-
-                    </LinearLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/actions"
-                        android:paddingLeft="16dp">
-
-                        <TextView
-                            android:id="@+id/invitees_label"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Invited 2 friend(s)"
-                            android:textSize="17sp" />
+                            android:layout_below="@id/actions"
+                            android:paddingLeft="16dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Shray Gupta, Alexis Angel"
-                            android:textSize="15sp"
-                            android:layout_below="@+id/invitees_label"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:id="@+id/invitees_in" />
+                            <TextView
+                                android:id="@+id/invitees_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Invited 2 friend(s)"
+                                android:textSize="17sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Shray Gupta, Alexis Angel"
+                                android:textSize="15sp"
+                                android:layout_below="@+id/invitees_label"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:id="@+id/invitees_in" />
+
+                        </RelativeLayout>
 
                     </RelativeLayout>
 
@@ -404,7 +405,7 @@
                 android:id="@+id/host_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/actions_card"
+                android:layout_below="@id/interactions_details"
                 android:layout_marginTop="16dp">
 
                 <RelativeLayout
@@ -447,7 +448,7 @@
                                 android:id="@+id/host_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Joseph Dechicchis"/>
+                                android:text="Joseph Dechicchis" />
 
                             <TextView
                                 android:id="@+id/host_info"
@@ -498,7 +499,7 @@
                         android:layout_marginTop="4dp"
                         android:gravity="center_vertical"
                         android:paddingBottom="8dp"
-                        android:text="Lorem ipsum dolor sit amet, quas sadipscing ea nam. Eos ne simul consul definiebas, te case pericula mei. Id dicat primis eum, mei adhuc diceret eligendi id. Ei eius consulatu repudiare eos, ridens dicunt ex mea."/>
+                        android:text="Lorem ipsum dolor sit amet, quas sadipscing ea nam. Eos ne simul consul definiebas, te case pericula mei. Id dicat primis eum, mei adhuc diceret eligendi id. Ei eius consulatu repudiare eos, ridens dicunt ex mea." />
 
                 </RelativeLayout>
 
