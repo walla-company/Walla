@@ -41,7 +41,7 @@ public class TabRVAdapter extends RecyclerView.Adapter<TabHolder> {
     @Override
     public void onBindViewHolder(TabHolder holder, int position) {
         holder.tabName.setText(list.get(position));
-        holder.tabName.setTypeface(fonts.AzoSansBold);
+        holder.tabName.setTypeface(fonts.AzoSansMedium);
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

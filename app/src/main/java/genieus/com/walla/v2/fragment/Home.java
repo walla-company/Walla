@@ -29,6 +29,7 @@ import genieus.com.walla.v1.InterestsRVAdapter;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.EventsLVAdapter;
 import genieus.com.walla.v2.info.EventInfo;
+import genieus.com.walla.v2.info.Fonts;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +52,8 @@ public class Home extends Fragment  {
     private List<Interests> interests;
     private static Dialog dialog;
     private TextView filter_tv;
+
+    private Fonts fonts;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -90,6 +93,7 @@ public class Home extends Fragment  {
     }
 
     private void initUi() {
+        fonts = new Fonts(getContext());
         initFilter();
         initEvents();
     }
@@ -109,6 +113,7 @@ public class Home extends Fragment  {
     }
 
     private void initFilter() {
+        filter_tv.setTypeface(fonts.AzoSansRegular);
         interests = new ArrayList<>();
         interests.add(new Interests("All", R.mipmap.all));
         interests.add(new Interests("Movies", R.mipmap.other));

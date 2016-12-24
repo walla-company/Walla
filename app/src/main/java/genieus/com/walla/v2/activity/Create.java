@@ -3,6 +3,11 @@ package genieus.com.walla.v2.activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,17 +46,21 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.info.Fonts;
 
 public class Create extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener {
     private GoogleMap mMap;
-    private TextView start_time;
-    private TextView end_time;
-    private TextView location;
+    private TextView start_time, end_time, location, visibility_label, title_label, start_time_label,
+            end_time_label, location_label, details_label, host_label, group_label, interest_label,
+            friends_label, guests_label;
     private RelativeLayout map_container;
-
+    private Button post;
     private GoogleApiClient mGoogleApiClient;
-    static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-    static final String TAG = "Places";
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final String TAG = "Places";
+    private String BUTTONBLUE = "#63CAF9";
+
+    private Fonts fonts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +83,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     }
 
     private void initUi() {
+        fonts = new Fonts(this);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -103,6 +115,42 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         });
 
         map_container.setVisibility(View.GONE);
+
+        post = (Button) findViewById(R.id.post_btn);
+        changeBackgroundColor(post, BUTTONBLUE);
+
+        visibility_label = (TextView) findViewById(R.id.visibility_label);
+        visibility_label.setTypeface(fonts.AzoSansRegular);
+        title_label = (TextView) findViewById(R.id.title_label);
+        title_label.setTypeface(fonts.AzoSansRegular);
+        start_time_label = (TextView) findViewById(R.id.start_time_label);
+        start_time_label.setTypeface(fonts.AzoSansRegular);
+        end_time_label = (TextView) findViewById(R.id.end_time_label);
+        end_time_label.setTypeface(fonts.AzoSansRegular);
+        location_label = (TextView) findViewById(R.id.location_label);
+        location_label.setTypeface(fonts.AzoSansRegular);
+        details_label = (TextView) findViewById(R.id.details_label);
+        details_label.setTypeface(fonts.AzoSansRegular);
+        group_label = (TextView) findViewById(R.id.groups_label);
+        group_label.setTypeface(fonts.AzoSansRegular);
+        interest_label = (TextView) findViewById(R.id.interests_label);
+        interest_label.setTypeface(fonts.AzoSansRegular);
+        friends_label = (TextView) findViewById(R.id.friends_label);
+        friends_label.setTypeface(fonts.AzoSansRegular);
+        guests_label = (TextView) findViewById(R.id.guests_label);
+        guests_label.setTypeface(fonts.AzoSansRegular);
+
+    }
+
+    private void changeBackgroundColor(View view, String color){
+        Drawable background = view.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable)background).getPaint().setColor(Color.parseColor(color));
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable)background).setColor(Color.parseColor(color));
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable)background).setColor(Color.parseColor(color));
+        }
     }
 
     private void showDateDialog(){

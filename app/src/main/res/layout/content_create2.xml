@@ -16,9 +16,9 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -44,7 +44,8 @@
                             android:layout_height="wrap_content"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Visibility" />
+                            android:text="Visibility"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/visibility_in"
@@ -86,18 +87,20 @@
                             android:layout_height="wrap_content"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Title" />
+                            android:text="Title"
+                            android:textSize="17sp" />
 
                         <EditText
                             android:id="@+id/title_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/title_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
                             android:hint="Let's play basketball!"
+                            android:minHeight="32dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp" />
 
@@ -117,17 +120,19 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Start time" />
+                            android:text="Start time"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/start_time_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/start_time_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
+                            android:minHeight="32dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp" />
 
@@ -148,17 +153,19 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="End time" />
+                            android:text="End time"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/end_time_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/end_time_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
+                            android:minHeight="32dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp" />
 
@@ -179,18 +186,20 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Location" />
+                            android:text="Location"
+                            android:textSize="17sp" />
 
                         <TextView
-                            android:gravity="center_vertical"
                             android:id="@+id/location_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/location_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
+                            android:gravity="center_vertical"
+                            android:minHeight="32dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp" />
 
@@ -214,9 +223,9 @@
 
                             <fragment
                                 android:id="@+id/map"
+                                class="com.google.android.gms.maps.SupportMapFragment"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                class="com.google.android.gms.maps.SupportMapFragment" />
+                                android:layout_height="match_parent" />
 
                         </RelativeLayout>
 
@@ -237,17 +246,19 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Details (optional)" />
+                            android:text="Details (optional)"
+                            android:textSize="17sp" />
 
                         <EditText
                             android:id="@+id/details_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/details_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
+                            android:minHeight="32dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp" />
 
@@ -269,17 +280,19 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Host on behalf of a group (optional)" />
+                            android:text="Host on behalf of a group (optional)"
+                            android:textSize="17sp" />
 
                         <EditText
                             android:id="@+id/host_in"
                             android:layout_width="match_parent"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/host_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
+                            android:minHeight="32dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp" />
 
@@ -296,7 +309,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/body_2"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:paddingBottom="8dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -315,7 +329,8 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Interest(s)" />
+                            android:text="Interest(s)"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/nterests_in"
@@ -345,7 +360,8 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Invite group(s) (optional)" />
+                            android:text="Invite group(s) (optional)"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/group_in"
@@ -376,14 +392,46 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Interest(s)" />
+                            android:text="Invite friend(s) (optional)"
+                            android:textSize="17sp" />
 
                         <TextView
-                            android:layout_marginBottom="8dp"
                             android:id="@+id/friends_in"
                             android:layout_width="match_parent"
                             android:layout_height="32dp"
                             android:layout_below="@+id/friends_label"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/rounded_corners"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/guests_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/friends_container"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:id="@+id/guests_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@id/title_in"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="Can guests invite other guests?"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/guests_in"
+                            android:layout_width="match_parent"
+                            android:layout_height="32dp"
+                            android:layout_below="@+id/guests_label"
+                            android:layout_marginBottom="8dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
@@ -399,10 +447,11 @@
             </android.support.v7.widget.CardView>
 
             <Button
-                android:layout_marginBottom="8dp"
+                android:id="@+id/post_btn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_below="@id/body_3"
+                android:layout_marginBottom="8dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/rounded_dodger_blue"
                 android:text="Post"

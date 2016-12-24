@@ -10,14 +10,14 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_marginBottom="4dp"
             android:id="@+id/filter_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:drawableLeft="@drawable/ic_fitler_darker"
             android:gravity="center_vertical"
             android:text="Showing type events"
-            android:textStyle="bold" />
+            android:textSize="15sp" />
 
         <ListView
             android:id="@+id/events"

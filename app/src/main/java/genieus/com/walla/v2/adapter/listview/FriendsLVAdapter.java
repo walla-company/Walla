@@ -12,6 +12,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
+import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.FriendInfo;
 
 /**
@@ -22,11 +23,14 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
 
     private List<FriendInfo> data;
     private int resource;
+    private Fonts fonts;
 
     public FriendsLVAdapter(Context context, int resource, List<FriendInfo> data) {
         super(context, resource);
         this.data = data;
         this.resource = resource;
+
+        fonts = new Fonts(context);
     }
 
     @Override
@@ -36,7 +40,7 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
 
@@ -44,7 +48,9 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
 
         CircleImageView image = (CircleImageView) convertView.findViewById(R.id.profile_picture);
         TextView name = (TextView) convertView.findViewById(R.id.name);
+        name.setTypeface(fonts.AzoSansMedium);
         TextView details = (TextView) convertView.findViewById(R.id.details);
+        details.setTypeface(fonts.AzoSansRegular);
 
         name.setText(friend.getName());
         details.setText(friend.getYear() + " · " + friend.getMajor());

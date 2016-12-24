@@ -175,7 +175,7 @@
                         android:layout_centerVertical="true"
                         android:gravity="center_vertical"
                         android:text="Judy and 4 others are going"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
 
 
                 </RelativeLayout>

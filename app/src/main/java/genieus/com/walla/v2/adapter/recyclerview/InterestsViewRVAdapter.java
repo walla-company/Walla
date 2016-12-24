@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.InterestInfo;
 import genieus.com.walla.v2.viewholder.InterestsViewHolder;
 
@@ -18,11 +19,14 @@ import genieus.com.walla.v2.viewholder.InterestsViewHolder;
 
 public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHolder> {
     private Context context;
-    List<InterestInfo> data;
+    private List<InterestInfo> data;
+    private Fonts fonts;
 
     public InterestsViewRVAdapter(Context context, List<InterestInfo> data){
         this.context = context;
         this.data = data;
+
+        fonts = new Fonts(context);
     }
 
     @Override
@@ -39,6 +43,7 @@ public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHo
         InterestInfo info  = data.get(position);
         holder.icon.setImageResource(info.getImg());
         holder.label.setText(info.getName());
+        holder.label.setTypeface(fonts.AzoSansRegular);
 
     }
 
