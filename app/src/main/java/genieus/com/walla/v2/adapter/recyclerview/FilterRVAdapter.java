@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.viewholder.FilterHolder;
 
 
@@ -16,6 +17,7 @@ import genieus.com.walla.v2.viewholder.FilterHolder;
  * Created by Anesu on 12/13/2016.
  */
 public class FilterRVAdapter extends RecyclerView.Adapter<FilterHolder> {
+    private Fonts fonts;
 
     public interface ItemClickListener {
         void onItemClicked(String filter, int pos);
@@ -29,6 +31,8 @@ public class FilterRVAdapter extends RecyclerView.Adapter<FilterHolder> {
         this.filters = filters;
         this.context = context;
         this.listener = listener;
+
+        fonts = new Fonts(context);
     }
 
     @Override
@@ -44,6 +48,7 @@ public class FilterRVAdapter extends RecyclerView.Adapter<FilterHolder> {
     public void onBindViewHolder(FilterHolder holder, final int position) {
         final String title = filters.get(position);
         holder.text.setText(title);
+        holder.text.setTypeface(fonts.AzoSansRegular);
 
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override

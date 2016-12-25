@@ -6,8 +6,7 @@
     <RelativeLayout
         android:id="@+id/interest_container"
         android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:background="#f1f1f1">
+        android:layout_height="88dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"

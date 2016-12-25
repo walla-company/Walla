@@ -1,7 +1,7 @@
 package genieus.com.walla.v2.fragment;
 
-import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -9,13 +9,13 @@ import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,7 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import genieus.com.walla.v1.Interests;
-import genieus.com.walla.v1.InterestsRVAdapter;
+import genieus.com.walla.v2.viewholder.FilterViewHolder;
+import genieus.com.walla.v2.adapter.recyclerview.InterestsRVAdapter;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.EventsLVAdapter;
 import genieus.com.walla.v2.info.EventInfo;
@@ -50,10 +51,11 @@ public class Home extends Fragment  {
     private InterestsRVAdapter adapter;
     private EventsLVAdapter adapterEvents;
     private List<Interests> interests;
-    private static Dialog dialog;
     private TextView filter_tv;
 
+    private static AlertDialog alert;
     private Fonts fonts;
+    private String currentFilter = "";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -128,8 +130,6 @@ public class Home extends Fragment  {
         interests.add(new Interests("Socialize", R.mipmap.other));
         interests.add(new Interests("Other", R.mipmap.other));
 
-        dialog.setTitle("Filter activities");
-
         //LinearLayoutManager horizontal
         // = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
@@ -138,9 +138,9 @@ public class Home extends Fragment  {
 
         adapter = new InterestsRVAdapter(interests, new InterestsRVAdapter.ItemClickListener() {
             @Override
-            public void onItemClicked(Interests event, View view, List<View> all, int pos) {
+            public void onItemClicked(Interests event, View view, List<FilterViewHolder> all, int pos) {
                 String query = event.getName().equals("All") ? "" : event.getName();
-                filterEvents(query);
+                currentFilter = query;
                 changeColorOfFilters(view, all, pos);
             }
         }, getContext());
@@ -149,15 +149,16 @@ public class Home extends Fragment  {
         interest_rv.setAdapter(adapter);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.copyFrom(alert.getWindow().getAttributes());
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.gravity = Gravity.CENTER;
 
-        dialog.getWindow().setAttributes(lp);
+        alert.getWindow().setAttributes(lp);
+
     }
 
-    private void changeColorOfFilters(View view, List<View> all, int pos) {
+    private void changeColorOfFilters(View view, List<FilterViewHolder> all, int pos) {
         Drawable background = view.getBackground();
         if (background instanceof ShapeDrawable) {
             ((ShapeDrawable)background).getPaint().setColor(getResources().getColor(R.color.colorPrimary));
@@ -167,12 +168,14 @@ public class Home extends Fragment  {
             ((ColorDrawable)background).setColor(getResources().getColor(R.color.colorPrimary));
         }
 
+        all.get(pos).label.setTextColor(getResources().getColor(R.color.colorPrimary));
+
         //String search = event.getName().equals("All") ? "" : event.getName();
         //filterEvents(search);
 
         for(int i= 0; i < all.size(); i++){
             if(i != pos){
-                Drawable bg = all.get(i).getBackground();
+                Drawable bg = all.get(i).container1.getBackground();
                 if (bg instanceof ShapeDrawable) {
                     ((ShapeDrawable)bg).getPaint().setColor(getResources().getColor(R.color.LightGrey));
                 } else if (bg instanceof GradientDrawable) {
@@ -180,12 +183,14 @@ public class Home extends Fragment  {
                 } else if (bg instanceof ColorDrawable) {
                     ((ColorDrawable)bg).setColor(getResources().getColor(R.color.LightGrey));
                 }
+
+                all.get(i).label.setTextColor(getResources().getColor(R.color.black));
             }
         }
     }
 
     public static void showFilter(){
-        dialog.show();
+        alert.show();
     }
     private void filterEvents(String query){
         if(query.equals("")) filter_tv.setVisibility(View.GONE);
@@ -203,16 +208,29 @@ public class Home extends Fragment  {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        dialog = new Dialog(getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.filter_popup);
-        interest_rv = (RecyclerView) dialog.findViewById(R.id.interests_rv);
+        createDialogFilter();
+
         events_lv = (ListView) view.findViewById(R.id.events);
         filter_tv = (TextView) view.findViewById(R.id.filter_label);
         filter_tv.setVisibility(View.GONE);
 
         initUi();
         return view;
+    }
+
+    private void createDialogFilter() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(false)
+                .setPositiveButton("Select Filter", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        filterEvents(currentFilter);
+                    }
+                });
+
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.filter_popup, null);
+        interest_rv = (RecyclerView) view.findViewById(R.id.interests_rv);
+        builder.setView(view);
+        alert = builder.create();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -7,10 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -50,6 +46,8 @@ import java.util.Map;
 import java.util.Calendar;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.adapter.recyclerview.InterestsRVAdapter;
+import genieus.com.walla.v2.viewholder.FilterViewHolder;
 
 public class Activities extends AppCompatActivity implements View.OnClickListener, InterestsRVAdapter.ItemClickListener, ChildEventListener, SearchView.OnQueryTextListener {
 
@@ -353,34 +351,6 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    @Override
-    public void onItemClicked(final Interests event, View view, List<View> all, int position) {
-        Drawable background = view.getBackground();
-        if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable)background).getPaint().setColor(Color.parseColor(getColor(event.getName())));
-        } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable)background).setColor(Color.parseColor(getColor(event.getName())));
-        } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable)background).setColor(Color.parseColor(getColor(event.getName())));
-        }
-
-        String search = event.getName().equals("All") ? "" : event.getName();
-        filterEvents(search);
-
-        for(int i= 0; i < all.size(); i++){
-            if(i != position){
-                Drawable bg = all.get(i).getBackground();
-                if (bg instanceof ShapeDrawable) {
-                    ((ShapeDrawable)bg).getPaint().setColor(getResources().getColor(R.color.LightGrey));
-                } else if (bg instanceof GradientDrawable) {
-                    ((GradientDrawable)bg).setColor(getResources().getColor(R.color.LightGrey));
-                } else if (bg instanceof ColorDrawable) {
-                    ((ColorDrawable)bg).setColor(getResources().getColor(R.color.LightGrey));
-                }
-            }
-        }
-
-    }
 
     private void filterEvents(String str){
         adp.getFilter().filter(str);
@@ -467,5 +437,10 @@ public class Activities extends AppCompatActivity implements View.OnClickListene
     protected void onStop() {
         super.onStop();
         prefs.edit().putLong(LOGIN_TIME_KEY, System.currentTimeMillis() / 1000);
+    }
+
+    @Override
+    public void onItemClicked(Interests event, View view, List<FilterViewHolder> all, int pos) {
+
     }
 }

@@ -6,6 +6,7 @@
     android:padding="8dp">
 
     <android.support.v7.widget.RecyclerView
+        android:background="@color/white"
         android:id="@+id/interests_rv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

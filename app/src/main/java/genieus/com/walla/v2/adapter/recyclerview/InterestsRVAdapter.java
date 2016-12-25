@@ -1,4 +1,4 @@
-package genieus.com.walla.v1;
+package genieus.com.walla.v2.adapter.recyclerview;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -16,16 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v1.Interests;
+import genieus.com.walla.v2.viewholder.FilterViewHolder;
+import genieus.com.walla.v2.info.Fonts;
 
 /**
  * Created by Anesu on 9/3/2016.
  */
-public class InterestsRVAdapter extends RecyclerView.Adapter<InterestsViewHolder> {
+public class InterestsRVAdapter extends RecyclerView.Adapter<FilterViewHolder> {
+    private Fonts fonts;
 
-    List<View> all;
-    List<Interests> interests;
-    ItemClickListener listener;
-    Context context;
+    private List<FilterViewHolder> all;
+    private List<Interests> interests;
+    private ItemClickListener listener;
+    private Context context;
 
     public InterestsRVAdapter(List<Interests> interests, ItemClickListener listener, Context context) {
         this.interests = interests;
@@ -33,10 +37,11 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<InterestsViewHolder
         this.context = context;
 
         all = new ArrayList<>();
+        fonts = new Fonts(context);
     }
 
     public interface ItemClickListener {
-        void onItemClicked(Interests event, View view, List<View> all, int pos);
+        void onItemClicked(Interests event, View view, List<FilterViewHolder> all, int pos);
     }
 
     private String getColor(String category){
@@ -64,28 +69,30 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<InterestsViewHolder
     }
 
     @Override
-    public InterestsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FilterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
                 from(parent.getContext()).
                 inflate(R.layout.interest_template, parent, false);
 
-        return new InterestsViewHolder(itemView);
+        return new FilterViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final InterestsViewHolder holder, final int position) {
-        if(!all.contains(holder.rl)){
-            all.add(holder.rl);
+    public void onBindViewHolder(final FilterViewHolder holder, final int position) {
+        if(!all.contains(holder)){
+            all.add(holder);
         }
         final Interests i = interests.get(position);
 
-        holder.iv.setImageResource(i.getImg());
-        holder.tv.setText(i.getName());
+        holder.icon.setImageResource(i.getImg());
+        holder.label.setText(i.getName());
+        holder.label.setTypeface(fonts.AzoSansRegular);
+        holder.label.setTextColor(context.getResources().getColor(R.color.black));
 
         Log.d("color", i.getName());
 
         if(position == 0){
-            Drawable background = holder.rl.getBackground();
+            Drawable background = holder.container1.getBackground();
             if (background instanceof ShapeDrawable) {
                 ((ShapeDrawable)background).getPaint().setColor(Color.parseColor(getColor(i.getName())));
             } else if (background instanceof GradientDrawable) {
@@ -94,7 +101,7 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<InterestsViewHolder
                 ((ColorDrawable)background).setColor(Color.parseColor(getColor(i.getName())));
             }
         }else{
-            Drawable background = holder.rl.getBackground();
+            Drawable background = holder.container1.getBackground();
             if (background instanceof ShapeDrawable) {
                 ((ShapeDrawable)background).getPaint().setColor(context.getResources().getColor(R.color.LightGrey));
             } else if (background instanceof GradientDrawable) {
@@ -104,10 +111,10 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<InterestsViewHolder
             }
         }
 
-        holder.container.setOnClickListener(new View.OnClickListener() {
+        holder.container2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClicked(i, holder.rl, all, position);
+                listener.onItemClicked(i, holder.container1, all, position);
             }
         });
     }

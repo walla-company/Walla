@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.recyclerview.InterestsViewRVAdapter;
 import genieus.com.walla.v2.info.InterestInfo;
+import genieus.com.walla.v2.info.Utility;
 
 public class InterestsView extends AppCompatActivity implements View.OnClickListener {
     RecyclerView interests_rv;
@@ -48,8 +50,10 @@ public class InterestsView extends AppCompatActivity implements View.OnClickList
         data.add(new InterestInfo("Volunteer", R.mipmap.volunteeringicon));
         data.add(new InterestInfo("Other", R.mipmap.othericon));
 
+        View view = LayoutInflater.from(this).inflate(R.layout.single_interest, null);
+
         GridLayoutManager grid
-                = new GridLayoutManager(this, 3);
+                = new GridLayoutManager(this, 4);
 
         interests_rv = (RecyclerView) findViewById(R.id.interests_rv);
         interests_rv.setLayoutManager(grid);

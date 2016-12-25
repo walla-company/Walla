@@ -50,7 +50,7 @@ public class TabRVAdapter extends RecyclerView.Adapter<TabHolder> {
         });
         /*
         if(isGroup(list.get(position))){
-            Drawable background = holder.container.getBackground();
+            Drawable background = holder.container2.getBackground();
             if (background instanceof ShapeDrawable) {
                 ((ShapeDrawable)background).getPaint().setColor(context.getResources().getColor(R.color.colorPrimary));
             } else if (background instanceof GradientDrawable) {
