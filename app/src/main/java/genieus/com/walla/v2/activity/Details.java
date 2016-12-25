@@ -2,6 +2,7 @@ package genieus.com.walla.v2.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.w3c.dom.Text;
 
@@ -19,8 +31,10 @@ import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.recyclerview.TabRVAdapter;
 import genieus.com.walla.v2.info.Fonts;
 
-public class Details extends AppCompatActivity implements View.OnClickListener {
+public class Details extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
     private Fonts fonts;
+    private GoogleApiClient mGoogleApiClient;
+    private GoogleMap mMap;
 
     private RecyclerView tabs;
     private RelativeLayout host_container;
@@ -35,10 +49,15 @@ public class Details extends AppCompatActivity implements View.OnClickListener {
         setSupportActionBar(toolbar);
 
         initUi();
+        initGoogleClient();
     }
 
     private void initUi() {
         fonts = new Fonts(this);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         tabs = (RecyclerView) findViewById(R.id.tabs_rv);
         LinearLayoutManager horizontal
@@ -80,6 +99,22 @@ public class Details extends AppCompatActivity implements View.OnClickListener {
         details_label.setTypeface(fonts.AzoSansRegular);
     }
 
+    private void initGoogleClient() {
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+    }
+
+    private void setMarker(LatLng place){
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(place , 17);
+        mMap.addMarker(new MarkerOptions().position(place).title("EventInfo location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
+        mMap.animateCamera(cameraUpdate);
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -88,5 +123,20 @@ public class Details extends AppCompatActivity implements View.OnClickListener {
                 startActivity(new Intent(this, ViewProfile.class));
                 break;
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+
+        setMarker(sydney);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

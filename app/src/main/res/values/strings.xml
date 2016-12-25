@@ -46,4 +46,7 @@
     <string name="title_activity_friends">Friends</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_my_groups">MyGroups</string>
+
+    <string name="create_shortcut_short">Compose</string>
+    <string name="compose_disabled_message1">Disabled</string>
 </resources>

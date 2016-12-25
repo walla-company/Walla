@@ -1,12 +1,20 @@
 package genieus.com.walla.v2.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
+import android.view.InflateException;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,12 +24,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.util.Arrays;
+import java.util.logging.Handler;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.fragment.Notifications;
 import genieus.com.walla.v2.adapter.viewpager.ViewPagerAdapter;
 import genieus.com.walla.v2.fragment.Calendar;
 import genieus.com.walla.v2.fragment.Home;
+import genieus.com.walla.v2.info.Fonts;
 
 public class MainContainer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, View.OnClickListener {
@@ -31,6 +44,7 @@ public class MainContainer extends AppCompatActivity
     private com.github.clans.fab.FloatingActionMenu fab;
 
     private MenuItem filter_icon;
+    private Fonts fonts;
 
     private int[] tabIcons, tabIconsColored;
     private String[] tabNames;
@@ -52,9 +66,28 @@ public class MainContainer extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         initUi();
+        initShortcuts();
+    }
+
+    private void initShortcuts() {
+        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+        Intent shortcutIntent = new Intent(this, Create.class);
+        shortcutIntent.setAction(Intent.ACTION_VIEW);
+
+        ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "compose")
+                .setShortLabel("Compose")
+                .setLongLabel("Create event")
+                .setIcon(Icon.createWithResource(this, R.drawable.ic_create))
+                .setIntent(shortcutIntent)
+                .build();
+
+        shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
+
     }
 
     private void initUi() {
+        fonts = new Fonts(this);
+
         tabIcons = new int[]{R.mipmap.ic_home, R.mipmap.ic_calendar, R.mipmap.ic_notifications,};
         tabIconsColored = new int[]{R.mipmap.ic_home_c, R.mipmap.ic_calendar_c, R.mipmap.ic_notifications_c,};
         tabNames = new String[]{"Activities", "Calendar", "Notifications"};
@@ -73,8 +106,8 @@ public class MainContainer extends AppCompatActivity
 
     private void setupFab() {
         fab = (com.github.clans.fab.FloatingActionMenu) findViewById(R.id.fab);
-        fab.setMenuButtonColorNormal(getResources().getColor(R.color.DodgerBlue));
-        fab.setMenuButtonColorPressed(getResources().getColor(R.color.DodgerBlue));
+        fab.setMenuButtonColorNormal(getResources().getColor(R.color.lightblue));
+        fab.setMenuButtonColorPressed(getResources().getColor(R.color.lightblue));
         fab.setClosedOnTouchOutside(true);
 
         com.github.clans.fab.FloatingActionButton createGroup = new com.github.clans.fab.FloatingActionButton(this);
@@ -85,10 +118,10 @@ public class MainContainer extends AppCompatActivity
         createPost.setLabelText("Create an event");
         createPost.setImageResource(R.drawable.ic_create);
 
-        createGroup.setColorNormal(getResources().getColor(R.color.DodgerBlue));
-        createPost.setColorNormal(getResources().getColor(R.color.DodgerBlue));
-        createGroup.setColorPressed(getResources().getColor(R.color.DodgerBlue));
-        createPost.setColorPressed(getResources().getColor(R.color.DodgerBlue));
+        createGroup.setColorNormal(getResources().getColor(R.color.lightblue));
+        createPost.setColorNormal(getResources().getColor(R.color.lightblue));
+        createGroup.setColorPressed(getResources().getColor(R.color.lightblue));
+        createPost.setColorPressed(getResources().getColor(R.color.lightblue));
 
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,6 +224,7 @@ public class MainContainer extends AppCompatActivity
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

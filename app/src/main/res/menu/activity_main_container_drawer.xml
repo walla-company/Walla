@@ -5,25 +5,26 @@
 
         <item
             android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
             android:title="Home" />
 
         <item
             android:id="@+id/nav_edit_profile"
-            android:icon="@drawable/ic_write"
+            android:icon="@drawable/ic_account"
             android:title="Edit Profile" />
 
         <item
             android:id="@+id/nav_my_interests"
-            android:icon="@drawable/ic_options"
+            android:icon="@drawable/ic_interested"
             android:title="My Interests" />
 
         <item
             android:id="@+id/nav_my_friends"
-            android:icon="@drawable/ic_mat_group"
+            android:icon="@drawable/ic_friends"
             android:title="My Friends" />
         <item
             android:id="@+id/nav_my_groups"
-            android:icon="@drawable/ic_mat_group_plus"
+            android:icon="@drawable/ic_groups"
             android:title="My Groups" />
     </group>
 
@@ -31,16 +32,16 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_share"
+                android:icon="@drawable/ic_share2"
                 android:title="Share" />
             <item
                 android:id="@+id/nav_contact"
-                android:icon="@drawable/ic_email"
+                android:icon="@drawable/ic_contact"
                 android:title="Contact" />
 
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_logout"
+                android:icon="@drawable/ic_exit"
                 android:title="Logout" />
         </menu>
     </item>
