@@ -5,12 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.InterestInfo;
+import genieus.com.walla.v2.info.Utility;
 import genieus.com.walla.v2.viewholder.InterestsViewHolder;
 
 /**
@@ -20,11 +22,13 @@ import genieus.com.walla.v2.viewholder.InterestsViewHolder;
 public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHolder> {
     private Context context;
     private List<InterestInfo> data;
+    private double width;
     private Fonts fonts;
 
-    public InterestsViewRVAdapter(Context context, List<InterestInfo> data){
+    public InterestsViewRVAdapter(Context context, List<InterestInfo> data, double width){
         this.context = context;
         this.data = data;
+        this.width = width;
 
         fonts = new Fonts(context);
     }
@@ -45,6 +49,10 @@ public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHo
         holder.label.setText(info.getName());
         holder.label.setTypeface(fonts.AzoSansRegular);
 
+        ViewGroup.LayoutParams containerParams = holder.container.getLayoutParams();
+        containerParams.width = Utility.dpToPx((int) width);
+        containerParams.height = Utility.dpToPx((int) (1.2 * width));
+        holder.container.setLayoutParams(containerParams);
     }
 
     @Override

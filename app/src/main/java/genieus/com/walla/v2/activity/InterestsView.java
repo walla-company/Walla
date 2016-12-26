@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -20,8 +21,10 @@ import genieus.com.walla.v2.info.InterestInfo;
 import genieus.com.walla.v2.info.Utility;
 
 public class InterestsView extends AppCompatActivity implements View.OnClickListener {
-    RecyclerView interests_rv;
-    InterestsViewRVAdapter adapter;
+    private RecyclerView interests_rv;
+    private InterestsViewRVAdapter adapter;
+
+    private List<InterestInfo> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public class InterestsView extends AppCompatActivity implements View.OnClickList
     }
 
     private void initUi() {
-        List<InterestInfo> data = new ArrayList<>();
+        data = new ArrayList<>();
         data.add(new InterestInfo("Movies", R.mipmap.movieicon));
         data.add(new InterestInfo("Food", R.mipmap.foodicon));
         data.add(new InterestInfo("Academics", R.mipmap.academicicon));
@@ -50,17 +53,22 @@ public class InterestsView extends AppCompatActivity implements View.OnClickList
         data.add(new InterestInfo("Volunteer", R.mipmap.volunteeringicon));
         data.add(new InterestInfo("Other", R.mipmap.othericon));
 
-        View view = LayoutInflater.from(this).inflate(R.layout.single_interest, null);
+        interests_rv = (RecyclerView) findViewById(R.id.interests_rv);
+
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
 
         GridLayoutManager grid
-                = new GridLayoutManager(this, 4);
-
-        interests_rv = (RecyclerView) findViewById(R.id.interests_rv);
+                = new GridLayoutManager(this, 3);
         interests_rv.setLayoutManager(grid);
 
-        adapter = new InterestsViewRVAdapter(this, data);
+        int parentDp = Utility.pxToDp(interests_rv.getWidth());
+        double width = Utility.sizeToFit(parentDp, 3, 4);
+        adapter = new InterestsViewRVAdapter(this, data, width);
         interests_rv.setAdapter(adapter);
-
     }
 
     @Override
