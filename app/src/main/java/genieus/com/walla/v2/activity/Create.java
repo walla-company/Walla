@@ -20,9 +20,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -32,6 +34,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.drive.realtime.internal.event.ObjectChangedDetails;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
@@ -47,6 +50,7 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.SimpleFormatter;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.info.Fonts;
@@ -54,10 +58,12 @@ import genieus.com.walla.v2.info.Fonts;
 public class Create extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, DialogInterface.OnClickListener {
     private static final int INVITEFRIENDS = 2;
     private static final int INVITEGROUPS = 3;
+    private static final int INTERESTS = 4;
     private GoogleMap mMap;
     private TextView start_time, end_time, location, visibility_label, title_label, start_time_label,
             end_time_label, location_label, details_label, host_label, group_label, interest_label,
-            friends_label, guests_label, friends_in, visibility_in, title_in, guests_in, group_in;
+            friends_label, guests_label, friends_in, visibility_in, guests_in, group_in,
+            interest_in, title_in;
     private RelativeLayout map_container;
     private Button post;
     private GoogleApiClient mGoogleApiClient;
@@ -69,6 +75,11 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private CharSequence[] visibilityOptions = {"Lit (Everyone can see it)", "Chill (Only invited people)"};
     private CharSequence[] guestsInviteOptions = {"Yes", "No"};
 
+    private Map<String, Object> postData;
+
+    private boolean choosingStartTime;
+    private Calendar time;
+
     private Fonts fonts;
 
     @Override
@@ -77,6 +88,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         setContentView(R.layout.activity_create2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         initGoogleClient();
         initUi();
@@ -93,6 +107,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
     private void initUi() {
         fonts = new Fonts(this);
+        postData = new HashMap<>();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -107,12 +122,14 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         start_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                choosingStartTime = true;
                 showDateDialog();
             }
         });
         end_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                choosingStartTime = false;
                 showDateDialog();
             }
         });
@@ -127,6 +144,13 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
         post = (Button) findViewById(R.id.post_btn);
         changeBackgroundColor(post, BUTTONBLUE);
+        post.setTypeface(fonts.AzoSansMedium);
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("post", postData.toString());
+            }
+        });
 
         builder = new AlertDialog.Builder(this);
         builder.setCancelable(false)
@@ -194,9 +218,16 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         guests_in = (TextView) findViewById(R.id.guests_in);
         guests_in.setTypeface(fonts.AzoSansRegular);
         guests_in.setOnClickListener(this);
+        guests_in.setText("Yes"); //default
+        postData.put("guests_invite", "Yes");
         group_in = (TextView) findViewById(R.id.group_in);
         group_in.setTypeface(fonts.AzoSansRegular);
         group_in.setOnClickListener(this);
+        interest_in = (TextView) findViewById(R.id.interests_in);
+        interest_in.setTypeface(fonts.AzoSansRegular);
+        interest_in.setOnClickListener(this);
+        title_in = (EditText) findViewById(R.id.title_in);
+        title_in.setTypeface(fonts.AzoSansRegular);
 
     }
 
@@ -258,7 +289,6 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         }
     }
 
-    // A place has been received; use requestCode to track the request.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
@@ -282,17 +312,34 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             if(resultCode == RESULT_OK){
                 initGroups(data);
             }
+        }else if(requestCode == INTERESTS){
+            if(resultCode == RESULT_OK){
+                initInterests(data);
+            }
         }
+    }
+
+    private void initInterests(Intent data) {
+        String info = data.getStringExtra("result");
+        interest_in.setText(info);
+        String[] interests = info.replace(" ","").split(",");
+        postData.put("interests", interests);
     }
 
     private void initGroups(Intent data) {
         String info = data.getStringExtra("result");
         group_in.setText(info);
+        interest_in.setText(info);
+        String[] groups = info.replace(" ","").split(",");
+        postData.put("groups_invited", groups);
     }
 
     private void initFriends(Intent data) {
         String info = data.getStringExtra("result");
         friends_in.setText(info);
+        interest_in.setText(info);
+        String[] friends = info.replace(" ","").split(",");
+        postData.put("friends_invited", friends);
     }
 
     private void initLocation(Place place) {
@@ -300,15 +347,69 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         LatLng loc = place.getLatLng();
         setMarker(loc);
         location.setText(place.getName());
+
+        postData.put("location_name", place.getName());
+        postData.put("location_lat", place.getLatLng().latitude);
+        postData.put("location_lon", place.getLatLng().longitude);
+    }
+
+    private void initStartTime(Calendar time){
+        String day = "";
+        SimpleDateFormat format1 = new SimpleDateFormat("MMM d, h:mm aaa");
+        SimpleDateFormat format2 = new SimpleDateFormat("h:mm aaa");
+        Calendar now = Calendar.getInstance();
+        if(time.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+                && time.get(Calendar.MONTH) == now.get(Calendar.MONTH)){
+            int diff = time.get(Calendar.DAY_OF_MONTH) - now.get(Calendar.DAY_OF_MONTH);
+            if(diff == 0){
+                day = "Today, " + format2.format(time.getTime());
+            }else if(diff == 1){
+                day = "Tomorrow, " + format2.format(time.getTime());
+            }else{
+
+                day = format1.format(time.getTime());
+            }
+        }else{
+
+        }
+
+        postData.put("start_time", time.getTimeInMillis() / 1000);
+        start_time.setText(day);
+    }
+
+    private void initEndTime(Calendar time){
+        String day = "";
+        SimpleDateFormat format1 = new SimpleDateFormat("MMM d, h:mm aaa");
+        SimpleDateFormat format2 = new SimpleDateFormat("h:mm aaa");
+        Calendar now = Calendar.getInstance();
+        if(time.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+                && time.get(Calendar.MONTH) == now.get(Calendar.MONTH)){
+            int diff = time.get(Calendar.DAY_OF_MONTH) - now.get(Calendar.DAY_OF_MONTH);
+            if(diff == 0){
+                day = "Today, " + format2.format(time.getTime());
+            }else if(diff == 1){
+                day = "Tomorrow, " + format2.format(time.getTime());
+            }else{
+
+                day = format1.format(time.getTime());
+            }
+        }else{
+
+        }
+
+        postData.put("end_time", time.getTimeInMillis() / 1000);
+        end_time.setText(day);
     }
 
     private void initVisibility(int which) {
         visibility_in.setText(visibilityOptions[which]);
+        postData.put("visibility", visibilityOptions[which]);
     }
 
 
     private void initGuestInvitations(int which) {
         guests_in.setText(guestsInviteOptions[which]);
+        postData.put("guests_invite", guestsInviteOptions[which]);
     }
 
     private void inviteFriends(){
@@ -332,13 +433,25 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        time = Calendar.getInstance();
+        time.set(Calendar.YEAR, year);
+        time.set(Calendar.MONTH, monthOfYear);
+        time.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
         showTimeDialog();
     }
 
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        time.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        time.set(Calendar.MINUTE, minute);
 
+        if(choosingStartTime){
+            initStartTime(time);
+        }else{
+            initEndTime(time);
+        }
     }
 
     @Override
@@ -362,6 +475,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             case R.id.guests_in:
                 showGuestInviteOptions();
                 break;
+            case R.id.interests_in:
+                startActivityForResult(new Intent(this, InterestsView.class), INTERESTS);
+                break;
 
         }
     }
@@ -372,5 +488,15 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             initVisibility(which);
         else if(dialog.equals(guestInviteAlert))
             initGuestInvitations(which);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

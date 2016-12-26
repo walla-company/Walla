@@ -21,6 +21,8 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
     private ListView friends_lv;
     private FriendsLVAdapter adapter;
     private List<String> selected;
+    private MenuItem done;
+    private boolean doneIconVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,9 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         initUi();
     }
@@ -75,18 +80,37 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(startedForResult()) {
-            menu.add(0, 0, 0, "DONE").setOnMenuItemClickListener(this).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            done = menu.add(0, 0, 0, "DONE");
+            done.setIcon(R.drawable.ic_done_all).setOnMenuItemClickListener(this).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            done.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
         }
 
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onFriendStateChanged(String name, boolean checked) {
         if(!checked){
             selected.remove(name);
+            if(selected.isEmpty()){
+                done.setVisible(false);
+                doneIconVisible = false;
+            }
         }else{
             selected.add(name);
+            if(!doneIconVisible){
+                done.setVisible(true);
+                doneIconVisible = true;
+            }
         }
     }
 

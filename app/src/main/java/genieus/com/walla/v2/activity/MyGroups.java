@@ -24,6 +24,8 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
     private ListView group_lv;
     private MyGroupsLVAdapter adapter;
     private List<String> selected;
+    private MenuItem done;
+    private boolean doneIconVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,10 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
         setContentView(R.layout.activity_my_groups);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         initUi();
 
@@ -82,15 +88,25 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
     public void onGroupStateChange(String name, boolean checked) {
         if(!checked){
             selected.remove(name);
+            if(selected.isEmpty()){
+                done.setVisible(false);
+                doneIconVisible = false;
+            }
         }else{
             selected.add(name);
+            if(!doneIconVisible){
+                done.setVisible(true);
+                doneIconVisible = true;
+            }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(startedForResult()) {
-            menu.add(0, 0, 0, "DONE").setOnMenuItemClickListener(this).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            done = menu.add(0, 0, 0, "DONE");
+            done.setIcon(R.drawable.ic_done_all).setOnMenuItemClickListener(this).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            done.setVisible(false);
         }
 
         return true;
@@ -106,5 +122,15 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
         }
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

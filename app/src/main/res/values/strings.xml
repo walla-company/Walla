@@ -33,19 +33,19 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="title_activity_main_container">MainContainer</string>
+    <string name="title_activity_main_container">Walla</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_search">Search</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_interests_view">InterestsView</string>
+    <string name="title_activity_interests_view">Interests</string>
     <string name="title_activity_group">Group</string>
     <string name="title_activity_details">Details</string>
-    <string name="title_activity_edit_profile">EditProfile</string>
+    <string name="title_activity_edit_profile">Edit Profile</string>
     <string name="title_activity_friends">Friends</string>
     <string name="title_activity_profile">Profile</string>
-    <string name="title_activity_my_groups">MyGroups</string>
+    <string name="title_activity_my_groups">Groups</string>
 
     <string name="create_shortcut_short">Compose</string>
     <string name="compose_disabled_message1">Disabled</string>
