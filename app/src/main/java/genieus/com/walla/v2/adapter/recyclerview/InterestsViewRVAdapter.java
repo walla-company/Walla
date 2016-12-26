@@ -1,7 +1,13 @@
 package genieus.com.walla.v2.adapter.recyclerview;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +26,21 @@ import genieus.com.walla.v2.viewholder.InterestsViewHolder;
  */
 
 public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHolder> {
+    public interface OnInterestStateChangedCListener{
+        public void onInterestStanceChanged(int pos);
+    }
+
     private Context context;
     private List<InterestInfo> data;
     private double width;
+    private OnInterestStateChangedCListener listener;
     private Fonts fonts;
 
-    public InterestsViewRVAdapter(Context context, List<InterestInfo> data, double width){
+    public InterestsViewRVAdapter(Context context, List<InterestInfo> data, OnInterestStateChangedCListener listener, double width){
         this.context = context;
         this.data = data;
         this.width = width;
+        this.listener = listener;
 
         fonts = new Fonts(context);
     }
@@ -43,8 +55,8 @@ public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHo
     }
 
     @Override
-    public void onBindViewHolder(InterestsViewHolder holder, int position) {
-        InterestInfo info  = data.get(position);
+    public void onBindViewHolder(final InterestsViewHolder holder, int position) {
+        final InterestInfo info  = data.get(position);
         holder.icon.setImageResource(info.getImg());
         holder.label.setText(info.getName());
         holder.label.setTypeface(fonts.AzoSansRegular);
@@ -53,6 +65,14 @@ public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHo
         containerParams.width = Utility.dpToPx((int) width);
         containerParams.height = Utility.dpToPx((int) (1.2 * width));
         holder.container.setLayoutParams(containerParams);
+
+        final int pos = position;
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onInterestStanceChanged(pos);
+            }
+        });
     }
 
     @Override

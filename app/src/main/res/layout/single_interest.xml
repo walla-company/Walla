@@ -6,7 +6,7 @@
     android:background="#f1f1f1">
 
     <RelativeLayout
-        android:id="@+id/interests_container"
+        android:id="@+id/single_interests_container"
         android:layout_width="130dp"
         android:layout_height="150dp"
         android:background="@color/white">

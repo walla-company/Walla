@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -26,10 +27,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.Arrays;
 import java.util.logging.Handler;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.fragment.Notifications;
 import genieus.com.walla.v2.adapter.viewpager.ViewPagerAdapter;
 import genieus.com.walla.v2.fragment.Calendar;
@@ -67,6 +72,46 @@ public class MainContainer extends AppCompatActivity
 
         initUi();
         initShortcuts();
+        testApi();
+    }
+
+    private void testApi() {
+        WallaApi api = new WallaApi(this);
+        api.getMinVersion(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceivedObject(JSONObject data, int call) {
+                Log.d("json", data.toString());
+            }
+
+            @Override
+            public void onDataReceivedArray(JSONArray data, int call) {
+
+            }
+        });
+
+        api.getAllowedDomains(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceivedObject(JSONObject data, int call) {
+                Log.d("json", data.toString());
+            }
+
+            @Override
+            public void onDataReceivedArray(JSONArray data, int call) {
+
+            }
+        });
+
+        api.getActivities(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceivedObject(JSONObject data, int call) {
+
+            }
+
+            @Override
+            public void onDataReceivedArray(JSONArray data, int call) {
+                Log.d("json", data.toString());
+            }
+        }, 224);
     }
 
     private void initShortcuts() {
