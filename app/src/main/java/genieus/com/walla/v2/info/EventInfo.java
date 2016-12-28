@@ -10,6 +10,8 @@ public class EventInfo {
         LIT,
         CHILL
     }
+
+    private String location;
     private String category;
     private int hoursDiff;
     private String title;
@@ -31,6 +33,8 @@ public class EventInfo {
         this.going = going;
         this.tabs = tabs;
     }
+
+    public EventInfo(){};
 
     public String getCategory() {
         return category;
@@ -102,5 +106,19 @@ public class EventInfo {
 
     public void setTabs(List<String> tabs) {
         this.tabs = tabs;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+
+    @Override
+    public String toString(){
+        return String.format("%s at %s", title, location);
     }
 }

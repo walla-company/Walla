@@ -1,6 +1,5 @@
 package genieus.com.walla.v2.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,11 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.InflateException;
-import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,13 +20,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.logging.Handler;
+import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.api.WallaApi;
@@ -39,7 +33,10 @@ import genieus.com.walla.v2.fragment.Notifications;
 import genieus.com.walla.v2.adapter.viewpager.ViewPagerAdapter;
 import genieus.com.walla.v2.fragment.Calendar;
 import genieus.com.walla.v2.fragment.Home;
+import genieus.com.walla.v2.info.DomainInfo;
+import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.info.UserInfo;
 
 public class MainContainer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, View.OnClickListener {
@@ -79,39 +76,47 @@ public class MainContainer extends AppCompatActivity
         WallaApi api = new WallaApi(this);
         api.getMinVersion(new WallaApi.OnDataReceived() {
             @Override
-            public void onDataReceivedObject(JSONObject data, int call) {
-                Log.d("json", data.toString());
-            }
-
-            @Override
-            public void onDataReceivedArray(JSONArray data, int call) {
-
+            public void onDataReceived(Object data, int call) {
+                Log.d("apidata", (String) data);
             }
         });
 
+
         api.getAllowedDomains(new WallaApi.OnDataReceived() {
             @Override
-            public void onDataReceivedObject(JSONObject data, int call) {
-                Log.d("json", data.toString());
-            }
-
-            @Override
-            public void onDataReceivedArray(JSONArray data, int call) {
-
+            public void onDataReceived(Object data, int call) {
+                Log.d("apidata", ((List<DomainInfo>) data).toString());
             }
         });
 
         api.getActivities(new WallaApi.OnDataReceived() {
             @Override
-            public void onDataReceivedObject(JSONObject data, int call) {
-
-            }
-
-            @Override
-            public void onDataReceivedArray(JSONArray data, int call) {
-                Log.d("json", data.toString());
+            public void onDataReceived(Object data, int call) {
+                Log.d("apidata", ((List<EventInfo>) data).toString());
             }
         }, 224);
+
+        api.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                Log.d("apidata", ((UserInfo) data).toString());
+            }
+        }, "4jAEwvyIAdMNJxS5LEG4ynC9SaX2");
+
+        api.isAttendingEvent(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                Log.d("apidata", "" + (boolean) data);
+            }
+        }, "108XpHhxDyWkhbCHWvRK7zPqH8f1", "-KVYOoA3hxvZxHcmVF84");
+
+
+        api.getAttendees(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                Log.d("apidata", "yes");
+            }
+        }, "-KVgdOyvdpen4v05HeCv");
     }
 
     private void initShortcuts() {
