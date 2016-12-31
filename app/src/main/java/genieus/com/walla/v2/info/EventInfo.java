@@ -1,55 +1,30 @@
 package genieus.com.walla.v2.info;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by Anesu on 12/17/2016.
  */
 public class EventInfo {
-    public enum Type{
-        LIT,
-        CHILL
-    }
 
-    private String location;
-    private String category;
-    private int hoursDiff;
-    private String title;
-    private Type type;
-    private String startTime;
-    private String endTime;
-    private int interested;
-    private int going;
-    private List<String> tabs;
-
-    public EventInfo(String category, int hoursDiff, String title, Type type, String startTime, String endTime, int interested, int going, List<String> tabs) {
-        this.category = category;
-        this.hoursDiff = hoursDiff;
-        this.title = title;
-        this.type = type;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.interested = interested;
-        this.going = going;
-        this.tabs = tabs;
-    }
+    private String auid, title, location_name, location_address, host, host_group;
+    private double location_lat, location_long;
+    private long start_time, end_time;
+    private boolean is_public, can_guests_invite;
+    private List<String> interests, going_list, interested_list;
+    private int going, interested;
 
     public EventInfo(){};
 
-    public String getCategory() {
-        return category;
+    public String getAuid() {
+        return auid;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public int getHoursDiff() {
-        return hoursDiff;
-    }
-
-    public void setHoursDiff(int hoursDiff) {
-        this.hoursDiff = hoursDiff;
+    public void setAuid(String auid) {
+        this.auid = auid;
     }
 
     public String getTitle() {
@@ -60,36 +35,108 @@ public class EventInfo {
         this.title = title;
     }
 
-    public Type getType() {
-        return type;
+    public String getLocation_name() {
+        return location_name;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setLocation_name(String location_name) {
+        this.location_name = location_name;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public String getLocation_address() {
+        return location_address;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setLocation_address(String location_address) {
+        this.location_address = location_address;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getHost() {
+        return host;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setHost(String host) {
+        this.host = host;
     }
 
-    public int getInterested() {
-        return interested;
+    public String getHost_group() {
+        return host_group;
     }
 
-    public void setInterested(int interested) {
-        this.interested = interested;
+    public void setHost_group(String host_group) {
+        this.host_group = host_group;
+    }
+
+    public long getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(long start_time) {
+        this.start_time = start_time;
+    }
+
+    public long getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(long end_time) {
+        this.end_time = end_time;
+    }
+
+    public double getLocation_lat() {
+        return location_lat;
+    }
+
+    public void setLocation_lat(double location_lat) {
+        this.location_lat = location_lat;
+    }
+
+    public double getLocation_long() {
+        return location_long;
+    }
+
+    public void setLocation_long(double location_long) {
+        this.location_long = location_long;
+    }
+
+    public boolean is_public() {
+        return is_public;
+    }
+
+    public void setIs_public(boolean is_public) {
+        this.is_public = is_public;
+    }
+
+    public boolean isCan_guests_invite() {
+        return can_guests_invite;
+    }
+
+    public void setCan_guests_invite(boolean can_guests_invite) {
+        this.can_guests_invite = can_guests_invite;
+    }
+
+    public List<String> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(List<String> interests) {
+        this.interests = interests;
+    }
+
+    public List<String> getGoing_list() {
+        return going_list;
+    }
+
+    public void setGoing_list(List<String> going_list) {
+        this.going_list = going_list;
+    }
+
+    public List<String> getInterested_list() {
+        return interested_list;
+    }
+
+    public void setInterested_list(List<String> interested_list) {
+        this.interested_list = interested_list;
     }
 
     public int getGoing() {
@@ -100,25 +147,60 @@ public class EventInfo {
         this.going = going;
     }
 
-    public List<String> getTabs() {
-        return tabs;
+    public int getInterested() {
+        return interested;
     }
 
-    public void setTabs(List<String> tabs) {
-        this.tabs = tabs;
+    public void setInterested(int interested) {
+        this.interested = interested;
     }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
 
     @Override
     public String toString(){
-        return String.format("%s at %s", title, location);
+        return String.format("%s at %s", title, location_name);
+    }
+
+    //helper methods
+    public String getStringTime(long time, boolean tag){ //tag used to determine if AM/PM is included
+        SimpleDateFormat format1 = new SimpleDateFormat("h:mm aaa");
+        SimpleDateFormat format2 = new SimpleDateFormat("h:mm");
+        Calendar now = Calendar.getInstance();
+        now.setTimeInMillis(time);
+
+        String date = "";
+        if(tag){
+            date = format1.format(now.getTime());
+        }else{
+            date = format2.format(now.getTime());
+        }
+
+        return date;
+
+    }
+
+    public String getStringDate(long time){
+        String date = "";
+        Calendar now = Calendar.getInstance();
+        Calendar start = Calendar.getInstance();
+        start.setTimeInMillis(time);
+
+        SimpleDateFormat format1 = new SimpleDateFormat("MMM d");
+        SimpleDateFormat format2 = new SimpleDateFormat("EEEE");
+
+        if(start.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+                && start.get(Calendar.MONTH) == now.get(Calendar.MONTH)){
+            int diff = start.get(Calendar.DAY_OF_MONTH) - now.get(Calendar.DAY_OF_MONTH);
+            if(diff == 0){
+                date = "Today";
+            }else if(diff == 1){
+                date = "Tomorrow";
+            }else if(diff < 7){
+                date = format2.format(start.getTime());
+            }
+        }else{
+            date = format1.format(start.getTime());
+        }
+
+        return date;
     }
 }

@@ -114,9 +114,20 @@ public class MainContainer extends AppCompatActivity
         api.getAttendees(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                Log.d("apidata", "yes");
+                Log.d("apidata", ((List<UserInfo>) data).toString());
             }
-        }, "-KVgdOyvdpen4v05HeCv");
+        }, "-KVYMmeugVkQLtLuuAsq");
+
+        api.verifyEmail("ZY59phLqRcNLPuEnTFDY0aym6MJ3", "mafuvadzeanesu@gmail.com");
+
+        api.reportPost("-KVYOoA3hxvZxHcmVF84", "ZY59phLqRcNLPuEnTFDY0aym6MJ3");
+
+        api.isVerified(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                Log.d("apidata", "verified: " + (boolean) data);
+            }
+        }, "ZY59phLqRcNLPuEnTFDY0aym6MJ3");
     }
 
     private void initShortcuts() {

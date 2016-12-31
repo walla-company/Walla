@@ -2,7 +2,6 @@ package genieus.com.walla.v2.adapter.listview;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,7 +45,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
     private EventInfo getEvent(List<EventInfo> events, String query){
         for(EventInfo event : events){
-            if((event.getTabs().toString() + event.getTitle() + event.getStartTime()).equals(query)){
+            if((event.getInterests().toString() + event.getTitle() + event.getStart_time()).equals(query)){
                 return event;
             }
         }
@@ -74,6 +73,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         //TextView interested = (TextView) convertView.findViewById(R.id.interested);
         //TextView going = (TextView) convertView.findViewById(R.id.going);
         TextView duration = (TextView) convertView.findViewById(R.id.duration);
+        TextView date = (TextView) convertView.findViewById(R.id.date);
         TextView attendees_description = (TextView) convertView.findViewById(R.id.attendees_description);
         RecyclerView tabs = (RecyclerView) convertView.findViewById(R.id.tabs_rv);
 
@@ -84,18 +84,20 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
         tabs.setLayoutManager(horizontal);
 
-        TabRVAdapter tabAdapter = new TabRVAdapter(getContext(), event.getTabs());
+        TabRVAdapter tabAdapter = new TabRVAdapter(getContext(), event.getInterests());
         tabs.setAdapter(tabAdapter);
 
 
-        visibility.setImageResource(event.getType() == EventInfo.Type.CHILL ? R.drawable.ic_chill_gray : R.drawable.ic_lit_gray);
+        visibility.setImageResource(event.is_public() ? R.drawable.ic_lit_gray : R.drawable.ic_chill_gray);
         title.setText(event.getTitle());
         title.setTypeface(fonts.AzoSansMedium);
         //interested.setText(event.getInterested());
         //interested.setTypeface(fonts.AzoSansRegular);
         //going.setText(event.getGoing());
         //going.setTypeface(fonts.AzoSansRegular);
-        duration.setText(event.getStartTime() + "\nto " + event.getEndTime());
+        date.setTypeface(fonts.AzoSansRegular);
+        date.setText(event.getStringDate(event.getStart_time()));
+        duration.setText(event.getStringTime(event.getStart_time(), true)+ "\nto " + event.getStringTime(event.getEnd_time(), false));
         duration.setTypeface(fonts.AzoSansRegular);
         attendees_description.setTypeface(fonts.AzoSansRegular);
 
@@ -125,7 +127,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
             String filterableString;
 
             for (int i = 0; i < count; i++) {
-                filterableString = list.get(i).getTabs().toString() + list.get(i).getTitle() + list.get(i).getStartTime();
+                filterableString = list.get(i).getInterests().toString() + list.get(i).getTitle() + list.get(i).getStart_time();
                 if (filterableString.toLowerCase().contains(filterString)) {
                     nlist.add(filterableString);
                 }

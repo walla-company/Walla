@@ -47,12 +47,37 @@ public class Group extends AppCompatActivity {
         activities_lv = (ListView) findViewById(R.id.group_activities_lv);
         List<EventInfo> list = new ArrayList<>();
 
-        list.add(new EventInfo("Dance", 4, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", EventInfo.Type.LIT, "6:45 PM", "7:55",2, 11, new ArrayList<String>(Arrays.asList("Movies", "Academics"))));
-        list.add(new EventInfo("Academics", 6, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", EventInfo.Type.CHILL, "3:45 PM", "4:30", 4, 2, new ArrayList<String>(Arrays.asList("Sports","CS201"))));
-        list.add(new EventInfo("Food", 6, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", EventInfo.Type.CHILL, "8:45 AM", "10:00", 7, 5, new ArrayList<String>(Arrays.asList("Dance", "Music", "Socialize"))));
-        list.add(new EventInfo("Music", 7, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", EventInfo.Type.LIT, "12:45 PM", "2:30", 3, 13, new ArrayList<String>(Arrays.asList("Free Food"))));
-        list.add(new EventInfo("Socialize", 11, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", EventInfo.Type.CHILL, "11:00 AM", "1:55", 7, 4, new ArrayList<String>(Arrays.asList("Music","Dab Squad"))));
+        EventInfo event1 = new EventInfo();
+        event1.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        event1.setInterests(Arrays.asList("Movies", "Academics"));
+        event1.setInterested(7);
+        event1.setGoing(5);
+        event1.setStart_time((long) 742385);
+        event1.setEnd_time((long) 749999);
+        event1.setIs_public(true);
 
+        EventInfo event2 = new EventInfo();
+        event2.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        event2.setInterests(Arrays.asList("Movies", "Academics"));
+        event2.setInterested(7);
+        event2.setGoing(5);
+        event2.setStart_time((long) 742385);
+        event2.setEnd_time((long) 749999);
+        event2.setIs_public(true);
+
+        EventInfo event3 = new EventInfo();
+        event3.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        event3.setInterests(Arrays.asList("Movies", "Academics"));
+        event3.setInterested(7);
+        event3.setGoing(5);
+        event3.setStart_time((long) 742385);
+        event3.setEnd_time((long) 749999);
+        event3.setIs_public(true);
+
+        List<EventInfo> data = new ArrayList<>();
+        data.add(event1);
+        data.add(event2);
+        data.add(event3);
 
         LayoutInflater myinflater = getLayoutInflater();
         ViewGroup myHeader = (ViewGroup)myinflater.inflate(R.layout.group_header_title, activities_lv, false);
