@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class EventInfo {
 
-    private String auid, title, location_name, location_address, host, host_group;
+    private String auid, title, location_name, location_address, host, host_group, details;
     private double location_lat, location_long;
     private long start_time, end_time;
     private boolean is_public, can_guests_invite;
@@ -18,6 +18,14 @@ public class EventInfo {
     private int going, interested;
 
     public EventInfo(){};
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
 
     public String getAuid() {
         return auid;

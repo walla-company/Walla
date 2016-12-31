@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.EventInfo;
@@ -37,11 +38,15 @@ public class WallaApi {
     public static final int USER_INFO = 4;
     public static final int IS_ATTENDING = 5;
     public static final int IS_VERIFIED = 6;
+    public static final int GET_ACTIVITY = 7;
+    public static final int GET_ACTIVITIES = 8;
 
 
-    public interface OnDataReceived{
+    public interface OnDataReceived {
         public void onDataReceived(Object data, int call);
     }
+
+    private static Context context;
 
     private static String token = "3eaf7dFmNF447d";
     private static String platform = "android";
@@ -54,6 +59,9 @@ public class WallaApi {
     private static String is_attending = "/api/is_attending?";
     private static String verify_email = "/api/request_verification?";
     private static String report_post = "/api/report_post?";
+    private static String add_activity = "/api/add_activity?";
+    private static String get_activity = "/api/get_activity?";
+    private static String get_activities = "/api/get_activities?";
     //private static String is_verified = "/api/is_verified?";
 
 
@@ -61,11 +69,12 @@ public class WallaApi {
     private static RequestQueue queue;
 
 
-    public WallaApi(Context context){
+    public WallaApi(Context context) {
         queue = Volley.newRequestQueue(context);
+        this.context = context;
     }
 
-    public static void getMinVersion(final OnDataReceived listener){
+    public static void getMinVersion(final OnDataReceived listener) {
         final String url = site + min_version + "token=" + token + "&platform=" + platform;
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
@@ -84,21 +93,21 @@ public class WallaApi {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("jsonerror", url +  " " + error.toString());
+                Log.d("jsonerror", url + " " + error.toString());
             }
         });
 
         queue.add(request);
     }
 
-    public static void getAllowedDomains(final OnDataReceived listener){
+    public static void getAllowedDomains(final OnDataReceived listener) {
         final String url = site + domains + "token=" + token;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 List<DomainInfo> domains = new ArrayList<>();
                 Iterator<String> keys = response.keys();
-                while(keys.hasNext()){
+                while (keys.hasNext()) {
                     String key = keys.next();
                     try {
                         JSONObject data = response.getJSONObject(key);
@@ -113,14 +122,14 @@ public class WallaApi {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("jsonerror", url +  " " + error.toString());
+                Log.d("jsonerror", url + " " + error.toString());
             }
         });
 
         queue.add(request);
     }
 
-    public static void getActivities(final OnDataReceived listener, int hours){
+    public static void getActivities(final OnDataReceived listener, int hours) {
         final String url = site + activities + "token=" + token + "&domain=" + domain + "&filter=" + hours;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
@@ -128,7 +137,7 @@ public class WallaApi {
                 List<EventInfo> events = new ArrayList<>();
 
                 int len = response.length();
-                for(int i = 0; i < len; i++){
+                for (int i = 0; i < len; i++) {
                     try {
                         JSONObject event = response.getJSONObject(i);
                         EventInfo info = new EventInfo();
@@ -149,14 +158,14 @@ public class WallaApi {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("jsonerror", url +  " " + error.toString());
+                Log.d("jsonerror", url + " " + error.toString());
             }
         });
 
         queue.add(request);
     }
 
-    public static void getUserInfo(final OnDataReceived listener, String uid){
+    public static void getUserInfo(final OnDataReceived listener, String uid) {
         final String url = site + user_info + "token=" + token + "&uid=" + uid + "&domain=" + domain;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
@@ -165,7 +174,7 @@ public class WallaApi {
 
                 try {
                     info.setName(response.getString("name"));
-                    if(response.has("verified")) info.setVerified(response.getBoolean("verified"));
+                    if (response.has("verified")) info.setVerified(response.getBoolean("verified"));
                     else info.setVerified(false);
 
                 } catch (JSONException e) {
@@ -177,14 +186,14 @@ public class WallaApi {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("jsonerror", url +  " " + error.toString());
+                Log.d("jsonerror", url + " " + error.toString());
             }
         });
 
         queue.add(request);
     }
 
-    public static void isAttendingEvent(final OnDataReceived listener, String uid, String eid){
+    public static void isAttendingEvent(final OnDataReceived listener, String uid, String eid) {
         final String url = site + is_attending + "token=" + token + "&uid=" + uid + "&event=" + eid + "&domain=" + domain;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
@@ -201,14 +210,14 @@ public class WallaApi {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("jsonerror", url +  " " + error.toString());
+                Log.d("jsonerror", url + " " + error.toString());
             }
         });
 
         queue.add(request);
     }
 
-    public static void getAttendees(final OnDataReceived listener, String eventId){
+    public static void getAttendees(final OnDataReceived listener, String eventId) {
         final String url = site + attendees + "token=" + token + "&event=" + eventId + "&domain=" + domain;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
@@ -216,7 +225,7 @@ public class WallaApi {
                 List<UserInfo> attendees = new ArrayList<>();
 
                 int len = response.length();
-                for(int i = 0; i < len; i++){
+                for (int i = 0; i < len; i++) {
                     try {
                         JSONObject data = response.getJSONObject(i);
                         UserInfo user = new UserInfo();
@@ -243,32 +252,32 @@ public class WallaApi {
 
     }
 
-    public static void verifyEmail(final String uid, final String email){
-       isVerified(new OnDataReceived() {
-           @Override
-           public void onDataReceived(Object data, int call) {
-               if((boolean) data) Log.d("apidata", "already verified");
-               else{
-                   final String url = site + verify_email + "token=" + token + "&uid=" + uid + "&email=" + email + "&domain=" + domain;
-                   StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                       @Override
-                       public void onResponse(String response) {
-                           Log.d("apidata", "sent");
-                       }
-                   }, new Response.ErrorListener() {
-                       @Override
-                       public void onErrorResponse(VolleyError error) {
-                           Log.d("jsonerror", url + " " + error.toString());
-                       }
-                   });
+    public static void verifyEmail(final String uid, final String email) {
+        isVerified(new OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                if ((boolean) data) Log.d("apidata", "already verified");
+                else {
+                    final String url = site + verify_email + "token=" + token + "&uid=" + uid + "&email=" + email + "&domain=" + domain;
+                    StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("apidata", "sent");
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("jsonerror", url + " " + error.toString());
+                        }
+                    });
 
-                   queue.add(request);
-               }
-           }
-       }, uid);
+                    queue.add(request);
+                }
+            }
+        }, uid);
     }
 
-    public static void reportPost(String eid, String reporter){
+    public static void reportPost(String eid, String reporter) {
         final String url = site + report_post + "token=" + token + "&uid=" + reporter + "&event=" + eid + "&domain=" + domain;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -285,7 +294,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void isVerified(final OnDataReceived listener, String uid){
+    public static void isVerified(final OnDataReceived listener, String uid) {
 
         getUserInfo(new OnDataReceived() {
             @Override
@@ -294,6 +303,141 @@ public class WallaApi {
             }
         }, uid);
 
+    }
+
+    public static void postActivity(JSONObject params) {
+        final String url = site + add_activity + "token=" + token;
+
+        try {
+            params.put("school_identifier", domain);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Log.d("apidata", params.toString());
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+
+
+    }
+
+    public static void getActivity(final OnDataReceived listener, String auid){
+        final String url = site + get_activity + "token=" + token + "&school_identifier=" + domain + "&auid=" + auid;
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                EventInfo event = new EventInfo();
+
+                try {
+                    event.setTitle(response.getString("title"));
+                    event.setAuid(response.getString("activity_id"));
+                    event.setCan_guests_invite(response.getBoolean("can_others_invite"));
+                    event.setIs_public(response.getBoolean("public"));
+                    event.setStart_time(response.getLong("start_time"));
+                    event.setEnd_time(response.getLong("end_time"));
+                    Log.d("apidata", response.getJSONObject("location").toString());
+                    event.setLocation_name(response.getJSONObject("location").getString("name"));
+                    event.setLocation_long(response.getJSONObject("location").getDouble("long"));
+                    event.setLocation_lat(response.getJSONObject("location").getDouble("lat"));
+                    event.setInterests(interestsJsontoList(response.getJSONArray("interests")));
+                    event.setDetails(response.getString("details"));
+                    event.setHost(response.getString("host"));
+
+                    Log.d("apidata", response.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                listener.onDataReceived(event, GET_ACTIVITY);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void getActivities(final OnDataReceived listener){
+        final String url = site + get_activities + "token=" + token + "&school_identifier=" + domain;
+        final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray array) {
+
+                Log.d("apiinfo", array.toString());
+
+                List<EventInfo> events = new ArrayList<>();
+
+                for(int i = 0; i < array.length(); i++){
+                    try {
+                        JSONObject response = array.getJSONObject(i);
+                        EventInfo event = new EventInfo();
+
+                        event.setTitle(response.getString("title"));
+                        event.setAuid(response.getString("activity_id"));
+                        event.setCan_guests_invite(response.getBoolean("can_others_invite"));
+                        event.setIs_public(response.getBoolean("public"));
+                        event.setStart_time(response.getLong("start_time"));
+                        event.setEnd_time(response.getLong("end_time"));
+                        Log.d("apidata", response.getJSONObject("location").toString());
+                        event.setLocation_name(response.getJSONObject("location").getString("name"));
+                        event.setLocation_long(response.getJSONObject("location").getDouble("long"));
+                        event.setLocation_lat(response.getJSONObject("location").getDouble("lat"));
+                        event.setInterests(interestsJsontoList(response.getJSONArray("interests")));
+                        event.setDetails(response.getString("details"));
+                        event.setHost(response.getString("host"));
+
+                        events.add(event);
+                    } catch (JSONException e) {
+                        Log.d("apidata", e.toString());
+                    }
+                }
+
+                listener.onDataReceived(events, GET_ACTIVITIES);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    private static List<String> interestsJsontoList(JSONArray array){
+        List<String> data = new ArrayList<>();
+        for(int i = 0; i < array.length(); i++){
+            try {
+                data.add(array.getString(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return data;
     }
 
 }

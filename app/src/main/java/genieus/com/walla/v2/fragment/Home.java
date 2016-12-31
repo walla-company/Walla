@@ -9,6 +9,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,12 +20,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import genieus.com.walla.v1.Interests;
+import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.viewholder.FilterViewHolder;
 import genieus.com.walla.v2.adapter.recyclerview.InterestsRVAdapter;
 import genieus.com.walla.R;
@@ -47,15 +50,20 @@ public class Home extends Fragment  {
     private static final String ARG_PARAM2 = "param2";
 
     private RecyclerView interest_rv;
-    private ListView events_lv;
+    private static ListView events_lv;
     private InterestsRVAdapter adapter;
-    private EventsLVAdapter adapterEvents;
+    private static EventsLVAdapter adapterEvents;
     private List<Interests> interests;
     private TextView filter_tv;
+    private static SwipeRefreshLayout swipeRefreshLayout;
 
     private static AlertDialog alert;
     private Fonts fonts;
     private String currentFilter = "";
+
+    private static Context context;
+
+    private static WallaApi api;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -94,13 +102,17 @@ public class Home extends Fragment  {
         }
     }
 
-    private void initUi() {
+    private void initUi(){
+        context = getContext();
+        api = new WallaApi(getContext());
         fonts = new Fonts(getContext());
         initFilter();
         initEvents();
     }
 
     private void initEvents() {
+
+        /*
         List<EventInfo> list = new ArrayList<>();
 
         EventInfo event1 = new EventInfo();
@@ -135,9 +147,19 @@ public class Home extends Fragment  {
         data.add(event2);
         data.add(event3);
 
-        adapterEvents = new EventsLVAdapter(getContext(), R.layout.single_activity, data);
-        events_lv.setAdapter(adapterEvents);
-        adapterEvents.getFilter().filter("");
+        */
+
+        final Context context = getContext();
+
+        api.getActivities(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>)data);
+                events_lv.setAdapter(adapterEvents);
+                adapterEvents.getFilter().filter("");
+            }
+        });
+
     }
 
     private void initFilter() {
@@ -182,6 +204,19 @@ public class Home extends Fragment  {
 
         alert.getWindow().setAttributes(lp);
 
+    }
+
+    public static void refreshPage(){
+        swipeRefreshLayout.setRefreshing(false);
+        api.getActivities(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>)data);
+                events_lv.setAdapter(adapterEvents);
+                adapterEvents.getFilter().filter("");
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void changeColorOfFilters(View view, List<FilterViewHolder> all, int pos) {
@@ -239,6 +274,14 @@ public class Home extends Fragment  {
         events_lv = (ListView) view.findViewById(R.id.events);
         filter_tv = (TextView) view.findViewById(R.id.filter_label);
         filter_tv.setVisibility(View.GONE);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_container);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshPage();
+            }
+        });
 
         initUi();
         return view;

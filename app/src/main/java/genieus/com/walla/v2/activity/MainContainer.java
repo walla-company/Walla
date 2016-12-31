@@ -45,7 +45,7 @@ public class MainContainer extends AppCompatActivity
     private ViewPager viewPager;
     private com.github.clans.fab.FloatingActionMenu fab;
 
-    private MenuItem filter_icon;
+    private MenuItem filter_icon, refresh_icon;
     private Fonts fonts;
 
     private int[] tabIcons, tabIconsColored;
@@ -69,7 +69,7 @@ public class MainContainer extends AppCompatActivity
 
         initUi();
         initShortcuts();
-        testApi();
+        //testApi();
     }
 
     private void testApi() {
@@ -232,12 +232,15 @@ public class MainContainer extends AppCompatActivity
         switch(position){
             case 0:
                 filter_icon.setVisible(true);
+                refresh_icon.setVisible(true);
                 break;
             case 1:
                 filter_icon.setVisible(false);
+                refresh_icon.setVisible(false);
                 break;
             case 2:
                 filter_icon.setVisible(false);
+                refresh_icon.setVisible(false);
                 break;
         }
     }
@@ -292,6 +295,7 @@ public class MainContainer extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         filter_icon = menu.findItem(R.id.action_filter);
+        refresh_icon = menu.findItem(R.id.action_refresh);
         return true;
     }
 
@@ -307,6 +311,9 @@ public class MainContainer extends AppCompatActivity
                 break;
             case R.id.action_filter:
                 Home.showFilter();
+                break;
+            case R.id.action_refresh:
+                Home.refreshPage();
                 break;
             default:
                 break;

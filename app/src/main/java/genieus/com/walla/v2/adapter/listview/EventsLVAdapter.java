@@ -77,7 +77,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         TextView attendees_description = (TextView) convertView.findViewById(R.id.attendees_description);
         RecyclerView tabs = (RecyclerView) convertView.findViewById(R.id.tabs_rv);
 
-        EventInfo event = getEvent(events, filtered.get(position));
+        final EventInfo event = getEvent(events, filtered.get(position));
 
         LinearLayoutManager horizontal
             = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -104,7 +104,9 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getContext().startActivity(new Intent(getContext(), Details.class));
+                Intent intent = new Intent(getContext(), Details.class);
+                intent.putExtra("auid", event.getAuid());
+                getContext().startActivity(intent);
             }
         });
 

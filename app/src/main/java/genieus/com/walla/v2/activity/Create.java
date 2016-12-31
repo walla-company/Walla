@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -46,6 +47,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -53,6 +57,7 @@ import java.util.*;
 import java.util.logging.SimpleFormatter;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 
 public class Create extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, DialogInterface.OnClickListener {
@@ -75,12 +80,14 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private CharSequence[] visibilityOptions = {"Lit (Everyone can see it)", "Chill (Only invited people)"};
     private CharSequence[] guestsInviteOptions = {"Yes", "No"};
 
-    private Map<String, Object> postData;
+    private JSONObject postObj;
+    private EditText details_in;
 
     private boolean choosingStartTime;
     private Calendar time;
 
     private Fonts fonts;
+    private WallaApi api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +113,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     }
 
     private void initUi() {
+        api = new WallaApi(this);
         fonts = new Fonts(this);
-        postData = new HashMap<>();
+        postObj = new JSONObject();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -145,12 +153,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         post = (Button) findViewById(R.id.post_btn);
         changeBackgroundColor(post, BUTTONBLUE);
         post.setTypeface(fonts.AzoSansMedium);
-        post.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("post", postData.toString());
-            }
-        });
+        post.setOnClickListener(this);
 
         builder = new AlertDialog.Builder(this);
         builder.setCancelable(false)
@@ -219,7 +222,11 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         guests_in.setTypeface(fonts.AzoSansRegular);
         guests_in.setOnClickListener(this);
         guests_in.setText("Yes"); //default
-        postData.put("guests_invite", "Yes");
+        try {
+            postObj.put("can_others_invite", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         group_in = (TextView) findViewById(R.id.group_in);
         group_in.setTypeface(fonts.AzoSansRegular);
         group_in.setOnClickListener(this);
@@ -228,6 +235,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         interest_in.setOnClickListener(this);
         title_in = (EditText) findViewById(R.id.title_in);
         title_in.setTypeface(fonts.AzoSansRegular);
+        details_in = (EditText) findViewById(R.id.details_in);
+        details_in.setTypeface(fonts.AzoSansRegular);
 
     }
 
@@ -323,7 +332,12 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         String info = data.getStringExtra("result");
         interest_in.setText(info);
         String[] interests = info.replace(" ","").split(",");
-        postData.put("interests", interests);
+        JSONArray array = new JSONArray(Arrays.asList(interests));
+        try {
+            postObj.put("interests", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initGroups(Intent data) {
@@ -331,7 +345,12 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         group_in.setText(info);
         interest_in.setText(info);
         String[] groups = info.replace(" ","").split(",");
-        postData.put("groups_invited", groups);
+        JSONArray array = new JSONArray(Arrays.asList(groups));
+        try {
+            postObj.put("invited_groups", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initFriends(Intent data) {
@@ -339,7 +358,12 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         friends_in.setText(info);
         interest_in.setText(info);
         String[] friends = info.replace(" ","").split(",");
-        postData.put("friends_invited", friends);
+        JSONArray array = new JSONArray(Arrays.asList(friends));
+        try {
+            postObj.put("invited_users", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initLocation(Place place) {
@@ -348,9 +372,14 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         setMarker(loc);
         location.setText(place.getName());
 
-        postData.put("location_name", place.getName());
-        postData.put("location_lat", place.getLatLng().latitude);
-        postData.put("location_lon", place.getLatLng().longitude);
+        try {
+            postObj.put("location_name", place.getName());
+            postObj.put("location_lat", place.getLatLng().latitude);
+            postObj.put("location_long", place.getLatLng().longitude);
+            postObj.put("location_address", place.getAddress());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initStartTime(Calendar time){
@@ -373,7 +402,11 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
         }
 
-        postData.put("start_time", time.getTimeInMillis() / 1000);
+        try {
+            postObj.put("start_time", time.getTimeInMillis() / 1000);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         start_time.setText(day);
     }
 
@@ -397,19 +430,31 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
         }
 
-        postData.put("end_time", time.getTimeInMillis() / 1000);
+        try {
+            postObj.put("end_time", time.getTimeInMillis() / 1000);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         end_time.setText(day);
     }
 
     private void initVisibility(int which) {
         visibility_in.setText(visibilityOptions[which]);
-        postData.put("visibility", visibilityOptions[which]);
+        try {
+            postObj.put("activity_public", which == 0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
     private void initGuestInvitations(int which) {
         guests_in.setText(guestsInviteOptions[which]);
-        postData.put("guests_invite", guestsInviteOptions[which]);
+        try {
+            postObj.put("can_others_invite", which == 0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void inviteFriends(){
@@ -430,6 +475,19 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         guestInviteAlert.show();
     }
 
+    private void postActivity(){
+        try {
+            postObj.put("title", title_in.getText().toString());
+            postObj.put("details", details_in.getText().toString());
+            postObj.put("host", "user69");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        api.postActivity(postObj);
+
+        Log.d("postdata", postObj.toString());
+    }
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -477,6 +535,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 break;
             case R.id.interests_in:
                 startActivityForResult(new Intent(this, InterestsView.class), INTERESTS);
+                break;
+            case R.id.post_btn:
+                postActivity();
                 break;
 
         }
