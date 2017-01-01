@@ -170,6 +170,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         post.setOnClickListener(this);
 
         builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select an option");
         builder.setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -186,6 +187,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         alert = builder.create();
 
         guestInviteBuilder = new AlertDialog.Builder(this);
+        guestInviteBuilder.setTitle("Select an option");
         guestInviteBuilder.setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -499,7 +501,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         }
 
         try {
-            postObj.put("start_time", time.getTimeInMillis() / 1000);
+            postObj.put("start_time", (long) time.getTimeInMillis() / 1000);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -527,7 +529,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         }
 
         try {
-            postObj.put("end_time", time.getTimeInMillis() / 1000);
+            postObj.put("end_time", (long)time.getTimeInMillis() / 1000);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -616,6 +618,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
     private boolean isValidActivity() {
         boolean valid = true;
+        boolean timeValid= true;
 
         if (title_in.getText().toString().equals("")) {
             title_in.setError("required");
@@ -637,10 +640,31 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             valid = false;
         }
 
+        try {
+            if(postObj.getLong("start_time") < (Calendar.getInstance().getTimeInMillis() / 1000))
+                start_time.setError("start time cannot be in the past");
+                Toast.makeText(this, "start time cannot be in the past", Toast.LENGTH_LONG).show();
+                timeValid = false;
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         if (!postObj.has("end_time")) {
             end_time.setError("required");
-            valid = false;
         }
+
+        try {
+            if(postObj.getLong("end_time") < postObj.getLong("start_time") )
+                end_time.setError("end time cannot be before start time");
+                Toast.makeText(this, "end time cannot be before start time", Toast.LENGTH_LONG).show();
+                timeValid = false;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         if (!postObj.has("location_name")) {
             location.setError("required");
@@ -657,7 +681,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             valid = false;
         }
 
-        return valid;
+        return valid && timeValid;
 
     }
 
@@ -711,6 +735,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 break;
             case R.id.interests_in:
                 startActivityForResult(new Intent(this, InterestsView.class), INTERESTS);
+                interest_in.setError(null);
                 break;
             case R.id.post_btn:
                 postActivity();

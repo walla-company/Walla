@@ -55,14 +55,21 @@ public class WallaApi {
     private static String domains = "/api/domains?";
     private static String activities = "/api/activities?";
     private static String attendees = "/api/attendees?";
-    private static String user_info = "/api/user_info?";
+    private static String user_info = "/api/get_user?";
     private static String is_attending = "/api/is_attending?";
     private static String verify_email = "/api/request_verification?";
     private static String report_post = "/api/report_post?";
     private static String add_activity = "/api/add_activity?";
     private static String get_activity = "/api/get_activity?";
     private static String get_activities = "/api/get_activities?";
-    //private static String is_verified = "/api/is_verified?";
+    private static String update_fname = "/api/update_user_first_name?";
+    private static String update_lname = "/api/update_user_last_name?";
+    private static String update_email = "/api/update_user_email?";
+    private static String update_major = "/api/update_user_major?";
+    private static String update_hometown = "/api/update_user_hometown?";
+    private static String update_description = "/api/update_user_description?";
+    private static String update_academic_level = "/api/update_user_academic_level?";
+    private static String update_profile_image_url = "/api/update_user_profile_image_url?";
 
 
     private static String domain = "duke";
@@ -166,16 +173,23 @@ public class WallaApi {
     }
 
     public static void getUserInfo(final OnDataReceived listener, String uid) {
-        final String url = site + user_info + "token=" + token + "&uid=" + uid + "&domain=" + domain;
+        final String url = site + user_info + "token=" + token + "&uid=" + uid + "&school_identifier=" + domain;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 UserInfo info = new UserInfo();
 
                 try {
-                    info.setName(response.getString("name"));
-                    if (response.has("verified")) info.setVerified(response.getBoolean("verified"));
-                    else info.setVerified(false);
+                    info.setFirst_name(response.getString("first_name"));
+                    info.setLast_name(response.getString("last_name"));
+                    info.setProfile_url("profile_image_url");
+                    info.setMajor(response.getString("major"));
+                    info.setYear(response.getString("academic_level"));
+                    info.setHometown(response.getString("hometown"));
+                    info.setUid(response.getString("user_id"));
+                    info.setDescription(response.getString("description"));
+                    info.setEmail(response.getString("email"));
+                    info.setVerified(response.getBoolean("verified"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -317,7 +331,7 @@ public class WallaApi {
 
         Log.d("apidata", params.toString());
 
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -426,6 +440,248 @@ public class WallaApi {
 
         queue.add(request);
     }
+
+    public static void saveUserFirstName(String uid, String name){
+        final String url = site + update_fname + "token=" + token + "&school_identifier=" + domain;
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("first_name", name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
+
+    public static void saveUserLastName(String uid, String name){
+        final String url = site + update_lname + "token=" + token + "&school_identifier=" + domain;
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("last_name", name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
+
+    public static void saveUserEmail(String uid, String email){
+        final String url = site + update_email + "token=" + token + "&school_identifier=" + domain;
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
+
+    public static void saveUserAcademicLevel(String uid, String level){
+        final String url = site + update_academic_level + "token=" + token + "&school_identifier=" + domain;
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("academic_level", level);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
+
+    public static void saveUserMajor(String uid, String major){
+        final String url = site + update_major + "token=" + token + "&school_identifier=" + domain;
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("major", major);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
+
+    public static void saveUserHometown(String uid, String town){
+        final String url = site + update_hometown + "token=" + token + "&school_identifier=" + domain;
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("hometown", town);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
+
+    public static void saveUserDescription(String uid, String description){
+        final String url = site + update_description + "token=" + token + "&school_identifier=" + domain;
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("description", description);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
+
+    public static void saveUserProfileImageUrl(String uid, String imageUrl){
+        final String url = site + update_profile_image_url + "token=" + token + "&school_identifier=" + domain;
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("profile_image_url", imageUrl);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
+
+
 
     private static List<String> interestsJsontoList(JSONArray array){
         List<String> data = new ArrayList<>();

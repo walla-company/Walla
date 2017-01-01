@@ -166,17 +166,17 @@ public class Home extends Fragment  {
         filter_tv.setTypeface(fonts.AzoSansRegular);
         interests = new ArrayList<>();
         interests.add(new Interests("All", R.mipmap.all));
-        interests.add(new Interests("Movies", R.mipmap.other));
-        interests.add(new Interests("Food", R.mipmap.food));
-        interests.add(new Interests("Academics", R.mipmap.other));
-        interests.add(new Interests("Study", R.mipmap.other));
-        interests.add(new Interests("Sports", R.mipmap.other));
-        interests.add(new Interests("Exhibition", R.mipmap.other));
-        interests.add(new Interests("Music", R.mipmap.other));
-        interests.add(new Interests("Games", R.mipmap.games));
-        interests.add(new Interests("Dance", R.mipmap.other));
-        interests.add(new Interests("Socialize", R.mipmap.other));
-        interests.add(new Interests("Other", R.mipmap.other));
+        interests.add(new Interests("Movies", R.mipmap.movieicon));
+        interests.add(new Interests("Food", R.mipmap.foodicon));
+        interests.add(new Interests("Academics", R.mipmap.academicicon));
+        interests.add(new Interests("Study", R.mipmap.studyicon));
+        interests.add(new Interests("Sports", R.mipmap.sportsicon));
+        interests.add(new Interests("Exhibition", R.mipmap.exhibitionicon));
+        interests.add(new Interests("Music", R.mipmap.musicicon));
+        interests.add(new Interests("Games", R.mipmap.gamesicon));
+        interests.add(new Interests("Dance", R.mipmap.danceicon));
+        interests.add(new Interests("Socialize", R.mipmap.socializeicon));
+        interests.add(new Interests("Volunteer", R.mipmap.volunteeringicon));
 
         //LinearLayoutManager horizontal
         // = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);

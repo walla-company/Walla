@@ -12,12 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.GroupProfileLVAdapter;
+import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 
@@ -29,6 +31,7 @@ public class ViewProfile extends AppCompatActivity {
     private TextView name, year, major, hometown, details_in, details_label;
     private Button add;
     private Fonts fonts;
+    private WallaApi api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,15 @@ public class ViewProfile extends AppCompatActivity {
     }
 
     private void initUi() {
+        api = new WallaApi(this);
         fonts = new Fonts(this);
+
+        String uid = getIntent().getExtras().getString("uid");
+        if(uid != null){
+
+        }else{
+            Toast.makeText(this, "Error retrieving user", Toast.LENGTH_LONG).show();
+        }
 
         List<GroupInfo> data = new ArrayList<>();
         data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));

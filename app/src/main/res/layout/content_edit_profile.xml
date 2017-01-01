@@ -38,7 +38,7 @@
                     android:textSize="17sp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/_in"
+                    android:id="@+id/profile_image_in"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_below="@+id/profile_picture_label"
@@ -53,10 +53,109 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/year_container"
+            android:id="@+id/fname_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/profile_picture_container"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:id="@+id/fname_in"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_below="@+id/fname_label"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/rounded_corners"
+                android:paddingLeft="8dp"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/fname_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="16dp"
+                android:paddingTop="4dp"
+                android:text="First name"
+                android:textSize="17sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/lname_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fname_container"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:id="@+id/lname_in"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_below="@+id/lname_label"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/rounded_corners"
+                android:paddingLeft="8dp"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/lname_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="16dp"
+                android:paddingTop="4dp"
+                android:text="Last name"
+                android:textSize="17sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/email_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lname_container"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:id="@+id/email_in"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_below="@+id/email_label"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/rounded_corners"
+                android:paddingLeft="8dp"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/email_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="16dp"
+                android:paddingTop="4dp"
+                android:text="Email"
+                android:textSize="17sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/year_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/email_container"
             android:layout_marginTop="16dp">
 
             <EditText
@@ -69,7 +168,7 @@
                 android:layout_marginTop="4dp"
                 android:background="@drawable/rounded_corners"
                 android:paddingLeft="8dp"
-                android:text="2020" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/year_label"
@@ -112,7 +211,7 @@
                 android:background="@drawable/rounded_corners"
                 android:minHeight="32dp"
                 android:paddingLeft="8dp"
-                android:text="Computer Science" />
+                android:text="" />
 
         </RelativeLayout>
 
@@ -134,7 +233,7 @@
                 android:background="@drawable/rounded_corners"
                 android:minHeight="32dp"
                 android:paddingLeft="8dp"
-                android:text="Shanghai, China" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/hometown_label"

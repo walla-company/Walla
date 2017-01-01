@@ -173,7 +173,7 @@ public class EventInfo {
         SimpleDateFormat format1 = new SimpleDateFormat("h:mm aaa");
         SimpleDateFormat format2 = new SimpleDateFormat("h:mm");
         Calendar now = Calendar.getInstance();
-        now.setTimeInMillis(time);
+        now.setTimeInMillis(time * 1000);
 
         String date = "";
         if(tag){
@@ -190,7 +190,7 @@ public class EventInfo {
         String date = "";
         Calendar now = Calendar.getInstance();
         Calendar start = Calendar.getInstance();
-        start.setTimeInMillis(time);
+        start.setTimeInMillis(time * 1000);
 
         SimpleDateFormat format1 = new SimpleDateFormat("MMM d");
         SimpleDateFormat format2 = new SimpleDateFormat("EEEE");

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +43,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     private WallaApi api;
 
     private RecyclerView tabs;
+    private CardView details_cv;
     private RelativeLayout host_container;
     private TextView duration, title, location_label, location, show_on_map, interested, going, invitees_label, invitee_in,
             host_name, host_info, details_in, details_label;
@@ -96,6 +98,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         host_container = (RelativeLayout) findViewById(R.id.host_container);
         host_container.setOnClickListener(this);
 
+        details_cv = (CardView) findViewById(R.id.details_card);
+
         duration = (TextView) findViewById(R.id.duration);
         duration.setTypeface(fonts.AzoSansRegular);
         duration.setText(String.format("%s\nto %s", event.getStringTime(event.getStart_time(), true), event.getStringTime(event.getEnd_time(), false)));
@@ -137,6 +141,10 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         details_in = (TextView) findViewById(R.id.details_in);
         details_in.setTypeface(fonts.AzoSansRegular);
         details_in.setText(event.getDetails());
+
+        if(event.getDetails() == null || event.getDetails().equals(""))
+            details_cv.setVisibility(View.GONE);
+
         details_label = (TextView) findViewById(R.id.details_label);
         details_label.setTypeface(fonts.AzoSansRegular);
 

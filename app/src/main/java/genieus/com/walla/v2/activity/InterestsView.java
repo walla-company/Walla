@@ -114,6 +114,15 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
                     doneIconVisible = true;
                 }
             }
+        }else{
+            String name = data.get(pos).getName();
+            if(!chosen){
+                selected.remove(name);
+                data.get(pos).setSelected(chosen);
+            }else{
+                selected.add(name);
+                data.get(pos).setSelected(chosen);
+            }
         }
 
 
