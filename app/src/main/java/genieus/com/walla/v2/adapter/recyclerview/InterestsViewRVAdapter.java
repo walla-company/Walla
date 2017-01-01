@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
@@ -36,6 +37,8 @@ public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHo
     private OnInterestStateChangedCListener listener;
     private Fonts fonts;
 
+    private List<RelativeLayout> containers;
+
     public InterestsViewRVAdapter(Context context, List<InterestInfo> data, OnInterestStateChangedCListener listener, double width){
         this.context = context;
         this.data = data;
@@ -43,6 +46,7 @@ public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHo
         this.listener = listener;
 
         fonts = new Fonts(context);
+        containers = new ArrayList<>();
     }
 
     @Override
@@ -56,12 +60,20 @@ public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHo
 
     @Override
     public void onBindViewHolder(final InterestsViewHolder holder, int position) {
-        final InterestInfo info  = data.get(position);
+        containers.add(position, holder.container);
+        holder.setIsRecyclable(false);
+        InterestInfo info  = data.get(position);
+
+        if(info.isSelected())
+            holder.container.setBackgroundColor(context.getResources().getColor(R.color.tan));
+        else
+            holder.container.setBackgroundColor(context.getResources().getColor(R.color.white));
+
         holder.icon.setImageResource(info.getImg());
         holder.label.setText(info.getName());
         holder.label.setTypeface(fonts.AzoSansRegular);
 
-        ViewGroup.LayoutParams containerParams = holder.container.getLayoutParams();
+        final ViewGroup.LayoutParams containerParams = holder.container.getLayoutParams();
         containerParams.width = Utility.dpToPx((int) width);
         containerParams.height = Utility.dpToPx((int) (1.2 * width));
         holder.container.setLayoutParams(containerParams);
@@ -71,8 +83,20 @@ public class InterestsViewRVAdapter extends RecyclerView.Adapter<InterestsViewHo
             @Override
             public void onClick(View v) {
                 listener.onInterestStanceChanged(pos);
+                //changeBackGroundColor(holder.label, context.getResources().getColor(R.color.tan));
             }
         });
+    }
+
+    private void changeBackGroundColor(View view, int color){
+        Drawable background = view.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable)background).getPaint().setColor(color);
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable)background).setColor(color);
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable)background).setColor(color);
+        }
     }
 
     @Override

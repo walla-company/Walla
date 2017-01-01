@@ -28,7 +28,7 @@ import genieus.com.walla.v2.info.GroupInfo;
 
 public class MyGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
     public interface OnGroupStateChangeListener{
-        public void onGroupStateChange(String name, boolean checked);
+        public boolean onGroupStateChange(int pos, boolean checked);
     }
 
     private int resource;
@@ -52,19 +52,20 @@ public class MyGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
 
         final GroupInfo info = data.get(position);
 
-        CheckBox check = (CheckBox) convertView.findViewById(R.id.check);
+        final CheckBox check = (CheckBox) convertView.findViewById(R.id.check);
         if(check != null){
             check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    listener.onGroupStateChange(info.getName(), isChecked);
+                    if(!listener.onGroupStateChange(position, isChecked))
+                        check.setChecked(false);
                 }
             });
         }

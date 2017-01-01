@@ -12,6 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +28,11 @@ import genieus.com.walla.v2.info.GroupInfo;
 public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnGroupStateChangeListener, MenuItem.OnMenuItemClickListener {
     private ListView group_lv;
     private MyGroupsLVAdapter adapter;
-    private List<String> selected;
+    private List<Integer> selected;
     private MenuItem done;
     private boolean doneIconVisible;
+    private List<GroupInfo> data;
+    private int max;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +50,7 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
     }
 
     private void initUi() {
-        List<GroupInfo> data = new ArrayList<>();
+        data = new ArrayList<>();
         data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
         data.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
         data.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
@@ -59,6 +66,8 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
         if(startedForResult()) {
             adapter = new MyGroupsLVAdapter(this, this, R.layout.single_group_select, data);
             selected = new ArrayList<>();
+
+            max = getIntent().getExtras().getInt("max");
         }
         else {
             adapter = new MyGroupsLVAdapter(this, this, R.layout.single_group, data);
@@ -79,26 +88,45 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
     }
 
     private String listAsString(){
-        StringBuffer sb = new StringBuffer();
-        for(String name : selected) sb.append(", " + name);
-        return sb.toString().substring(2);
+        JSONArray array = new JSONArray();
+       for(int elm : selected){
+           JSONObject group = new JSONObject();
+           try {
+               group.put("name", data.get(elm).getName());
+               group.put("abbr", data.get(elm).getAbbr());
+               group.put("color", data.get(elm).getColor());
+           } catch (JSONException e) {
+               e.printStackTrace();
+           }
+
+           array.put(group);
+       }
+
+        return array.toString();
     }
 
     @Override
-    public void onGroupStateChange(String name, boolean checked) {
+    public boolean onGroupStateChange(int pos, boolean checked) {
         if(!checked){
-            selected.remove(name);
+            if(selected.contains(pos))
+                selected.remove(new Integer(pos));
             if(selected.isEmpty()){
                 done.setVisible(false);
                 doneIconVisible = false;
             }
         }else{
-            selected.add(name);
+            if(max > 0 && selected.size() >= max){
+                Toast.makeText(this, "You can host on behalf of only 1 group", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            selected.add(pos);
             if(!doneIconVisible){
                 done.setVisible(true);
                 doneIconVisible = true;
             }
         }
+
+        return true;
     }
 
     @Override

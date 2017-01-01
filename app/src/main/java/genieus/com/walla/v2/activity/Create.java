@@ -13,6 +13,8 @@ import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +32,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -57,25 +61,32 @@ import java.util.*;
 import java.util.logging.SimpleFormatter;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.adapter.recyclerview.InterestsViewRVAdapter;
+import genieus.com.walla.v2.adapter.recyclerview.MiniGroupRVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.info.GroupInfo;
+import genieus.com.walla.v2.info.InterestInfo;
 
 public class Create extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, DialogInterface.OnClickListener {
     private static final int INVITEFRIENDS = 2;
     private static final int INVITEGROUPS = 3;
     private static final int INTERESTS = 4;
+    private static final int HOSTGROUP = 5;
     private GoogleMap mMap;
     private TextView start_time, end_time, location, visibility_label, title_label, start_time_label,
             end_time_label, location_label, details_label, host_label, group_label, interest_label,
-            friends_label, guests_label, friends_in, visibility_in, guests_in, group_in,
+            friends_label, guests_label, friends_in, visibility_in, guests_in,
             interest_in, title_in;
-    private RelativeLayout map_container;
+    private RelativeLayout map_container, group_in, host_in;
     private Button post;
+    private RecyclerView groups_rv, host_group_rv;
+    private MiniGroupRVAdapter adapter, hostAdapter;
     private GoogleApiClient mGoogleApiClient;
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private static final String TAG = "Places";
     private String BUTTONBLUE = "#63CAF9";
-    private AlertDialog.Builder builder, guestInviteBuilder;
+    private AlertDialog.Builder builder, guestInviteBuilder, confirmCreate;
     private AlertDialog alert, guestInviteAlert;
     private CharSequence[] visibilityOptions = {"Lit (Everyone can see it)", "Chill (Only invited people)"};
     private CharSequence[] guestsInviteOptions = {"Yes", "No"};
@@ -131,6 +142,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             @Override
             public void onClick(View v) {
                 choosingStartTime = true;
+                start_time.setError(null);
                 showDateDialog();
             }
         });
@@ -138,6 +150,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             @Override
             public void onClick(View v) {
                 choosingStartTime = false;
+                end_time.setError(null);
                 showDateDialog();
             }
         });
@@ -145,6 +158,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             @Override
             public void onClick(View v) {
                 findPlace(location);
+                location.setError(null);
             }
         });
 
@@ -168,7 +182,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                     }
                 });
 
-        builder.setSingleChoiceItems(visibilityOptions, 0, this);
+        builder.setSingleChoiceItems(visibilityOptions, -1, this);
         alert = builder.create();
 
         guestInviteBuilder = new AlertDialog.Builder(this);
@@ -184,8 +198,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                     }
                 });
 
-        guestInviteBuilder.setSingleChoiceItems(guestsInviteOptions, 0, this);
+        guestInviteBuilder.setSingleChoiceItems(guestsInviteOptions, -1, this);
         guestInviteAlert = guestInviteBuilder.create();
+
 
         visibility_label = (TextView) findViewById(R.id.visibility_label);
         visibility_label.setTypeface(fonts.AzoSansRegular);
@@ -201,6 +216,12 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         details_label.setTypeface(fonts.AzoSansRegular);
         group_label = (TextView) findViewById(R.id.groups_label);
         group_label.setTypeface(fonts.AzoSansRegular);
+        group_label.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inviteGroups();
+            }
+        });
         interest_label = (TextView) findViewById(R.id.interests_label);
         interest_label.setTypeface(fonts.AzoSansRegular);
         friends_label = (TextView) findViewById(R.id.friends_label);
@@ -218,6 +239,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         visibility_in.setOnClickListener(this);
         title_in = (TextView) findViewById(R.id.title_in);
         title_in.setTypeface(fonts.AzoSansRegular);
+        title_in.setTextColor(visibility_in.getTextColors());
         guests_in = (TextView) findViewById(R.id.guests_in);
         guests_in.setTypeface(fonts.AzoSansRegular);
         guests_in.setOnClickListener(this);
@@ -227,9 +249,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        group_in = (TextView) findViewById(R.id.group_in);
-        group_in.setTypeface(fonts.AzoSansRegular);
-        group_in.setOnClickListener(this);
+
         interest_in = (TextView) findViewById(R.id.interests_in);
         interest_in.setTypeface(fonts.AzoSansRegular);
         interest_in.setOnClickListener(this);
@@ -237,21 +257,33 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         title_in.setTypeface(fonts.AzoSansRegular);
         details_in = (EditText) findViewById(R.id.details_in);
         details_in.setTypeface(fonts.AzoSansRegular);
+        details_in.setTextColor(visibility_in.getTextColors());
+        group_in = (RelativeLayout) findViewById(R.id.group_in);
+        group_in.setOnClickListener(this);
+        host_in = (RelativeLayout) findViewById(R.id.host_in);
+        host_in.setOnClickListener(this);
 
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager manager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+        groups_rv = (RecyclerView) findViewById(R.id.groups_rv);
+        host_group_rv = (RecyclerView) findViewById(R.id.group_host_rv);
+        groups_rv.setLayoutManager(manager);
+        host_group_rv.setLayoutManager(manager2);
     }
 
-    private void changeBackgroundColor(View view, String color){
+    private void changeBackgroundColor(View view, String color) {
         Drawable background = view.getBackground();
         if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable)background).getPaint().setColor(Color.parseColor(color));
+            ((ShapeDrawable) background).getPaint().setColor(Color.parseColor(color));
         } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable)background).setColor(Color.parseColor(color));
+            ((GradientDrawable) background).setColor(Color.parseColor(color));
         } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable)background).setColor(Color.parseColor(color));
+            ((ColorDrawable) background).setColor(Color.parseColor(color));
         }
     }
 
-    private void showDateDialog(){
+    private void showDateDialog() {
         final java.util.Calendar cal = java.util.Calendar.getInstance();
         int yr = cal.get(java.util.Calendar.YEAR);
         int month = cal.get(java.util.Calendar.MONTH);
@@ -260,7 +292,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         new DatePickerDialog(this, this, yr, month, day).show();
     }
 
-    private void showTimeDialog(){
+    private void showTimeDialog() {
         final java.util.Calendar cal = java.util.Calendar.getInstance();
         int h = cal.get(java.util.Calendar.HOUR_OF_DAY);
         int m = cal.get(java.util.Calendar.MINUTE);
@@ -268,8 +300,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         new TimePickerDialog(this, this, h, m, false).show();
     }
 
-    private void setMarker(LatLng place){
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(place , 17);
+    private void setMarker(LatLng place) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(place, 17);
         mMap.addMarker(new MarkerOptions().position(place).title("EventInfo location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
         mMap.animateCamera(cameraUpdate);
@@ -313,25 +345,65 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
-        }else if(requestCode == INVITEFRIENDS){
-            if(resultCode == RESULT_OK){
+        } else if (requestCode == INVITEFRIENDS) {
+            if (resultCode == RESULT_OK) {
                 initFriends(data);
             }
-        }else if(requestCode == INVITEGROUPS){
-            if(resultCode == RESULT_OK){
+        } else if (requestCode == INVITEGROUPS) {
+            if (resultCode == RESULT_OK) {
                 initGroups(data);
             }
-        }else if(requestCode == INTERESTS){
-            if(resultCode == RESULT_OK){
+        } else if (requestCode == INTERESTS) {
+            if (resultCode == RESULT_OK) {
                 initInterests(data);
             }
+        } else if (requestCode == HOSTGROUP) {
+            if(data != null)
+                initGroupHost(data);
         }
+    }
+
+    private void initGroupHost(Intent data) {
+        String info = data.getStringExtra("result");
+        JSONArray array = null;
+        try {
+            array = new JSONArray(info);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        List<GroupInfo> list = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject group = null;
+            try {
+                group = array.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                list.add(new GroupInfo(group.getString("name"), group.getString("abbr"), group.getString("color")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                postObj.put("host_group", group.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        Log.d("hostdata", list.size() + " = size");
+        hostAdapter = new MiniGroupRVAdapter(this, list);
+        host_group_rv.setAdapter(hostAdapter);
     }
 
     private void initInterests(Intent data) {
         String info = data.getStringExtra("result");
         interest_in.setText(info);
-        String[] interests = info.replace(" ","").split(",");
+        String[] interests = info.replace(" ", "").split(",");
         JSONArray array = new JSONArray(Arrays.asList(interests));
         try {
             postObj.put("interests", array);
@@ -342,22 +414,46 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
     private void initGroups(Intent data) {
         String info = data.getStringExtra("result");
-        group_in.setText(info);
-        interest_in.setText(info);
-        String[] groups = info.replace(" ","").split(",");
-        JSONArray array = new JSONArray(Arrays.asList(groups));
+        JSONArray array = null;
         try {
-            postObj.put("invited_groups", array);
+            array = new JSONArray(info);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        List<GroupInfo> list = new ArrayList<>();
+        List<String> identifiers = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject group = null;
+            try {
+                group = array.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                list.add(new GroupInfo(group.getString("name"), group.getString("abbr"), group.getString("color")));
+                identifiers.add(group.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        JSONArray arr = new JSONArray(identifiers);
+        try {
+            postObj.put("invited_groups", arr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        adapter = new MiniGroupRVAdapter(this, list);
+        groups_rv.setAdapter(adapter);
     }
 
     private void initFriends(Intent data) {
         String info = data.getStringExtra("result");
         friends_in.setText(info);
-        interest_in.setText(info);
-        String[] friends = info.replace(" ","").split(",");
+        String[] friends = info.replace(" ", "").split(",");
         JSONArray array = new JSONArray(Arrays.asList(friends));
         try {
             postObj.put("invited_users", array);
@@ -382,23 +478,23 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         }
     }
 
-    private void initStartTime(Calendar time){
+    private void initStartTime(Calendar time) {
         String day = "";
         SimpleDateFormat format1 = new SimpleDateFormat("MMM d, h:mm aaa");
         SimpleDateFormat format2 = new SimpleDateFormat("h:mm aaa");
         Calendar now = Calendar.getInstance();
-        if(time.get(Calendar.YEAR) == now.get(Calendar.YEAR)
-                && time.get(Calendar.MONTH) == now.get(Calendar.MONTH)){
+        if (time.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+                && time.get(Calendar.MONTH) == now.get(Calendar.MONTH)) {
             int diff = time.get(Calendar.DAY_OF_MONTH) - now.get(Calendar.DAY_OF_MONTH);
-            if(diff == 0){
+            if (diff == 0) {
                 day = "Today, " + format2.format(time.getTime());
-            }else if(diff == 1){
+            } else if (diff == 1) {
                 day = "Tomorrow, " + format2.format(time.getTime());
-            }else{
+            } else {
 
                 day = format1.format(time.getTime());
             }
-        }else{
+        } else {
 
         }
 
@@ -410,23 +506,23 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         start_time.setText(day);
     }
 
-    private void initEndTime(Calendar time){
+    private void initEndTime(Calendar time) {
         String day = "";
         SimpleDateFormat format1 = new SimpleDateFormat("MMM d, h:mm aaa");
         SimpleDateFormat format2 = new SimpleDateFormat("h:mm aaa");
         Calendar now = Calendar.getInstance();
-        if(time.get(Calendar.YEAR) == now.get(Calendar.YEAR)
-                && time.get(Calendar.MONTH) == now.get(Calendar.MONTH)){
+        if (time.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+                && time.get(Calendar.MONTH) == now.get(Calendar.MONTH)) {
             int diff = time.get(Calendar.DAY_OF_MONTH) - now.get(Calendar.DAY_OF_MONTH);
-            if(diff == 0){
+            if (diff == 0) {
                 day = "Today, " + format2.format(time.getTime());
-            }else if(diff == 1){
+            } else if (diff == 1) {
                 day = "Tomorrow, " + format2.format(time.getTime());
-            }else{
+            } else {
 
                 day = format1.format(time.getTime());
             }
-        }else{
+        } else {
 
         }
 
@@ -457,13 +553,20 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         }
     }
 
-    private void inviteFriends(){
+    private void setGroupHost(){
+        Intent intent = new Intent(this, MyGroups.class);
+        intent.putExtra("max", 1);
+        startActivityForResult(intent, HOSTGROUP);
+    }
+
+    private void inviteFriends() {
         Intent intent = new Intent(this, Friends.class);
         startActivityForResult(intent, INVITEFRIENDS);
     }
 
-    private void inviteGroups(){
+    private void inviteGroups() {
         Intent intent = new Intent(this, MyGroups.class);
+        intent.putExtra("max", -1);
         startActivityForResult(intent, INVITEGROUPS);
     }
 
@@ -475,7 +578,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         guestInviteAlert.show();
     }
 
-    private void postActivity(){
+    private void postActivity() {
         try {
             postObj.put("title", title_in.getText().toString());
             postObj.put("details", details_in.getText().toString());
@@ -484,9 +587,78 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             e.printStackTrace();
         }
 
-        api.postActivity(postObj);
+        if (isValidActivity()) {
+            confirmCreate = new AlertDialog.Builder(this);
+            confirmCreate.setTitle("Confirm");
+            try {
+                confirmCreate.setMessage("Are you sure you want to create this event: \n\'" + postObj.getString("title") + "\'?");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            confirmCreate.setCancelable(false)
+                    .setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            api.postActivity(postObj);
+                        }
+                    })
+                    .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
 
-        Log.d("postdata", postObj.toString());
+            confirmCreate.show();
+        } else {
+            Toast.makeText(this, "Required data is missing", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private boolean isValidActivity() {
+        boolean valid = true;
+
+        if (title_in.getText().toString().equals("")) {
+            title_in.setError("required");
+            valid = false;
+        }
+
+        if (!postObj.has("can_others_invite")) {
+            guests_in.setError("required");
+            valid = false;
+        }
+
+        if (!postObj.has("activity_public")) {
+            visibility_in.setError("required");
+            valid = false;
+        }
+
+        if (!postObj.has("start_time")) {
+            start_time.setError("required");
+            valid = false;
+        }
+
+        if (!postObj.has("end_time")) {
+            end_time.setError("required");
+            valid = false;
+        }
+
+        if (!postObj.has("location_name")) {
+            location.setError("required");
+            valid = false;
+        }
+
+        if (!postObj.has("start_time")) {
+            start_time.setError("required");
+            valid = false;
+        }
+
+        if (!postObj.has("interests")) {
+            interest_in.setError("required");
+            valid = false;
+        }
+
+        return valid;
+
     }
 
     @Override
@@ -505,9 +677,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         time.set(Calendar.HOUR_OF_DAY, hourOfDay);
         time.set(Calendar.MINUTE, minute);
 
-        if(choosingStartTime){
+        if (choosingStartTime) {
             initStartTime(time);
-        }else{
+        } else {
             initEndTime(time);
         }
     }
@@ -520,15 +692,19 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch(id){
+        switch (id) {
             case R.id.friends_in:
                 inviteFriends();
                 break;
             case R.id.group_in:
                 inviteGroups();
                 break;
+            case R.id.host_in:
+                setGroupHost();
+                break;
             case R.id.visibility_in:
                 showVisibilityOptions();
+                visibility_in.setError(null);
                 break;
             case R.id.guests_in:
                 showGuestInviteOptions();
@@ -545,9 +721,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        if(dialog.equals(alert))
+        if (dialog.equals(alert))
             initVisibility(which);
-        else if(dialog.equals(guestInviteAlert))
+        else if (dialog.equals(guestInviteAlert))
             initGuestInvitations(which);
     }
 

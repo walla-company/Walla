@@ -40,7 +40,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
     private MenuItem done;
     private boolean doneIconVisible;
     private int MAX_INTERESTS = 2;
-    private AlertDialog alert;
+    private double width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +57,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
     }
 
     private void initUi() {
-        if(startedForResult()) {
-            selected = new ArrayList<>();
-
-            alert = new AlertDialog.Builder(this)
-                    .setMessage("You can only selected a maximum of " + MAX_INTERESTS + " interests")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            alert.cancel();
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .create();
-        }
+        selected = new ArrayList<>();
 
         data = new ArrayList<>();
         data.add(new InterestInfo("Movies", R.mipmap.movieicon, false));
@@ -84,7 +72,6 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
         data.add(new InterestInfo("Dance", R.mipmap.danceicon, false));
         data.add(new InterestInfo("Socialize", R.mipmap.socializeicon, false));
         data.add(new InterestInfo("Volunteer", R.mipmap.volunteeringicon, false));
-        data.add(new InterestInfo("Other", R.mipmap.othericon, false));
 
         interests_rv = (RecyclerView) findViewById(R.id.interests_rv);
 
@@ -99,7 +86,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
         interests_rv.setLayoutManager(grid);
 
         int parentDp = Utility.pxToDp(interests_rv.getWidth());
-        double width = Utility.sizeToFit(parentDp, 3, 4);
+        width = Utility.sizeToFit(parentDp, 3, 4);
         adapter = new InterestsViewRVAdapter(this, data, this, width);
         interests_rv.setAdapter(adapter);
     }
@@ -107,10 +94,6 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
     @Override
     public void onInterestStanceChanged(int pos) {
         boolean chosen = !data.get(pos).isSelected();
-        data.get(pos).setSelected(chosen);
-        Toast.makeText(this, "clicked " + pos, Toast.LENGTH_LONG).show();
-        adapter.notifyDataSetChanged();
-        
         if(startedForResult()){
             String name = data.get(pos).getName();
             if(!chosen){
@@ -118,20 +101,25 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
                 if(selected.isEmpty()){
                     done.setVisible(false);
                     doneIconVisible = false;
+                    data.get(pos).setSelected(chosen);
                 }
             }else{
-                if(selected.size() >= MAX_INTERESTS) showAlert();
-                else selected.add(name);
+                if(selected.size() >= MAX_INTERESTS) Toast.makeText(this, "You can only selected a maximum of " + MAX_INTERESTS + " interests", Toast.LENGTH_LONG).show();
+                else {
+                    selected.add(name);
+                    data.get(pos).setSelected(chosen);
+                }
                 if(!doneIconVisible){
                     done.setVisible(true);
                     doneIconVisible = true;
                 }
             }
         }
-    }
 
-    private void showAlert() {
-        alert.show();
+
+        //adapter.notifyDataSetChanged();
+        adapter = new InterestsViewRVAdapter(this, data, this, width);
+        interests_rv.setAdapter(adapter);
     }
 
     private boolean startedForResult(){
