@@ -4,13 +4,15 @@ package genieus.com.walla.v2.info;
  * Created by anesu on 12/21/16.
  */
 public class GroupInfo {
-    String name, abbr, color;
+    String name, abbr, color, description, guid;
 
     public GroupInfo(String name, String abbr, String color){
         this.name = name;
         this.abbr = abbr;
         this.color = color;
     }
+
+    public GroupInfo(){}
 
     public String getName() {
         return name;
@@ -34,5 +36,21 @@ public class GroupInfo {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 }

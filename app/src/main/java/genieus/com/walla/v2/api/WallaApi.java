@@ -23,6 +23,7 @@ import java.util.Map;
 
 import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.EventInfo;
+import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.UserInfo;
 
 /**
@@ -40,6 +41,7 @@ public class WallaApi {
     public static final int IS_VERIFIED = 6;
     public static final int GET_ACTIVITY = 7;
     public static final int GET_ACTIVITIES = 8;
+    public static final int GET_GROUP = 9;
 
 
     public interface OnDataReceived {
@@ -70,6 +72,7 @@ public class WallaApi {
     private static String update_description = "/api/update_user_description?";
     private static String update_academic_level = "/api/update_user_academic_level?";
     private static String update_profile_image_url = "/api/update_user_profile_image_url?";
+    private static String get_group = "/api/get_group?";
 
 
     private static String domain = "duke";
@@ -136,6 +139,41 @@ public class WallaApi {
         queue.add(request);
     }
 
+    public static void getUserInfo(final OnDataReceived listener, String uid) {
+        final String url = site + user_info + "token=" + token + "&uid=" + uid + "&school_identifier=" + domain;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                UserInfo info = new UserInfo();
+
+                try {
+                    info.setFirst_name(response.getString("first_name"));
+                    info.setLast_name(response.getString("last_name"));
+                    info.setProfile_url("profile_image_url");
+                    info.setMajor(response.getString("major"));
+                    info.setYear(response.getString("academic_level"));
+                    info.setHometown(response.getString("hometown"));
+                    info.setUid(response.getString("user_id"));
+                    info.setDescription(response.getString("description"));
+                    info.setEmail(response.getString("email"));
+                    info.setVerified(response.getBoolean("verified"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                listener.onDataReceived(info, USER_INFO);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
     public static void getActivities(final OnDataReceived listener, int hours) {
         final String url = site + activities + "token=" + token + "&domain=" + domain + "&filter=" + hours;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
@@ -172,30 +210,24 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void getUserInfo(final OnDataReceived listener, String uid) {
-        final String url = site + user_info + "token=" + token + "&uid=" + uid + "&school_identifier=" + domain;
+    public static void getGroup(final OnDataReceived listener, String guid) {
+        final String url = site + get_group + "token=" + token + "&school_identifier=" + domain + "&guid=" + guid;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                UserInfo info = new UserInfo();
+                GroupInfo group = new GroupInfo();
 
                 try {
-                    info.setFirst_name(response.getString("first_name"));
-                    info.setLast_name(response.getString("last_name"));
-                    info.setProfile_url("profile_image_url");
-                    info.setMajor(response.getString("major"));
-                    info.setYear(response.getString("academic_level"));
-                    info.setHometown(response.getString("hometown"));
-                    info.setUid(response.getString("user_id"));
-                    info.setDescription(response.getString("description"));
-                    info.setEmail(response.getString("email"));
-                    info.setVerified(response.getBoolean("verified"));
-
+                    group.setName(response.getString("name"));
+                    group.setAbbr(response.getString("short_name"));
+                    group.setColor(response.getString("color"));
+                    group.setDescription(response.getString("details"));
+                    group.setGuid(response.getString("group_id"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                listener.onDataReceived(info, USER_INFO);
+                listener.onDataReceived(group, GET_GROUP);
             }
         }, new Response.ErrorListener() {
             @Override

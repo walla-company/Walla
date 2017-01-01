@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,8 +22,10 @@ import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.EventsLVAdapter;
+import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.info.GroupInfo;
 
 public class Group extends AppCompatActivity {
     private String BUTTONBLUE = "#63CAF9";
@@ -30,6 +33,10 @@ public class Group extends AppCompatActivity {
 
     private ListView activities_lv;
     private Button join_btn;
+
+    private GroupInfo info;
+
+    private WallaApi api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +44,16 @@ public class Group extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initUi();
+        api = new WallaApi(this);
+
+        String guid = "-K_QNzIlm31gNgepdtTk";
+        api.getGroup(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                info = (GroupInfo) data;
+                initUi();
+            }
+        }, guid);
 
     }
 
@@ -85,15 +101,19 @@ public class Group extends AppCompatActivity {
         activities_lv.addHeaderView(myHeader, null, false);
 
         TextView title = (TextView) activities_lv.findViewById(R.id.title);
+        title.setText(info.getName());
         title.setTypeface(fonts.AzoSansRegular);
         TextView memberInfo = (TextView) activities_lv.findViewById(R.id.members_info);
         memberInfo.setTypeface(fonts.AzoSansRegular);
         TextView abbr = (TextView) activities_lv.findViewById(R.id.abbr);
+        abbr.setText(info.getAbbr());
         abbr.setTypeface(fonts.AzoSansRegular);
         TextView detailsLabel = (TextView) activities_lv.findViewById(R.id.details_label);
         detailsLabel.setTypeface(fonts.AzoSansRegular);
         TextView detailsIn = (TextView) activities_lv.findViewById(R.id.details_in);
         detailsIn.setTypeface(fonts.AzoSansMedium);
+        detailsIn.setText(info.getDescription());
+        RelativeLayout abbrContainer = (RelativeLayout) activities_lv.findViewById(R.id.group_icon_container);
 
         EventsLVAdapter adapter = new EventsLVAdapter(this, R.layout.single_activity, list);
         activities_lv.setAdapter(adapter);
@@ -101,6 +121,7 @@ public class Group extends AppCompatActivity {
         adapter.getFilter().filter("");
 
         join_btn = (Button) findViewById(R.id.join_btn);
+        changeBackgroundColor(abbrContainer, info.getColor());
         changeBackgroundColor(join_btn, BUTTONBLUE);
     }
 

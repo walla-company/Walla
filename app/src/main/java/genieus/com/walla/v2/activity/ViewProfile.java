@@ -22,6 +22,7 @@ import genieus.com.walla.v2.adapter.listview.GroupProfileLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
+import genieus.com.walla.v2.info.UserInfo;
 
 public class ViewProfile extends AppCompatActivity {
     private String BUTTONBLUE = "#63CAF9";
@@ -32,6 +33,7 @@ public class ViewProfile extends AppCompatActivity {
     private Button add;
     private Fonts fonts;
     private WallaApi api;
+    private UserInfo user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +42,26 @@ public class ViewProfile extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initUi();
-    }
-
-    private void initUi() {
         api = new WallaApi(this);
-        fonts = new Fonts(this);
 
         String uid = getIntent().getExtras().getString("uid");
         if(uid != null){
+            api.getUserInfo(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object data, int call) {
+                    user = (UserInfo) data;
+                    initUi();
+                }
+            }, uid);
 
         }else{
             Toast.makeText(this, "Error retrieving user", Toast.LENGTH_LONG).show();
+            finish();
         }
+    }
+
+    private void initUi() {
+        fonts = new Fonts(this);
 
         List<GroupInfo> data = new ArrayList<>();
         data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
@@ -65,14 +74,19 @@ public class ViewProfile extends AppCompatActivity {
 
         name = (TextView) findViewById(R.id.name);
         name.setTypeface(fonts.AzoSansMedium);
+        name.setText(user.getFirst_name() + " " +  user.getLast_name());
         year = (TextView) findViewById(R.id.year);
         year.setTypeface(fonts.AzoSansRegular);
+        year.setText(user.getYear());
         major = (TextView) findViewById(R.id.major);
         major.setTypeface(fonts.AzoSansRegular);
+        major.setText(user.getMajor());
         hometown = (TextView) findViewById(R.id.hometowen);
         hometown.setTypeface(fonts.AzoSansRegular);
+        hometown.setText(user.getHometown());
         details_in = (TextView) findViewById(R.id.details_in);
         details_in.setTypeface(fonts.AzoSansRegular);
+        details_in.setText(user.getDescription());
         details_label = (TextView) findViewById(R.id.details_label);
         details_label.setTypeface(fonts.AzoSansMedium);
         add = (Button) findViewById(R.id.add_btn);

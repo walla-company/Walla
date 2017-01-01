@@ -171,7 +171,9 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         int id = v.getId();
         switch(id){
             case R.id.host_container:
-                startActivity(new Intent(this, ViewProfile.class));
+                Intent intent = new Intent(this, ViewProfile.class);
+                intent.putExtra("uid", "user");
+                startActivity(intent);
                 break;
         }
     }
