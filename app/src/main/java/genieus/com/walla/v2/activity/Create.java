@@ -618,7 +618,6 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
     private boolean isValidActivity() {
         boolean valid = true;
-        boolean timeValid= true;
 
         if (title_in.getText().toString().equals("")) {
             title_in.setError("required");
@@ -640,29 +639,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             valid = false;
         }
 
-        try {
-            if(postObj.getLong("start_time") < (Calendar.getInstance().getTimeInMillis() / 1000))
-                start_time.setError("start time cannot be in the past");
-                Toast.makeText(this, "start time cannot be in the past", Toast.LENGTH_LONG).show();
-                timeValid = false;
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         if (!postObj.has("end_time")) {
             end_time.setError("required");
-        }
-
-        try {
-            if(postObj.getLong("end_time") < postObj.getLong("start_time") )
-                end_time.setError("end time cannot be before start time");
-                Toast.makeText(this, "end time cannot be before start time", Toast.LENGTH_LONG).show();
-                timeValid = false;
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
 
@@ -681,7 +659,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             valid = false;
         }
 
-        return valid && timeValid;
+        return valid;
 
     }
 

@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,8 @@ public class ViewProfile extends AppCompatActivity {
     private GroupProfileLVAdapter groupsAdapter;
     private TextView name, year, major, hometown, details_in, details_label;
     private Button add;
+    private ProgressBar progress;
+    private RelativeLayout container;
     private Fonts fonts;
     private WallaApi api;
     private UserInfo user;
@@ -43,6 +47,10 @@ public class ViewProfile extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         api = new WallaApi(this);
+        progress = (ProgressBar) findViewById(R.id.progress_bar);
+        container = (RelativeLayout) findViewById(R.id.data_container);
+        container.setVisibility(View.GONE);
+
 
         String uid = getIntent().getExtras().getString("uid");
         if(uid != null){
@@ -50,6 +58,8 @@ public class ViewProfile extends AppCompatActivity {
                 @Override
                 public void onDataReceived(Object data, int call) {
                     user = (UserInfo) data;
+                    container.setVisibility(View.VISIBLE);
+                    progress.setVisibility(View.GONE);
                     initUi();
                 }
             }, uid);

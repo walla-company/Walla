@@ -2,6 +2,7 @@ package genieus.com.walla.v2.api;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +25,7 @@ import java.util.Map;
 import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.GroupInfo;
+import genieus.com.walla.v2.info.InterestInfo;
 import genieus.com.walla.v2.info.UserInfo;
 
 /**
@@ -72,6 +74,7 @@ public class WallaApi {
     private static String update_description = "/api/update_user_description?";
     private static String update_academic_level = "/api/update_user_academic_level?";
     private static String update_profile_image_url = "/api/update_user_profile_image_url?";
+    private static String update_interests = "/api/update_user_interests?";
     private static String get_group = "/api/get_group?";
 
 
@@ -147,6 +150,19 @@ public class WallaApi {
                 UserInfo info = new UserInfo();
 
                 try {
+                    List<String> list = new ArrayList<>();
+                    if (response.has("interests")) {
+                        JSONArray interests = response.getJSONArray("interests");
+
+                        for (int i = 0; i < interests.length(); i++) {
+                            list.add(interests.getString(i));
+                        }
+                    }
+
+                    info.setInterests(new ArrayList<String>(list));
+
+                    //Toast.makeText(context, info.getInterests().toString(), Toast.LENGTH_LONG).show();
+
                     info.setFirst_name(response.getString("first_name"));
                     info.setLast_name(response.getString("last_name"));
                     info.setProfile_url("profile_image_url");
@@ -159,6 +175,7 @@ public class WallaApi {
                     info.setVerified(response.getBoolean("verified"));
 
                 } catch (JSONException e) {
+                    Log.d("readerror", e.toString());
                     e.printStackTrace();
                 }
 
@@ -384,7 +401,7 @@ public class WallaApi {
 
     }
 
-    public static void getActivity(final OnDataReceived listener, String auid){
+    public static void getActivity(final OnDataReceived listener, String auid) {
         final String url = site + get_activity + "token=" + token + "&school_identifier=" + domain + "&auid=" + auid;
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
@@ -425,7 +442,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void getActivities(final OnDataReceived listener){
+    public static void getActivities(final OnDataReceived listener) {
         final String url = site + get_activities + "token=" + token + "&school_identifier=" + domain;
         final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
@@ -435,7 +452,7 @@ public class WallaApi {
 
                 List<EventInfo> events = new ArrayList<>();
 
-                for(int i = 0; i < array.length(); i++){
+                for (int i = 0; i < array.length(); i++) {
                     try {
                         JSONObject response = array.getJSONObject(i);
                         EventInfo event = new EventInfo();
@@ -473,7 +490,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void saveUserFirstName(String uid, String name){
+    public static void saveUserFirstName(String uid, String name) {
         final String url = site + update_fname + "token=" + token + "&school_identifier=" + domain;
         JSONObject params = new JSONObject();
         try {
@@ -503,7 +520,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void saveUserLastName(String uid, String name){
+    public static void saveUserLastName(String uid, String name) {
         final String url = site + update_lname + "token=" + token + "&school_identifier=" + domain;
         JSONObject params = new JSONObject();
         try {
@@ -533,7 +550,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void saveUserEmail(String uid, String email){
+    public static void saveUserEmail(String uid, String email) {
         final String url = site + update_email + "token=" + token + "&school_identifier=" + domain;
         JSONObject params = new JSONObject();
         try {
@@ -563,7 +580,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void saveUserAcademicLevel(String uid, String level){
+    public static void saveUserAcademicLevel(String uid, String level) {
         final String url = site + update_academic_level + "token=" + token + "&school_identifier=" + domain;
         JSONObject params = new JSONObject();
         try {
@@ -593,7 +610,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void saveUserMajor(String uid, String major){
+    public static void saveUserMajor(String uid, String major) {
         final String url = site + update_major + "token=" + token + "&school_identifier=" + domain;
         JSONObject params = new JSONObject();
         try {
@@ -623,7 +640,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void saveUserHometown(String uid, String town){
+    public static void saveUserHometown(String uid, String town) {
         final String url = site + update_hometown + "token=" + token + "&school_identifier=" + domain;
         JSONObject params = new JSONObject();
         try {
@@ -653,7 +670,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void saveUserDescription(String uid, String description){
+    public static void saveUserDescription(String uid, String description) {
         final String url = site + update_description + "token=" + token + "&school_identifier=" + domain;
         JSONObject params = new JSONObject();
         try {
@@ -683,7 +700,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void saveUserProfileImageUrl(String uid, String imageUrl){
+    public static void saveUserProfileImageUrl(String uid, String imageUrl) {
         final String url = site + update_profile_image_url + "token=" + token + "&school_identifier=" + domain;
         JSONObject params = new JSONObject();
         try {
@@ -713,11 +730,40 @@ public class WallaApi {
         queue.add(request);
     }
 
+    public static void saveUserInterests(String uid, JSONArray interests) {
+        final String url = site + update_interests + "token=" + token + "&school_identifier=" + domain;
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("interests", interests);
+            params.put("uid", uid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("apidata", url + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
 
 
-    private static List<String> interestsJsontoList(JSONArray array){
+    private static List<String> interestsJsontoList(JSONArray array) {
         List<String> data = new ArrayList<>();
-        for(int i = 0; i < array.length(); i++){
+        for (int i = 0; i < array.length(); i++) {
             try {
                 data.add(array.getString(i));
             } catch (JSONException e) {

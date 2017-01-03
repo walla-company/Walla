@@ -20,10 +20,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import genieus.com.walla.v1.Interests;
@@ -166,17 +164,17 @@ public class Home extends Fragment  {
         filter_tv.setTypeface(fonts.AzoSansRegular);
         interests = new ArrayList<>();
         interests.add(new Interests("All", R.mipmap.all));
-        interests.add(new Interests("Movies", R.mipmap.movieicon));
+        interests.add(new Interests("Movies", R.drawable.ic_movieicon));
         interests.add(new Interests("Food", R.mipmap.foodicon));
-        interests.add(new Interests("Academics", R.mipmap.academicicon));
-        interests.add(new Interests("Study", R.mipmap.studyicon));
-        interests.add(new Interests("Sports", R.mipmap.sportsicon));
-        interests.add(new Interests("Exhibition", R.mipmap.exhibitionicon));
-        interests.add(new Interests("Music", R.mipmap.musicicon));
-        interests.add(new Interests("Games", R.mipmap.gamesicon));
-        interests.add(new Interests("Dance", R.mipmap.danceicon));
-        interests.add(new Interests("Socialize", R.mipmap.socializeicon));
-        interests.add(new Interests("Volunteer", R.mipmap.volunteeringicon));
+        interests.add(new Interests("Academics", R.drawable.ic_academicsicon));
+        interests.add(new Interests("Study", R.drawable.ic_studyicon));
+        interests.add(new Interests("Sports", R.drawable.ic_sportsicon));
+        interests.add(new Interests("Exhibition", R.drawable.ic_exhibitionicon));
+        interests.add(new Interests("Music", R.drawable.ic_musicicon));
+        interests.add(new Interests("Games", R.drawable.ic_gamesicon));
+        interests.add(new Interests("Dance", R.drawable.ic_danceicon));
+        interests.add(new Interests("Socialize", R.drawable.ic_socialize));
+        interests.add(new Interests("Volunteer", R.drawable.ic_volunteericon));
 
         //LinearLayoutManager horizontal
         // = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);

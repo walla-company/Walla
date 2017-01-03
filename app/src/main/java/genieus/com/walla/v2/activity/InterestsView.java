@@ -21,12 +21,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.recyclerview.InterestsViewRVAdapter;
+import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.InterestInfo;
+import genieus.com.walla.v2.info.UserInfo;
 import genieus.com.walla.v2.info.Utility;
 import genieus.com.walla.v2.viewholder.InterestsViewHolder;
 
@@ -35,12 +39,14 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
     private InterestsViewRVAdapter adapter;
 
     private List<InterestInfo> data;
-    
+
     private List<String> selected;
     private MenuItem done;
     private boolean doneIconVisible;
     private int MAX_INTERESTS = 2;
     private double width;
+    private WallaApi api;
+    private UserInfo user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +55,30 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        api = new WallaApi(this);
+        interests_rv = (RecyclerView) findViewById(R.id.interests_rv);
+        selected = new ArrayList<>();
+        data = new ArrayList<>();
+
+       if(!startedForResult()){
+            api.getUserInfo(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object result, int call) {
+                    user = (UserInfo) result;
+                    if(user.getInterests() == null){
+                        Toast.makeText(InterestsView.this, "list is null 2", Toast.LENGTH_LONG).show();
+                    }
+                    initUi();
+                }
+            }, "user");
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        initUi();
 
     }
 
     private void initUi() {
-        selected = new ArrayList<>();
-
-        data = new ArrayList<>();
         data.add(new InterestInfo("Movies", R.mipmap.movieicon, false));
         data.add(new InterestInfo("Food", R.mipmap.foodicon, false));
         data.add(new InterestInfo("Academics", R.mipmap.academicicon, false));
@@ -73,89 +92,103 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
         data.add(new InterestInfo("Socialize", R.mipmap.socializeicon, false));
         data.add(new InterestInfo("Volunteer", R.mipmap.volunteeringicon, false));
 
-        interests_rv = (RecyclerView) findViewById(R.id.interests_rv);
+        if(!startedForResult()) {
+            for (InterestInfo interest : data) {
+                if (user.getInterests().contains(interest.getName())) {
+                    interest.setSelected(true);
+                }
+            }
+
+            selected.addAll(user.getInterests());
+        }
+
+        adapter = new InterestsViewRVAdapter(this, data, this, width);
+        interests_rv.setAdapter(adapter);
 
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-
         GridLayoutManager grid
                 = new GridLayoutManager(this, 3);
         interests_rv.setLayoutManager(grid);
 
         int parentDp = Utility.pxToDp(interests_rv.getWidth());
         width = Utility.sizeToFit(parentDp, 3, 4);
-        adapter = new InterestsViewRVAdapter(this, data, this, width);
-        interests_rv.setAdapter(adapter);
+
+        if(startedForResult()){
+            initUi();
+        }
+
     }
 
     @Override
     public void onInterestStanceChanged(int pos) {
         boolean chosen = !data.get(pos).isSelected();
-        if(startedForResult()){
+        if (startedForResult()) {
             String name = data.get(pos).getName();
-            if(!chosen){
+            if (!chosen) {
                 selected.remove(name);
-                if(selected.isEmpty()){
+                if (selected.isEmpty()) {
                     done.setVisible(false);
                     doneIconVisible = false;
                     data.get(pos).setSelected(chosen);
                 }
-            }else{
-                if(selected.size() >= MAX_INTERESTS) Toast.makeText(this, "You can only selected a maximum of " + MAX_INTERESTS + " interests", Toast.LENGTH_LONG).show();
+            } else {
+                if (selected.size() >= MAX_INTERESTS)
+                    Toast.makeText(this, "You can only selected a maximum of " + MAX_INTERESTS + " interests", Toast.LENGTH_LONG).show();
                 else {
                     selected.add(name);
                     data.get(pos).setSelected(chosen);
                 }
-                if(!doneIconVisible){
+                if (!doneIconVisible) {
                     done.setVisible(true);
                     doneIconVisible = true;
                 }
             }
-        }else{
+        } else {
             String name = data.get(pos).getName();
-            if(!chosen){
+            if (!chosen) {
                 selected.remove(name);
                 data.get(pos).setSelected(chosen);
-            }else{
+            } else {
                 selected.add(name);
                 data.get(pos).setSelected(chosen);
             }
         }
 
 
-        //adapter.notifyDataSetChanged();
-        adapter = new InterestsViewRVAdapter(this, data, this, width);
-        interests_rv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        //adapter = new InterestsViewRVAdapter(this, data, this, width);
+        //interests_rv.setAdapter(adapter);
     }
 
-    private boolean startedForResult(){
+    private boolean startedForResult() {
         return getCallingActivity() != null;
     }
 
-    private void changeBackGroundColor(View view, int color){
+    private void changeBackGroundColor(View view, int color) {
         Drawable background = view.getBackground();
         if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable)background).getPaint().setColor(color);
+            ((ShapeDrawable) background).getPaint().setColor(color);
         } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable)background).setColor(color);
+            ((GradientDrawable) background).setColor(color);
         } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable)background).setColor(color);
+            ((ColorDrawable) background).setColor(color);
         }
     }
 
     private void returnData() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("result", listAsString());
-        setResult(Activity.RESULT_OK,returnIntent);
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 
-    private String listAsString(){
+    private String listAsString() {
         StringBuffer sb = new StringBuffer();
-        for(String name : selected) sb.append(", " + name);
+        for (String name : selected) sb.append(", " + name);
         return sb.toString().substring(2);
     }
 
@@ -171,7 +204,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(startedForResult()) {
+        if (startedForResult()) {
             done = menu.add(0, 0, 0, "DONE");
             done.setIcon(R.drawable.ic_done_all).setOnMenuItemClickListener(this).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             done.setVisible(false);
@@ -182,12 +215,19 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             default:
                 returnData();
                 break;
         }
 
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        JSONArray array = new JSONArray(selected);
+        api.saveUserInterests("user", array);
     }
 }
