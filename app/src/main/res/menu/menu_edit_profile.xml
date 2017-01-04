@@ -8,6 +8,6 @@
         android:id="@+id/action_save"
         android:icon="@drawable/ic_save"
         android:title="save"
-        app:showAsAction="always"></item>
+        app:showAsAction="never"></item>
 
 </menu>

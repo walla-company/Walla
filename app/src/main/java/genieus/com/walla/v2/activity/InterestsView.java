@@ -227,7 +227,9 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
     @Override
     protected void onStop() {
         super.onStop();
-        JSONArray array = new JSONArray(selected);
-        api.saveUserInterests("user", array);
+        if(!startedForResult()) {
+            JSONArray array = new JSONArray(selected);
+            api.saveUserInterests("user", array);
+        }
     }
 }

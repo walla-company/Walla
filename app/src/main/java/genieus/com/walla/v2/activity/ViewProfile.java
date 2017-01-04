@@ -8,6 +8,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -16,9 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.GroupProfileLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
@@ -29,6 +33,7 @@ import genieus.com.walla.v2.info.UserInfo;
 public class ViewProfile extends AppCompatActivity {
     private String BUTTONBLUE = "#63CAF9";
 
+    private CircleImageView profile_pic;
     private ListView groups_lv;
     private GroupProfileLVAdapter groupsAdapter;
     private TextView name, year, major, hometown, details_in, details_label;
@@ -45,6 +50,9 @@ public class ViewProfile extends AppCompatActivity {
         setContentView(R.layout.activity_profile2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         api = new WallaApi(this);
         progress = (ProgressBar) findViewById(R.id.progress_bar);
@@ -72,7 +80,7 @@ public class ViewProfile extends AppCompatActivity {
 
     private void initUi() {
         fonts = new Fonts(this);
-
+        getSupportActionBar().setTitle(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
         List<GroupInfo> data = new ArrayList<>();
         data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
         data.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
@@ -101,7 +109,12 @@ public class ViewProfile extends AppCompatActivity {
         details_label.setTypeface(fonts.AzoSansMedium);
         add = (Button) findViewById(R.id.add_btn);
         add.setTypeface(fonts.AzoSansBold);
+        profile_pic = (CircleImageView) findViewById(R.id.profile_picture);
         changeBackgroundColor(add, BUTTONBLUE);
+
+        Picasso.with(this) //Context
+                .load(user.getProfile_url()) //URL/FILE
+                .into(profile_pic);//an ImageView Object to show the loaded image
 
     }
 
@@ -114,6 +127,16 @@ public class ViewProfile extends AppCompatActivity {
         } else if (background instanceof ColorDrawable) {
             ((ColorDrawable)background).setColor(Color.parseColor(color));
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

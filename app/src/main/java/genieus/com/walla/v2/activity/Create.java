@@ -601,6 +601,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                     .setPositiveButton("Post", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             api.postActivity(postObj);
+                            Snackbar.make(map_container, "Activity created successfully", Snackbar.LENGTH_LONG).show();
+                            post.invalidate();
                         }
                     })
                     .setNegativeButton("Delete", new DialogInterface.OnClickListener() {

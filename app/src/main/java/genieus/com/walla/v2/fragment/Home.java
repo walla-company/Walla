@@ -165,7 +165,7 @@ public class Home extends Fragment  {
         interests = new ArrayList<>();
         interests.add(new Interests("All", R.mipmap.all));
         interests.add(new Interests("Movies", R.drawable.ic_movieicon));
-        interests.add(new Interests("Food", R.mipmap.foodicon));
+        interests.add(new Interests("Food", R.drawable.ic_foodicon));
         interests.add(new Interests("Academics", R.drawable.ic_academicsicon));
         interests.add(new Interests("Study", R.drawable.ic_studyicon));
         interests.add(new Interests("Sports", R.drawable.ic_sportsicon));
@@ -201,6 +201,7 @@ public class Home extends Fragment  {
         lp.gravity = Gravity.CENTER;
 
         alert.getWindow().setAttributes(lp);
+        alert.setCanceledOnTouchOutside(true);
 
     }
 
