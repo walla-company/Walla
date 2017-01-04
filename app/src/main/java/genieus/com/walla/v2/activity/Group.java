@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,10 +35,12 @@ public class Group extends AppCompatActivity {
 
     private ListView activities_lv;
     private Button join_btn;
+    private ProgressBar progress;
 
     private GroupInfo info;
 
     private WallaApi api;
+    private String guid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +48,20 @@ public class Group extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         api = new WallaApi(this);
 
-        String guid = "-K_QNzIlm31gNgepdtTk";
+
+        //String guid = "-K_QNzIlm31gNgepdtTk";
+        Bundle extras = getIntent().getExtras();
+
+        if(extras.containsKey("guid"))
+            guid = extras.getString("guid");
+        else
+            finish();
+
         api.getGroup(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
@@ -59,6 +74,9 @@ public class Group extends AppCompatActivity {
 
     private void initUi() {
         fonts = new Fonts(this);
+
+        progress = (ProgressBar) findViewById(R.id.progress);
+        progress.setVisibility(View.GONE);
 
         activities_lv = (ListView) findViewById(R.id.group_activities_lv);
         List<EventInfo> list = new ArrayList<>();
@@ -134,6 +152,16 @@ public class Group extends AppCompatActivity {
         } else if (background instanceof ColorDrawable) {
             ((ColorDrawable)background).setColor(Color.parseColor(color));
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -7,14 +7,19 @@
     <LinearLayout
         android:background="@android:color/transparent"
         android:id="@+id/tabs_container"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:orientation="horizontal">
 
        <android.support.v7.widget.RecyclerView
            android:id="@+id/tabs_rv"
-           android:layout_width="match_parent"
+           android:layout_width="wrap_content"
            android:layout_height="match_parent"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/groups_rv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
 
 
     </LinearLayout>

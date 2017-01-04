@@ -35,7 +35,12 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/tabs_rv"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/groups_rv"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
 
 
@@ -139,7 +144,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title_card"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded">
 
                 <RelativeLayout
                     android:id="@+id/location_container"
@@ -156,7 +162,8 @@
                         android:layout_alignParentRight="true"
                         android:paddingRight="8dp"
                         android:text="show on map"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/location_in"
@@ -175,9 +182,6 @@
                         android:id="@+id/location_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
                         android:paddingLeft="16dp"
                         android:paddingTop="4dp"
                         android:text="Location"
@@ -185,20 +189,36 @@
 
                     <RelativeLayout
                         android:id="@+id/map_container"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_below="@id/location_in"
-                        android:layout_marginLeft="16dp">
+                        android:layout_marginLeft="16dp"
+                        android:visibility="visible">
 
                         <fragment
                             android:id="@+id/map"
                             class="com.google.android.gms.maps.SupportMapFragment"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="16dp" />
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true" />
 
                     </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/get_directions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/map_container"
+                        android:drawableLeft="@drawable/ic_location"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Get directions"
+                        android:textSize="16sp"
+                        android:visibility="visible" />
+
                 </RelativeLayout>
 
 
@@ -241,6 +261,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="120dp"
+                                android:layout_marginTop="16dp"
                                 android:orientation="vertical">
 
                                 <LinearLayout
@@ -257,7 +278,7 @@
 
                                         <ImageView
                                             android:id="@+id/interested_icon"
-                                            android:layout_width="wrap_content"
+                                            android:layout_width="20dp"
                                             android:layout_height="match_parent"
                                             android:src="@mipmap/star" />
 
@@ -267,7 +288,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_centerVertical="true"
                                             android:layout_toRightOf="@id/interested_icon"
-                                            android:text="7" />
+                                            android:text="7"
+                                            android:textSize="17sp" />
 
                                     </RelativeLayout>
 
@@ -284,7 +306,7 @@
                                             android:layout_alignParentStart="true"
                                             android:layout_centerVertical="true"
                                             android:text="Ben Yang, Albert Pujols and 5 others are interested"
-                                            android:textSize="15sp" />
+                                            android:textSize="16sp" />
 
                                     </RelativeLayout>
 
@@ -304,7 +326,7 @@
 
                                         <ImageView
                                             android:id="@+id/going_icon"
-                                            android:layout_width="wrap_content"
+                                            android:layout_width="20dp"
                                             android:layout_height="match_parent"
                                             android:src="@mipmap/check" />
 
@@ -314,7 +336,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_centerVertical="true"
                                             android:layout_toRightOf="@id/going_icon"
-                                            android:text="5" />
+                                            android:text="5"
+                                            android:textSize="17sp" />
 
                                     </RelativeLayout>
 
@@ -331,7 +354,7 @@
                                             android:layout_alignParentStart="true"
                                             android:layout_centerVertical="true"
                                             android:text="JoJo Dechiccis, Judy Zhu and 3 others are going"
-                                            android:textSize="15sp" />
+                                            android:textSize="16sp" />
 
                                     </RelativeLayout>
 
@@ -394,13 +417,6 @@
                             android:paddingLeft="16dp">
 
                             <TextView
-                                android:id="@+id/invitees_label"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Invited 2 friend(s)"
-                                android:textSize="17sp" />
-
-                            <TextView
                                 android:id="@+id/invitees_in"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -408,7 +424,19 @@
                                 android:layout_alignParentStart="true"
                                 android:layout_below="@+id/invitees_label"
                                 android:text="Shray Gupta, Alexis Angel"
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/invitees_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:text="Invited 2 friend(s)"
+                                android:textSize="17sp"
+                                android:visibility="gone" />
 
                         </RelativeLayout>
 

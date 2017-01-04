@@ -165,7 +165,7 @@ public class WallaApi {
 
                     info.setFirst_name(response.getString("first_name"));
                     info.setLast_name(response.getString("last_name"));
-                    info.setProfile_url("profile_image_url");
+                    info.setProfile_url(response.getString("profile_image_url"));
                     info.setMajor(response.getString("major"));
                     info.setYear(response.getString("academic_level"));
                     info.setHometown(response.getString("hometown"));
@@ -227,7 +227,7 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void getGroup(final OnDataReceived listener, String guid) {
+    public static void getGroup(final OnDataReceived listener, final String guid) {
         final String url = site + get_group + "token=" + token + "&school_identifier=" + domain + "&guid=" + guid;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
@@ -409,13 +409,13 @@ public class WallaApi {
                 EventInfo event = new EventInfo();
 
                 try {
+                    event.setHost_group(response.getString("host_group"));
                     event.setTitle(response.getString("title"));
                     event.setAuid(response.getString("activity_id"));
                     event.setCan_guests_invite(response.getBoolean("can_others_invite"));
                     event.setIs_public(response.getBoolean("public"));
                     event.setStart_time(response.getLong("start_time"));
                     event.setEnd_time(response.getLong("end_time"));
-                    Log.d("apidata", response.getJSONObject("location").toString());
                     event.setLocation_name(response.getJSONObject("location").getString("name"));
                     event.setLocation_long(response.getJSONObject("location").getDouble("long"));
                     event.setLocation_lat(response.getJSONObject("location").getDouble("lat"));
@@ -457,6 +457,7 @@ public class WallaApi {
                         JSONObject response = array.getJSONObject(i);
                         EventInfo event = new EventInfo();
 
+                        event.setHost_group(response.getString("host_group"));
                         event.setTitle(response.getString("title"));
                         event.setAuid(response.getString("activity_id"));
                         event.setCan_guests_invite(response.getBoolean("can_others_invite"));

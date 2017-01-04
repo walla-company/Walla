@@ -51,9 +51,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private Fonts fonts;
     private CircleImageView profile_pic;
     private NestedScrollView parent;
-    private EditText hometown_in, description_in, fname_in, email_in, year_in, major_in, lname_in;
+    private EditText hometown_in, description_in, fname_in, year_in, major_in, lname_in;
     private TextView profile_pic_label, year_label, major_label, hometown_label, description_label,
-            fname_label, lname_label, email_label;
+            fname_label, lname_label;
 
     private String[] sourceOptions = {"Take Photo", "Choose from Library", "Cancel"};
 
@@ -97,8 +97,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         fname_label.setTypeface(fonts.AzoSansRegular);
         lname_label = (TextView) findViewById(R.id.lname_label);
         lname_label.setTypeface(fonts.AzoSansRegular);
-        email_label = (TextView) findViewById(R.id.email_label);
-        email_label.setTypeface(fonts.AzoSansRegular);
         year_in = (EditText) findViewById(R.id.year_in);
         year_in.setTypeface(fonts.AzoSansRegular);
         year_in.setText(info.getYear());
@@ -117,11 +115,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         lname_in = (EditText) findViewById(R.id.lname_in);
         lname_in.setTypeface(fonts.AzoSansRegular);
         lname_in.setText(info.getLast_name());
-        email_in = (EditText) findViewById(R.id.email_in);
-        email_in.setTypeface(fonts.AzoSansRegular);
-        email_in.setText(info.getEmail());
-
         profile_pic = (CircleImageView) findViewById(R.id.profile_image_in);
+
+        Log.d("picdata", "url: " + info.getProfile_url());
         Picasso.with(this) //Context
                 .load(info.getProfile_url()) //URL/FILE
                 .into(profile_pic);//an ImageView Object to show the loaded image;
@@ -189,7 +185,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private void saveData(){
         api.saveUserFirstName(info.getUid(), fname_in.getText().toString());
         api.saveUserLastName(info.getUid(), lname_in.getText().toString());
-        api.saveUserEmail(info.getUid(), email_in.getText().toString());
         api.saveUserAcademicLevel(info.getUid(), year_in.getText().toString());
         api.saveUserMajor(info.getUid(), major_in.getText().toString());
         api.saveUserHometown(info.getUid(), hometown_in.getText().toString());

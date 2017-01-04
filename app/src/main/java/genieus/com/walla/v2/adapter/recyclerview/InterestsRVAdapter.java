@@ -89,8 +89,6 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<FilterViewHolder> {
         holder.label.setTypeface(fonts.AzoSansRegular);
         holder.label.setTextColor(context.getResources().getColor(R.color.black));
 
-        Log.d("color", i.getName());
-
         if(position == 0){
             Drawable background = holder.container1.getBackground();
             if (background instanceof ShapeDrawable) {

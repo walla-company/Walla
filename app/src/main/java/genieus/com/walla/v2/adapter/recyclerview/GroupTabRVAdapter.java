@@ -3,6 +3,7 @@ package genieus.com.walla.v2.adapter.recyclerview;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,21 +12,24 @@ import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.Group;
-import genieus.com.walla.v2.activity.InterestsView;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.viewholder.TabHolder;
 
 /**
- * Created by Anesu on 12/17/2016.
+ * Created by anesu on 1/3/17.
  */
-public class TabRVAdapter extends RecyclerView.Adapter<TabHolder> {
+
+public class GroupTabRVAdapter extends  RecyclerView.Adapter<TabHolder> {
     private Context context;
-    private List<String> list;
+    private List<GroupInfo> list;
     private Fonts fonts;
 
-    public TabRVAdapter(Context context, List<String> list) {
+    public GroupTabRVAdapter(Context context, List<GroupInfo> list) {
         this.context = context;
         this.list = list;
+
+        Log.d("groupdata", "sizeL " + list.size());;
 
         fonts = new Fonts(context);
     }
@@ -41,15 +45,18 @@ public class TabRVAdapter extends RecyclerView.Adapter<TabHolder> {
 
     @Override
     public void onBindViewHolder(TabHolder holder, int position) {
-        holder.tabName.setText(list.get(position));
+        final GroupInfo info = list.get(position);
+        holder.tabName.setText(info.getAbbr());
         holder.tabName.setTypeface(fonts.AzoSansMedium);
+        holder.container.setBackgroundColor(context.getResources().getColor(R.color.tan));
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, InterestsView.class));
+                Intent intent = new Intent(context, Group.class);
+                intent.putExtra("guid", info.getGuid());
+                context.startActivity(intent);
             }
         });
-
     }
 
     @Override
