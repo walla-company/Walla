@@ -110,7 +110,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
         visibility.setImageResource(event.is_public() ? R.drawable.ic_lit_gray : R.drawable.ic_chill_gray);
         title.setText(event.getTitle());
-        title.setTypeface(fonts.AzoSansMedium);
+        title.setTypeface(fonts.AzoSansRegular);
         //interested.setText(event.getInterested());
         //interested.setTypeface(fonts.AzoSansRegular);
         //going.setText(event.getGoing());

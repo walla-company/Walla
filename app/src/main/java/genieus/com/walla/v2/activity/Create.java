@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -76,19 +77,19 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private GoogleMap mMap;
     private TextView start_time, end_time, location, visibility_label, title_label, start_time_label,
             end_time_label, location_label, details_label, host_label, group_label, interest_label,
-            friends_label, guests_label, friends_in, visibility_in, guests_in,
+            friends_label, guests_label, friends_in, guests_in,
             interest_in, title_in;
-    private RelativeLayout map_container, group_in, host_in;
+    private RelativeLayout map_container, group_in, host_in, lit_container, chill_container;
     private Button post;
+    private ImageButton chill, lit;
     private RecyclerView groups_rv, host_group_rv;
     private MiniGroupRVAdapter adapter, hostAdapter;
     private GoogleApiClient mGoogleApiClient;
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private static final String TAG = "Places";
     private String BUTTONBLUE = "#63CAF9";
-    private AlertDialog.Builder builder, guestInviteBuilder, confirmCreate;
-    private AlertDialog alert, guestInviteAlert;
-    private CharSequence[] visibilityOptions = {"Lit (Everyone can see it)", "Chill (Only invited people)"};
+    private AlertDialog.Builder guestInviteBuilder, confirmCreate;
+    private AlertDialog guestInviteAlert;
     private CharSequence[] guestsInviteOptions = {"Yes", "No"};
 
     private JSONObject postObj;
@@ -133,6 +134,13 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        lit_container = (RelativeLayout) findViewById(R.id.lit_container);
+        chill_container = (RelativeLayout) findViewById(R.id.chill_container);
+        changeBackgroundColor(chill_container, getResources().getColor(R.color.white));
+        lit = (ImageButton) findViewById(R.id.fire_btn);
+        lit.setOnClickListener(this);
+        chill = (ImageButton) findViewById(R.id.chill_btn);
+        chill.setOnClickListener(this);
         start_time = (TextView) findViewById(R.id.start_time_in);
         end_time = (TextView) findViewById(R.id.end_time_in);
         location = (TextView) findViewById(R.id.location_in);
@@ -168,23 +176,6 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         changeBackgroundColor(post, BUTTONBLUE);
         post.setTypeface(fonts.AzoSansMedium);
         post.setOnClickListener(this);
-
-        builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select an option");
-        builder.setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        builder.setSingleChoiceItems(visibilityOptions, -1, this);
-        alert = builder.create();
 
         guestInviteBuilder = new AlertDialog.Builder(this);
         guestInviteBuilder.setTitle("Select an option");
@@ -236,12 +227,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         friends_in = (TextView) findViewById(R.id.friends_in);
         friends_in.setTypeface(fonts.AzoSansRegular);
         friends_in.setOnClickListener(this);
-        visibility_in = (TextView) findViewById(R.id.visibility_in);
-        visibility_in.setTypeface(fonts.AzoSansRegular);
-        visibility_in.setOnClickListener(this);
         title_in = (TextView) findViewById(R.id.title_in);
         title_in.setTypeface(fonts.AzoSansRegular);
-        title_in.setTextColor(visibility_in.getTextColors());
+        title_in.setTextColor(start_time.getTextColors());
         guests_in = (TextView) findViewById(R.id.guests_in);
         guests_in.setTypeface(fonts.AzoSansRegular);
         guests_in.setOnClickListener(this);
@@ -259,7 +247,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         title_in.setTypeface(fonts.AzoSansRegular);
         details_in = (EditText) findViewById(R.id.details_in);
         details_in.setTypeface(fonts.AzoSansRegular);
-        details_in.setTextColor(visibility_in.getTextColors());
+        details_in.setTextColor(start_time.getTextColors());
         group_in = (RelativeLayout) findViewById(R.id.group_in);
         group_in.setOnClickListener(this);
         host_in = (RelativeLayout) findViewById(R.id.host_in);
@@ -536,16 +524,6 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         end_time.setText(day);
     }
 
-    private void initVisibility(int which) {
-        visibility_in.setText(visibilityOptions[which]);
-        try {
-            postObj.put("activity_public", which == 0);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     private void initGuestInvitations(int which) {
         guests_in.setText(guestsInviteOptions[which]);
         try {
@@ -570,10 +548,6 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         Intent intent = new Intent(this, MyGroups.class);
         intent.putExtra("max", -1);
         startActivityForResult(intent, INVITEGROUPS);
-    }
-
-    private void showVisibilityOptions() {
-        alert.show();
     }
 
     private void showGuestInviteOptions() {
@@ -632,7 +606,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         }
 
         if (!postObj.has("activity_public")) {
-            visibility_in.setError("required");
+            //visibility_in.setError("required");
             valid = false;
         }
 
@@ -663,6 +637,17 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
         return valid;
 
+    }
+
+    private void changeBackgroundColor(View view, int color){
+        Drawable background = view.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable)background).getPaint().setColor(color);
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable)background).setColor(color);
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable)background).setColor(color);
+        }
     }
 
     @Override
@@ -706,10 +691,6 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             case R.id.host_in:
                 setGroupHost();
                 break;
-            case R.id.visibility_in:
-                showVisibilityOptions();
-                visibility_in.setError(null);
-                break;
             case R.id.guests_in:
                 showGuestInviteOptions();
                 break;
@@ -720,15 +701,32 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             case R.id.post_btn:
                 postActivity();
                 break;
+            case R.id.chill_btn:
+                changeBackgroundColor(chill_container, getResources().getColor(R.color.DodgerBlue));
+                changeBackgroundColor(lit_container, getResources().getColor(R.color.white));
+                try {
+                    postObj.put("activity_public", false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.fire_btn:
+                changeBackgroundColor(lit_container, getResources().getColor(R.color.DodgerBlue));
+                changeBackgroundColor(chill_container, getResources().getColor(R.color.white));
+                try {
+                    postObj.put("activity_public", true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+
 
         }
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        if (dialog.equals(alert))
-            initVisibility(which);
-        else if (dialog.equals(guestInviteAlert))
+       if (dialog.equals(guestInviteAlert))
             initGuestInvitations(which);
     }
 

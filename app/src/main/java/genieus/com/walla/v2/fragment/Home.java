@@ -41,7 +41,7 @@ import genieus.com.walla.v2.info.Fonts;
  * Use the {@link Home#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Home extends Fragment  {
+public class Home extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -52,7 +52,7 @@ public class Home extends Fragment  {
     private InterestsRVAdapter adapter;
     private static EventsLVAdapter adapterEvents;
     private List<Interests> interests;
-    private TextView filter_tv;
+    private static TextView filter_tv;
     private static SwipeRefreshLayout swipeRefreshLayout;
 
     private static AlertDialog alert;
@@ -100,7 +100,7 @@ public class Home extends Fragment  {
         }
     }
 
-    private void initUi(){
+    private void initUi() {
         context = getContext();
         api = new WallaApi(getContext());
         fonts = new Fonts(getContext());
@@ -152,7 +152,7 @@ public class Home extends Fragment  {
         api.getActivities(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>)data);
+                adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>) data);
                 events_lv.setAdapter(adapterEvents);
                 adapterEvents.getFilter().filter("");
             }
@@ -205,12 +205,12 @@ public class Home extends Fragment  {
 
     }
 
-    public static void refreshPage(){
+    public static void refreshPage() {
         swipeRefreshLayout.setRefreshing(false);
         api.getActivities(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>)data);
+                adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>) data);
                 events_lv.setAdapter(adapterEvents);
                 adapterEvents.getFilter().filter("");
                 swipeRefreshLayout.setRefreshing(false);
@@ -221,11 +221,11 @@ public class Home extends Fragment  {
     private void changeColorOfFilters(View view, List<FilterViewHolder> all, int pos) {
         Drawable background = view.getBackground();
         if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable)background).getPaint().setColor(getResources().getColor(R.color.colorPrimary));
+            ((ShapeDrawable) background).getPaint().setColor(getResources().getColor(R.color.colorPrimary));
         } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable)background).setColor(getResources().getColor(R.color.colorPrimary));
+            ((GradientDrawable) background).setColor(getResources().getColor(R.color.colorPrimary));
         } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable)background).setColor(getResources().getColor(R.color.colorPrimary));
+            ((ColorDrawable) background).setColor(getResources().getColor(R.color.colorPrimary));
         }
 
         all.get(pos).label.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -233,15 +233,15 @@ public class Home extends Fragment  {
         //String search = event.getName().equals("All") ? "" : event.getName();
         //filterEvents(search);
 
-        for(int i= 0; i < all.size(); i++){
-            if(i != pos){
+        for (int i = 0; i < all.size(); i++) {
+            if (i != pos) {
                 Drawable bg = all.get(i).container1.getBackground();
                 if (bg instanceof ShapeDrawable) {
-                    ((ShapeDrawable)bg).getPaint().setColor(getResources().getColor(R.color.LightGrey));
+                    ((ShapeDrawable) bg).getPaint().setColor(getResources().getColor(R.color.LightGrey));
                 } else if (bg instanceof GradientDrawable) {
-                    ((GradientDrawable)bg).setColor(getResources().getColor(R.color.LightGrey));
+                    ((GradientDrawable) bg).setColor(getResources().getColor(R.color.LightGrey));
                 } else if (bg instanceof ColorDrawable) {
-                    ((ColorDrawable)bg).setColor(getResources().getColor(R.color.LightGrey));
+                    ((ColorDrawable) bg).setColor(getResources().getColor(R.color.LightGrey));
                 }
 
                 all.get(i).label.setTextColor(getResources().getColor(R.color.black));
@@ -249,17 +249,29 @@ public class Home extends Fragment  {
         }
     }
 
-    public static void showFilter(){
+    public static void showFilter() {
         alert.show();
     }
-    private void filterEvents(String query){
-        if(query.equals("")) filter_tv.setVisibility(View.GONE);
+
+    private void filterEvents(String query) {
+        if (query.equals("")) filter_tv.setVisibility(View.GONE);
         else {
             filter_tv.setVisibility(View.VISIBLE);
             filter_tv.setText(String.format("Showing %s events", query.toLowerCase()));
         }
 
         adapterEvents.getFilter().filter(query);
+
+        /*
+        if(adapterEvents.getCount() == 0){
+            filter_tv.setVisibility(View.VISIBLE);
+            if (query.equals(""))
+                filter_tv.setText("There are currently no events");
+            else
+                filter_tv.setText("There are currently no " + query + " events");
+        }
+        */
+
     }
 
 

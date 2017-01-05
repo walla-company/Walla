@@ -127,7 +127,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         duration.setTypeface(fonts.AzoSansRegular);
         duration.setText(String.format("%s\nto %s", event.getStringTime(event.getStart_time(), true), event.getStringTime(event.getEnd_time(), false)));
         title = (TextView) findViewById(R.id.title);
-        title.setTypeface(fonts.AzoSansMedium);
+        title.setTypeface(fonts.AzoSansRegular);
         title.setText(event.getTitle());
         location_label = (TextView) findViewById(R.id.location_label);
         location_label.setTypeface(fonts.AzoSansRegular);

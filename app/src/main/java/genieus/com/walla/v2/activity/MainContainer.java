@@ -20,6 +20,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +30,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.fragment.Notifications;
@@ -44,9 +48,15 @@ public class MainContainer extends AppCompatActivity
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private com.github.clans.fab.FloatingActionMenu fab;
+    private CircleImageView profile_pic;
+    private TextView name;
+    private NavigationView navigationView;
+    private View navHeader;
+    private static UserInfo user;
 
     private MenuItem filter_icon;
     private Fonts fonts;
+    private WallaApi api;
 
     private int[] tabIcons, tabIconsColored;
     private String[] tabNames;
@@ -148,6 +158,25 @@ public class MainContainer extends AppCompatActivity
 
     private void initUi() {
         fonts = new Fonts(this);
+        api = new WallaApi(this);
+
+        String uid = "user";
+        api.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                user = (UserInfo) data;
+                name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
+                Picasso.with(MainContainer.this) //Context
+                        .load(user.getProfile_url()) //URL/FILE
+                        .into(profile_pic);//an ImageView Object to show the loaded image
+            }
+        }, uid);
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navHeader = navigationView.getHeaderView(0);
+        name = (TextView) navHeader.findViewById(R.id.name);
+        profile_pic = (CircleImageView) navHeader.findViewById(R.id.profile_image);
+        name.setTypeface(fonts.AzoSansRegular);
 
         tabIcons = new int[]{R.mipmap.ic_home, R.mipmap.ic_calendar, R.mipmap.ic_notifications,};
         tabIconsColored = new int[]{R.mipmap.ic_home_c, R.mipmap.ic_calendar_c, R.mipmap.ic_notifications_c,};
@@ -212,7 +241,8 @@ public class MainContainer extends AppCompatActivity
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             @Override
             public void onPageSelected(int position) {
@@ -222,14 +252,15 @@ public class MainContainer extends AppCompatActivity
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
 
         viewPager.setAdapter(adapter);
     }
 
     private void changeTabMenuItems(int position) {
-        switch(position){
+        switch (position) {
             case 0:
                 filter_icon.setVisible(true);
                 break;
@@ -243,7 +274,7 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void changeActionBarTitle(int position) {
-        switch(position){
+        switch (position) {
             case 0:
                 getSupportActionBar().setTitle(tabNames[0]);
                 break;
@@ -257,7 +288,7 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void switchTabIcons(int position) {
-        switch(position){
+        switch (position) {
             case 0:
                 tabLayout.getTabAt(0).setIcon(tabIconsColored[0]);
                 tabLayout.getTabAt(1).setIcon(tabIcons[1]);
@@ -301,7 +332,7 @@ public class MainContainer extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.action_search:
                 switchToSearchActivity();
                 break;
@@ -336,7 +367,7 @@ public class MainContainer extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        switch(id){
+        switch (id) {
             case R.id.nav_my_interests:
                 startActivity(new Intent(this, InterestsView.class));
                 break;
@@ -388,7 +419,7 @@ public class MainContainer extends AppCompatActivity
         startActivity(sendIntent);
     }
 
-    private String getVersion(){
+    private String getVersion() {
         PackageInfo pInfo = null;
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
