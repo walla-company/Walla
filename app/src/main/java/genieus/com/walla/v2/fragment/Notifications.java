@@ -14,7 +14,7 @@ import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.NotificationInfoLVAdapter;
-import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.NotificationInfo;
 
 /**
@@ -31,8 +31,12 @@ public class Notifications extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public static final String FRIEND_REQUEST = "friend_request";
+
     private ListView info_lv;
     private NotificationInfoLVAdapter infoAdapter;
+    private List<NotificationInfo> list;
+    private WallaApi api;
 
 
     // TODO: Rename and change types of parameters
@@ -78,22 +82,31 @@ public class Notifications extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         info_lv = (ListView) view.findViewById(R.id.info_lv);
-        initUi();
+        api = new WallaApi(getContext());
+
+        api.getNotifications(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                list = (List<NotificationInfo>) data;
+                initUi();
+            }
+        }, "user2");
 
         return view;
     }
 
     private void initUi() {
+        /*
         List<NotificationInfo> data = new ArrayList<>();
-        data.add(new NotificationInfo("new freind", "Jimbo McBoosie accepted you friends request!"));
-        data.add(new NotificationInfo("new freind", "Jimbo McBoosie accepted you friends request!"));
-        data.add(new NotificationInfo("new freind", "Jimbo McBoosie accepted you friends request!"));
-        data.add(new NotificationInfo("new freind", "Jimbo McBoosie accepted you friends request!"));
-        data.add(new NotificationInfo("new freind", "Jimbo McBoosie accepted you friends request!"));
-        data.add(new NotificationInfo("new freind", "Jimbo McBoosie accepted you friends request!"));
+        data.add(new NotificationInfo("new freind", "Jimbo McBoosie sent you a friend request!"));
+        data.add(new NotificationInfo("new freind", "Jimbo McBoosie sent you a friend request"));
+        data.add(new NotificationInfo("new freind", "Jimbo McBoosie sent you a friend request"));
+        data.add(new NotificationInfo("new freind", "Jimbo McBoosie sent you a friend request"));
+        data.add(new NotificationInfo("new freind", "Jimbo McBoosie sent you a friend request"));
+        */
 
 
-        infoAdapter = new NotificationInfoLVAdapter(getContext(), R.layout.single_info_notification, data);
+        infoAdapter = new NotificationInfoLVAdapter(getContext(), R.layout.single_notification, list);
         info_lv.setAdapter(infoAdapter);
     }
 

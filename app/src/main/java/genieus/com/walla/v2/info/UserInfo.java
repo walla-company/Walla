@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UserInfo {
     private String name, year, profile_url, major, hometown, description, uid, first_name, last_name, email;
-    private List<String> interests;
+    private List<String> interests, friends;
     private boolean verified;
 
     public UserInfo(){};
@@ -111,6 +111,14 @@ public class UserInfo {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
     }
 
     @Override

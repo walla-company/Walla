@@ -68,6 +68,8 @@ public class MainContainer extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        startActivity(new Intent(this, LoginScreen.class));
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -166,9 +168,12 @@ public class MainContainer extends AppCompatActivity
             public void onDataReceived(Object data, int call) {
                 user = (UserInfo) data;
                 name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
-                Picasso.with(MainContainer.this) //Context
-                        .load(user.getProfile_url()) //URL/FILE
-                        .into(profile_pic);//an ImageView Object to show the loaded image
+
+                if(user.getProfile_url() != null && !user.getProfile_url().equals("")) {
+                    Picasso.with(MainContainer.this) //Context
+                            .load(user.getProfile_url()) //URL/FILE
+                            .into(profile_pic);//an ImageView Object to show the loaded image
+                }
             }
         }, uid);
 

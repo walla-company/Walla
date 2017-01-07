@@ -118,9 +118,11 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         profile_pic = (CircleImageView) findViewById(R.id.profile_image_in);
 
         Log.d("picdata", "url: " + info.getProfile_url());
-        Picasso.with(this) //Context
-                .load(info.getProfile_url()) //URL/FILE
-                .into(profile_pic);//an ImageView Object to show the loaded image;
+        if(info.getProfile_url() != null && !info.getProfile_url().equals("")) {
+            Picasso.with(this) //Context
+                    .load(info.getProfile_url()) //URL/FILE
+                    .into(profile_pic);//an ImageView Object to show the loaded image;
+        }
 
         profile_pic.setOnClickListener(this);
     }

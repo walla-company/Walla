@@ -10,6 +10,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -70,6 +72,12 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
         name.setTypeface(fonts.AzoSansMedium);
         TextView details = (TextView) convertView.findViewById(R.id.details);
         details.setTypeface(fonts.AzoSansRegular);
+
+        if(friend.getImage_url() != null && !friend.getImage_url().equals("")) {
+            Picasso.with(getContext()) //Context
+                    .load(friend.getImage_url()) //URL/FILE
+                    .into(image);//an ImageView Object to show the loaded image
+        }
 
         name.setText(friend.getName());
         details.setText(friend.getYear() + " · " + friend.getMajor());

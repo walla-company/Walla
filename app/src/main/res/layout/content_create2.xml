@@ -61,13 +61,11 @@
                             android:layout_below="@id/visibility_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="4dp"
-                            android:background="@drawable/rounded"
                             android:paddingBottom="2dp">
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@color/white"
                                 android:paddingBottom="2dp">
 
                                 <ImageButton
@@ -90,11 +88,9 @@
                             android:layout_below="@id/visibility_label"
                             android:layout_marginLeft="4dp"
                             android:layout_toRightOf="@id/lit_container"
-                            android:background="@drawable/rounded"
                             android:paddingBottom="2dp">
 
                             <RelativeLayout
-                                android:background="@color/white"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="2dp">
@@ -105,7 +101,7 @@
                                     android:layout_height="32dp"
                                     android:layout_centerInParent="true"
                                     android:layout_marginTop="8dp"
-                                    android:src="@mipmap/chillbtn" />
+                                    android:src="@mipmap/private_pressed" />
 
                             </RelativeLayout>
 
@@ -528,6 +524,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:layout_marginBottom="8dp"
                         android:id="@+id/guests_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -575,7 +572,7 @@
                 android:layout_below="@id/body_3"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_dodger_blue"
+                android:background="@drawable/rounded"
                 android:text="Post"
                 android:textColor="@color/white"
                 android:textSize="20sp" />

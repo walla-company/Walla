@@ -7,18 +7,14 @@ import android.graphics.Bitmap;
  */
 
 public class FriendInfo {
-    private String name, year, major;
-    private Bitmap image;
+    private String name, year, major, image_url;
 
-    public FriendInfo(String name, String year, String major){
-        this(name, year, major, null);
-    }
 
-    public FriendInfo(String name, String year, String major, Bitmap image){
+    public FriendInfo(String name, String year, String major, String image_url){
         this.name = name;
         this.year = year;
         this.major = major;
-        this.image = image;
+        this.image_url = image_url;
     }
 
     public String getName() {
@@ -45,11 +41,11 @@ public class FriendInfo {
         this.major = major;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public String getImage_url() {
+        return image_url;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }

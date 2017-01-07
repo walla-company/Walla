@@ -32,6 +32,7 @@ import genieus.com.walla.v2.info.UserInfo;
 
 public class ViewProfile extends AppCompatActivity {
     private String BUTTONBLUE = "#63CAF9";
+    private String BUTTONGREY = "#D8D8D8";
 
     private CircleImageView profile_pic;
     private ListView groups_lv;
@@ -110,11 +111,19 @@ public class ViewProfile extends AppCompatActivity {
         add = (Button) findViewById(R.id.add_btn);
         add.setTypeface(fonts.AzoSansBold);
         profile_pic = (CircleImageView) findViewById(R.id.profile_picture);
-        changeBackgroundColor(add, BUTTONBLUE);
+        if(user.getFriends().contains("user")) {
+            changeBackgroundColor(add, BUTTONBLUE);
+            add.setText("Add friend");
+        }else{
+            changeBackgroundColor(add, BUTTONGREY);
+            add.setText("Remove friend");
+        }
 
-        Picasso.with(this) //Context
-                .load(user.getProfile_url()) //URL/FILE
-                .into(profile_pic);//an ImageView Object to show the loaded image
+        if(user.getProfile_url() != null && !user.getProfile_url().equals("")) {
+            Picasso.with(this) //Context
+                    .load(user.getProfile_url()) //URL/FILE
+                    .into(profile_pic);//an ImageView Object to show the loaded image
+        }
 
     }
 

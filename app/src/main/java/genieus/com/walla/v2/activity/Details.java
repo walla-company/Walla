@@ -106,14 +106,15 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         tabs.setLayoutManager(horizontal);
         groups.setLayoutManager(horizontal2);
 
-        api.getGroup(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                Log.d("groupdata", ((GroupInfo) data).getName());
-                GroupTabRVAdapter groupTabAdapter = new GroupTabRVAdapter(Details.this, new ArrayList<GroupInfo>(Arrays.asList((GroupInfo) data)));
-                groups.setAdapter(groupTabAdapter);
-            }
-        }, event.getHost_group());
+        if(event.getHost_group() != null && event.getHost_group().equals("")) {
+            api.getGroup(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object data, int call) {
+                    GroupTabRVAdapter groupTabAdapter = new GroupTabRVAdapter(Details.this, new ArrayList<GroupInfo>(Arrays.asList((GroupInfo) data)));
+                    groups.setAdapter(groupTabAdapter);
+                }
+            }, event.getHost_group());
+        }
 
         TabRVAdapter tabAdapter = new TabRVAdapter(this, event.getInterests());
         tabs.setAdapter(tabAdapter);
@@ -184,9 +185,11 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 UserInfo user = (UserInfo) data;
                 host_name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
                 host_info.setText(String.format("%s · %s", user.getYear(), user.getMajor()));
-                Picasso.with(Details.this) //Context
-                        .load(user.getProfile_url()) //URL/FILE
-                        .into(host_image);//an ImageView Object to show the loaded image
+                if(user.getProfile_url() != null && !user.getProfile_url().equals("")) {
+                    Picasso.with(Details.this) //Context
+                            .load(user.getProfile_url()) //URL/FILE
+                            .into(host_image);//an ImageView Object to show the loaded image
+                }
             }
         }, event.getHost());
 
@@ -214,7 +217,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         switch(id){
             case R.id.host_container:
                 Intent intent = new Intent(this, ViewProfile.class);
-                intent.putExtra("uid", "user");
+                intent.putExtra("uid", "Goy6Z9tKSNgA8KIGveGQpUqmrQ72");
                 startActivity(intent);
                 break;
             case R.id.get_directions:

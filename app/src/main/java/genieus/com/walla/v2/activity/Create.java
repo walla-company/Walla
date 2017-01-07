@@ -79,7 +79,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             end_time_label, location_label, details_label, host_label, group_label, interest_label,
             friends_label, guests_label, friends_in, guests_in,
             interest_in, title_in;
-    private RelativeLayout map_container, group_in, host_in, lit_container, chill_container;
+    private RelativeLayout map_container, group_in, host_in;
     private Button post;
     private ImageButton chill, lit;
     private RecyclerView groups_rv, host_group_rv;
@@ -134,13 +134,15 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        lit_container = (RelativeLayout) findViewById(R.id.lit_container);
-        chill_container = (RelativeLayout) findViewById(R.id.chill_container);
-        changeBackgroundColor(chill_container, getResources().getColor(R.color.white));
         lit = (ImageButton) findViewById(R.id.fire_btn);
         lit.setOnClickListener(this);
         chill = (ImageButton) findViewById(R.id.chill_btn);
         chill.setOnClickListener(this);
+        try {
+            postObj.put("activity_public", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         start_time = (TextView) findViewById(R.id.start_time_in);
         end_time = (TextView) findViewById(R.id.end_time_in);
         location = (TextView) findViewById(R.id.location_in);
@@ -702,8 +704,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 postActivity();
                 break;
             case R.id.chill_btn:
-                changeBackgroundColor(chill_container, getResources().getColor(R.color.DodgerBlue));
-                changeBackgroundColor(lit_container, getResources().getColor(R.color.white));
+                chill.setImageResource(R.mipmap.chillbtn);
+                lit.setImageResource(R.mipmap.public_pressed);
                 try {
                     postObj.put("activity_public", false);
                 } catch (JSONException e) {
@@ -711,8 +713,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 }
                 break;
             case R.id.fire_btn:
-                changeBackgroundColor(lit_container, getResources().getColor(R.color.DodgerBlue));
-                changeBackgroundColor(chill_container, getResources().getColor(R.color.white));
+                lit.setImageResource(R.mipmap.firebtn);
+                chill.setImageResource(R.mipmap.private_pressed);
                 try {
                     postObj.put("activity_public", true);
                 } catch (JSONException e) {

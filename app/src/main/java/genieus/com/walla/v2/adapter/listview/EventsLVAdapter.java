@@ -96,14 +96,15 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         groupsTabs.setLayoutManager(horizontal2);
         tabs.setLayoutManager(horizontal);
 
-        api.getGroup(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                Log.d("groupdata", ((GroupInfo) data).getName());
-                GroupTabRVAdapter groupTabAdapter = new GroupTabRVAdapter(getContext(), new ArrayList<GroupInfo>(Arrays.asList((GroupInfo) data)));
-                groupsTabs.setAdapter(groupTabAdapter);
-            }
-        }, event.getHost_group());
+        if(event.getHost_group() != null && event.getHost_group().equals("")) {
+            api.getGroup(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object data, int call) {
+                    GroupTabRVAdapter groupTabAdapter = new GroupTabRVAdapter(getContext(), new ArrayList<GroupInfo>(Arrays.asList((GroupInfo) data)));
+                    groupsTabs.setAdapter(groupTabAdapter);
+                }
+            }, event.getHost_group());
+        }
 
         TabRVAdapter tabAdapter = new TabRVAdapter(getContext(), event.getInterests());
         tabs.setAdapter(tabAdapter);

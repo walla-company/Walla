@@ -12,6 +12,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.shaded.fasterxml.jackson.databind.util.JSONPObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,7 @@ import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.InterestInfo;
+import genieus.com.walla.v2.info.NotificationInfo;
 import genieus.com.walla.v2.info.UserInfo;
 
 /**
@@ -44,6 +46,7 @@ public class WallaApi {
     public static final int GET_ACTIVITY = 7;
     public static final int GET_ACTIVITIES = 8;
     public static final int GET_GROUP = 9;
+    public static final int GET_NOTIFICATIONS = 10;
 
 
     public interface OnDataReceived {
@@ -76,6 +79,8 @@ public class WallaApi {
     private static String update_profile_image_url = "/api/update_user_profile_image_url?";
     private static String update_interests = "/api/update_user_interests?";
     private static String get_group = "/api/get_group?";
+    private static String get_notifications = "/api/get_notifications?";
+    private static String approve_friend = "/api/approve_friend?";
 
 
     private static String domain = "duke";
@@ -161,7 +166,14 @@ public class WallaApi {
 
                     info.setInterests(new ArrayList<String>(list));
 
-                    //Toast.makeText(context, info.getInterests().toString(), Toast.LENGTH_LONG).show();
+                    List<String> friends = new ArrayList<>();
+                    if(response.has("friends")){
+                        Iterator<String> keys = response.getJSONObject("friends").keys();
+                        while(keys.hasNext()){
+                            friends.add(keys.next());
+                        }
+                    }
+                    info.setFriends(friends);
 
                     info.setFirst_name(response.getString("first_name"));
                     info.setLast_name(response.getString("last_name"));
@@ -173,7 +185,6 @@ public class WallaApi {
                     info.setDescription(response.getString("description"));
                     info.setEmail(response.getString("email"));
                     info.setVerified(response.getBoolean("verified"));
-
                 } catch (JSONException e) {
                     Log.d("readerror", e.toString());
                     e.printStackTrace();
@@ -457,7 +468,8 @@ public class WallaApi {
                         JSONObject response = array.getJSONObject(i);
                         EventInfo event = new EventInfo();
 
-                        event.setHost_group(response.getString("host_group"));
+                        if(response.has("host_group") && response.getString("host_group").equals(""))
+                            event.setHost_group(response.getString("host_group"));
                         event.setTitle(response.getString("title"));
                         event.setAuid(response.getString("activity_id"));
                         event.setCan_guests_invite(response.getBoolean("can_others_invite"));
@@ -757,6 +769,84 @@ public class WallaApi {
                         }
                     }
                 });
+
+        queue.add(request);
+    }
+
+    public static void getNotifications(final OnDataReceived listener, String uid){
+        final String url = site + get_notifications + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        List<NotificationInfo> list = new ArrayList<>();
+                        Iterator<String> keys = response.keys();
+                        while(keys.hasNext()){
+                            String key = keys.next();
+                            JSONObject notifObj;
+                            try {
+                                notifObj = response.getJSONObject(key);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                return;
+                            }
+                            NotificationInfo notif = new NotificationInfo();
+                            try {
+                                notif.setNuid(notifObj.getString("notification_id"));
+                                notif.setSenderUId(notifObj.getString("sender"));
+                                notif.setType(notifObj.getString("type"));
+                                if(notifObj.has("message")){
+                                    notif.setMessage(notifObj.getString("message"));
+                                }
+
+                                list.add(notif);
+
+                            } catch (JSONException e) {
+                                Log.d("notiferror", e.toString());
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        //Log.d("notifdata", list.toString());
+                        listener.onDataReceived(list, GET_NOTIFICATIONS);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (null != error.networkResponse) {
+                            Log.d("jsonerror", url + error.toString());
+                        }
+                    }
+                });
+
+        queue.add(request);
+    }
+
+    public static void approveFriendRequest(String uid, String friend){
+        final String url = site + approve_friend + "token=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("friend", friend);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
 
         queue.add(request);
     }
