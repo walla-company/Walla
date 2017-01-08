@@ -8,9 +8,11 @@ import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -57,6 +60,7 @@ public class MainContainer extends AppCompatActivity
     private MenuItem filter_icon;
     private Fonts fonts;
     private WallaApi api;
+    private FirebaseAuth auth;
 
     private int[] tabIcons, tabIconsColored;
     private String[] tabNames;
@@ -68,7 +72,10 @@ public class MainContainer extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        startActivity(new Intent(this, LoginScreen.class));
+        auth = FirebaseAuth.getInstance();
+        if(!isLoggedIn()){
+            startActivity(new Intent(this, LoginScreen.class));
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -82,6 +89,10 @@ public class MainContainer extends AppCompatActivity
         initUi();
         initShortcuts();
         //testApi();
+    }
+
+    private boolean isLoggedIn(){
+        return auth.getCurrentUser() != null;
     }
 
     private void testApi() {
@@ -169,7 +180,8 @@ public class MainContainer extends AppCompatActivity
                 user = (UserInfo) data;
                 name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
 
-                if(user.getProfile_url() != null && !user.getProfile_url().equals("")) {
+                if (user.getProfile_url() != null && !user.getProfile_url().equals("")) {
+                    showWelcomeMessage();
                     Picasso.with(MainContainer.this) //Context
                             .load(user.getProfile_url()) //URL/FILE
                             .into(profile_pic);//an ImageView Object to show the loaded image
@@ -197,6 +209,16 @@ public class MainContainer extends AppCompatActivity
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+    }
+
+    private void showWelcomeMessage() {
+        Snackbar snack = Snackbar.make(navigationView, String.format("Welcome %s %s", user.getFirst_name(), user.getLast_name()), Snackbar.LENGTH_LONG);
+        View view = snack.getView();
+        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTypeface(fonts.AzoSansRegular);
+        tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        snack.show();
     }
 
     private void setupFab() {
@@ -404,7 +426,8 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void logout() {
-        //TODO don't forget
+        auth.signOut();
+        startActivity(new Intent(this, LoginScreen.class));
     }
 
     private void contactWalla() {

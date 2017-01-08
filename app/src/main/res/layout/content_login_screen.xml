@@ -72,6 +72,8 @@
                         android:paddingRight="8dp" />
 
                     <EditText
+                        android:id="@+id/password"
+                        android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_below="@id/email"
