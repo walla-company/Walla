@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -23,6 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,6 +93,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private AlertDialog.Builder guestInviteBuilder, confirmCreate;
     private AlertDialog guestInviteAlert;
     private CharSequence[] guestsInviteOptions = {"Yes", "No"};
+    private CharSequence[] createOptions = {"Yes", "No"};
 
     private JSONObject postObj;
     private EditText details_in;
@@ -568,25 +571,46 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         if (isValidActivity()) {
             confirmCreate = new AlertDialog.Builder(this);
             confirmCreate.setTitle("Confirm");
-            try {
-                confirmCreate.setMessage("Are you sure you want to create this event: \n\'" + postObj.getString("title") + "\'?");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            confirmCreate.setCancelable(false)
-                    .setPositiveButton("Post", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            api.postActivity(postObj);
-                            Snackbar.make(map_container, "Activity created successfully", Snackbar.LENGTH_LONG).show();
-                            post.invalidate();
-                        }
-                    })
-                    .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
 
+            confirmCreate.setTitle("Are you sure you want to create this event");
+            confirmCreate.setItems(createOptions, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case 0:
+                            //yes
+                            api.postActivity(postObj);
+                            Snackbar snack = Snackbar.make(map_container, "Activity created successfully", Snackbar.LENGTH_LONG);
+                            View view = snack.getView();
+                            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                            tv.setTypeface(fonts.AzoSansRegular);
+                            tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+                            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                            snack.show();
+
+                            new CountDownTimer(2000, 1000){
+                                @Override
+                                public void onTick(long millisUntilFinished) {}
+
+                                @Override
+                                public void onFinish() {
+                                    onBackPressed();
+                                }
+                            }.start();
+                            dialog.cancel();
+                            break;
+                        case 1:
+                            //no
+                            dialog.cancel();
+                            break;
+                        default:
+                            dialog.cancel();
+                            break;
+                    }
+                }
+            });
+
+            confirmCreate.setCancelable(false);
             confirmCreate.show();
         } else {
             Toast.makeText(this, "Required data is missing", Toast.LENGTH_LONG).show();

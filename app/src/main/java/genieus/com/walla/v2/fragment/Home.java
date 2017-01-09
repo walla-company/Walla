@@ -163,12 +163,12 @@ public class Home extends Fragment {
     private void initFilter() {
         filter_tv.setTypeface(fonts.AzoSansRegular);
         interests = new ArrayList<>();
-        interests.add(new Interests("All", R.mipmap.all));
         interests.add(new Interests("Movies", R.drawable.ic_movieicon));
         interests.add(new Interests("Food", R.drawable.ic_foodicon));
         interests.add(new Interests("Academics", R.drawable.ic_academicsicon));
         interests.add(new Interests("Study", R.drawable.ic_studyicon));
         interests.add(new Interests("Sports", R.drawable.ic_sportsicon));
+        interests.add(new Interests("Rides", R.drawable.ic_ridesicon));
         interests.add(new Interests("Exhibition", R.drawable.ic_exhibitionicon));
         interests.add(new Interests("Music", R.drawable.ic_musicicon));
         interests.add(new Interests("Games", R.drawable.ic_gamesicon));
@@ -305,7 +305,12 @@ public class Home extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         filterEvents(currentFilter);
                     }
-                });
+                }).setNeutralButton("No filter", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                filterEvents("");
+            }
+        });
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.filter_popup, null);
         interest_rv = (RecyclerView) view.findViewById(R.id.interests_rv);
@@ -329,6 +334,12 @@ public class Home extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshPage();
     }
 
     @Override

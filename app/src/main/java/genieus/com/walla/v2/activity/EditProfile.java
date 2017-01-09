@@ -100,21 +100,27 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         year_in = (EditText) findViewById(R.id.year_in);
         year_in.setTypeface(fonts.AzoSansRegular);
         year_in.setText(info.getYear());
+        year_in.setTextColor(fname_label.getTextColors());
         major_in = (EditText) findViewById(R.id.major_in);
         major_in.setTypeface(fonts.AzoSansRegular);
         major_in.setText(info.getMajor());
+        major_in.setTextColor(fname_label.getTextColors());
         hometown_in = (EditText) findViewById(R.id.hometown_in);
         hometown_in.setTypeface(fonts.AzoSansRegular);
         hometown_in.setText(info.getHometown());
+        hometown_in.setTextColor(fname_label.getTextColors());
         description_in = (EditText) findViewById(R.id.description_in);
         description_in.setTypeface(fonts.AzoSansRegular);
         description_in.setText(info.getDescription());
+        description_in.setTextColor(fname_label.getTextColors());
         fname_in = (EditText) findViewById(R.id.fname_in);
         fname_in.setTypeface(fonts.AzoSansRegular);
         fname_in.setText(info.getFirst_name());
+        fname_in.setTextColor(fname_label.getTextColors());
         lname_in = (EditText) findViewById(R.id.lname_in);
         lname_in.setTypeface(fonts.AzoSansRegular);
         lname_in.setText(info.getLast_name());
+        lname_in.setTextColor(fname_label.getTextColors());
         profile_pic = (CircleImageView) findViewById(R.id.profile_image_in);
 
         Log.d("picdata", "url: " + info.getProfile_url());

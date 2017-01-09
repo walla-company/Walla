@@ -19,7 +19,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:src="@color/LightGrey" />
+            android:src="@mipmap/walla_pic" />
 
         <RelativeLayout
             android:id="@+id/info_container"

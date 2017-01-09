@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,6 +72,8 @@ public class MainContainer extends AppCompatActivity
         setContentView(R.layout.activity_main_container);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        setupFab();
 
         auth = FirebaseAuth.getInstance();
         if(!isLoggedIn()){
@@ -192,7 +195,9 @@ public class MainContainer extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);
         name = (TextView) navHeader.findViewById(R.id.name);
+        name.setOnClickListener(this);
         profile_pic = (CircleImageView) navHeader.findViewById(R.id.profile_image);
+        profile_pic.setOnClickListener(this);
         name.setTypeface(fonts.AzoSansRegular);
 
         tabIcons = new int[]{R.mipmap.ic_home, R.mipmap.ic_calendar, R.mipmap.ic_notifications,};
@@ -200,8 +205,6 @@ public class MainContainer extends AppCompatActivity
         tabNames = new String[]{"Activities", "Calendar", "Notifications"};
 
         getSupportActionBar().setTitle(tabNames[0]);
-
-        setupFab();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -219,6 +222,7 @@ public class MainContainer extends AppCompatActivity
         tv.setTextColor(getResources().getColor(R.color.colorPrimary));
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         snack.show();
+
     }
 
     private void setupFab() {
@@ -365,6 +369,12 @@ public class MainContainer extends AppCompatActivity
                 break;
             case R.id.action_filter:
                 Home.showFilter();
+                break;
+            case R.id.name:
+                startActivity(new Intent(this, EditProfile.class));
+                break;
+            case R.id.profile_image:
+                startActivity(new Intent(this, EditProfile.class));
                 break;
             default:
                 break;

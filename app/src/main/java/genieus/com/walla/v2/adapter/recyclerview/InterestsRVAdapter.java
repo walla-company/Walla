@@ -44,8 +44,8 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<FilterViewHolder> {
         void onItemClicked(Interests event, View view, List<FilterViewHolder> all, int pos);
     }
 
-    private String getColor(String category){
-        switch(category){
+    private String getColor(String category) {
+        switch (category) {
             case "All":
                 return "#FFA160";
             case "Art":
@@ -79,7 +79,7 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<FilterViewHolder> {
 
     @Override
     public void onBindViewHolder(final FilterViewHolder holder, final int position) {
-        if(!all.contains(holder)){
+        if (!all.contains(holder)) {
             all.add(holder);
         }
         final Interests i = interests.get(position);
@@ -89,25 +89,16 @@ public class InterestsRVAdapter extends RecyclerView.Adapter<FilterViewHolder> {
         holder.label.setTypeface(fonts.AzoSansRegular);
         holder.label.setTextColor(context.getResources().getColor(R.color.black));
 
-        if(position == 0){
-            Drawable background = holder.container1.getBackground();
-            if (background instanceof ShapeDrawable) {
-                ((ShapeDrawable)background).getPaint().setColor(Color.parseColor(getColor(i.getName())));
-            } else if (background instanceof GradientDrawable) {
-                ((GradientDrawable)background).setColor(Color.parseColor(getColor(i.getName())));
-            } else if (background instanceof ColorDrawable) {
-                ((ColorDrawable)background).setColor(Color.parseColor(getColor(i.getName())));
-            }
-        }else{
-            Drawable background = holder.container1.getBackground();
-            if (background instanceof ShapeDrawable) {
-                ((ShapeDrawable)background).getPaint().setColor(context.getResources().getColor(R.color.LightGrey));
-            } else if (background instanceof GradientDrawable) {
-                ((GradientDrawable)background).setColor(context.getResources().getColor(R.color.LightGrey));
-            } else if (background instanceof ColorDrawable) {
-                ((ColorDrawable)background).setColor(context.getResources().getColor(R.color.LightGrey));
-            }
+
+        Drawable background = holder.container1.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable) background).getPaint().setColor(context.getResources().getColor(R.color.LightGrey));
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(context.getResources().getColor(R.color.LightGrey));
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable) background).setColor(context.getResources().getColor(R.color.LightGrey));
         }
+
 
         holder.container2.setOnClickListener(new View.OnClickListener() {
             @Override

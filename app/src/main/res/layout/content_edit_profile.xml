@@ -5,8 +5,8 @@
     android:id="@+id/content_edit_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#f1f1f1"
+    android:padding="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="genieus.com.walla.v2.activity.EditProfile"
     tools:showIn="@layout/activity_edit_profile">
@@ -15,237 +15,258 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-
-        <RelativeLayout
-            android:id="@+id/profile_picture_container"
+        <android.support.v7.widget.CardView
+            android:id="@+id/profile_pic_cv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true">
+            app:cardCornerRadius="10dp">
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/profile_picture_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
+
+                <RelativeLayout
+                    android:layout_marginBottom="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/profile_picture_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Profile picture"
+                        android:textSize="17sp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_image_in"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_below="@+id/profile_picture_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="4dp"
+                        android:src="@mipmap/walla_pic" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            app:cardCornerRadius="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_pic_cv"
+            android:layout_marginTop="16dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/profile_picture_label"
+
+                <RelativeLayout
+                    android:id="@+id/fname_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <EditText
+                        android:id="@+id/fname_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_below="@+id/fname_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/rounded_corners"
+                        android:paddingLeft="8dp"
+                        android:text="" />
+
+                    <TextView
+                        android:id="@+id/fname_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="First name"
+                        android:textSize="17sp" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/lname_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fname_container"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/lname_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Last name"
+                        android:textSize="17sp" />
+
+
+                    <EditText
+                        android:id="@+id/lname_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_below="@+id/lname_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/rounded_corners"
+                        android:paddingLeft="8dp"
+                        android:text="" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/year_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lname_container"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                    android:id="@+id/year_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="16dp"
                     android:paddingTop="4dp"
-                    android:text="Profile picture"
+                    android:text="Year"
                     android:textSize="17sp" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image_in"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:layout_below="@+id/profile_picture_label"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="4dp"
-                    android:src="@color/LightGrey" />
 
-            </RelativeLayout>
+                    <EditText
+                        android:id="@+id/year_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_below="@+id/year_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/rounded_corners"
+                        android:paddingLeft="8dp"
+                        android:text="" />
 
 
-        </RelativeLayout>
+                </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/fname_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_picture_container"
-            android:layout_marginTop="16dp">
+                <RelativeLayout
+                    android:layout_marginTop="16dp"
+                    android:id="@+id/major_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true">
 
-            <EditText
-                android:id="@+id/fname_in"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_below="@+id/fname_label"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/rounded_corners"
-                android:paddingLeft="8dp"
-                android:text="" />
+                    <TextView
+                        android:id="@+id/major_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Major"
+                        android:textSize="17sp" />
 
-            <TextView
-                android:id="@+id/fname_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:paddingLeft="16dp"
-                android:paddingTop="4dp"
-                android:text="First name"
-                android:textSize="17sp" />
+                    <EditText
+                        android:id="@+id/major_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/major_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/rounded_corners"
+                        android:minHeight="32dp"
+                        android:paddingLeft="8dp"
+                        android:text="" />
 
-        </RelativeLayout>
+                </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/lname_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fname_container"
-            android:layout_marginTop="16dp">
 
-            <EditText
-                android:id="@+id/lname_in"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_below="@+id/lname_label"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/rounded_corners"
-                android:paddingLeft="8dp"
-                android:text="" />
+                <RelativeLayout
+                    android:id="@+id/hometown_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/major_container"
+                    android:layout_marginTop="16dp">
 
-            <TextView
-                android:id="@+id/lname_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:paddingLeft="16dp"
-                android:paddingTop="4dp"
-                android:text="Last name"
-                android:textSize="17sp" />
+                    <TextView
+                    android:id="@+id/hometown_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="4dp"
+                    android:text="Where are you from?"
+                    android:textSize="17sp" />
 
-        </RelativeLayout>
+                    <EditText
+                        android:id="@+id/hometown_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/hometown_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/rounded_corners"
+                        android:minHeight="32dp"
+                        android:paddingLeft="8dp"
+                        android:text="" />
 
-        <RelativeLayout
-            android:id="@+id/year_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lname_container"
-            android:layout_marginTop="16dp">
 
-            <EditText
-                android:id="@+id/year_in"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_below="@+id/year_label"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/rounded_corners"
-                android:paddingLeft="8dp"
-                android:text="" />
 
-            <TextView
-                android:id="@+id/year_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:paddingLeft="16dp"
-                android:paddingTop="4dp"
-                android:text="Year"
-                android:textSize="17sp" />
+                </RelativeLayout>
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_marginBottom="16dp"
+                    android:id="@+id/description_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/hometown_container"
+                    android:layout_marginTop="16dp">
 
-        <RelativeLayout
-            android:id="@+id/major_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/year_container"
-            android:layout_marginTop="16dp">
+                    <TextView
+                        android:id="@+id/description_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Describe yourself in a paragraph"
+                        android:textSize="17sp" />
 
-            <TextView
-                android:id="@+id/major_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-                android:paddingTop="4dp"
-                android:text="Major"
-                android:textSize="17sp" />
+                    <EditText
+                        android:id="@+id/description_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/description_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/rounded_corners"
+                        android:gravity="start"
+                        android:minHeight="124dp"
+                        android:paddingLeft="8dp" />
 
-            <EditText
-                android:id="@+id/major_in"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/major_label"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/rounded_corners"
-                android:minHeight="32dp"
-                android:paddingLeft="8dp"
-                android:text="" />
+                </RelativeLayout>
 
-        </RelativeLayout>
+            </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/hometown_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/major_container"
-            android:layout_marginTop="16dp">
 
-            <EditText
-                android:id="@+id/hometown_in"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/hometown_label"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/rounded_corners"
-                android:minHeight="32dp"
-                android:paddingLeft="8dp"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/hometown_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:paddingLeft="16dp"
-                android:paddingTop="4dp"
-                android:text="Where are you from?"
-                android:textSize="17sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/description_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/hometown_container"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:id="@+id/description_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-                android:paddingTop="4dp"
-                android:text="Describe yourself in a paragraph"
-                android:textSize="17sp" />
-
-            <EditText
-                android:id="@+id/description_in"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/description_label"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/rounded_corners"
-                android:gravity="start"
-                android:minHeight="124dp"
-                android:paddingLeft="8dp" />
-
-        </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
     </RelativeLayout>
 

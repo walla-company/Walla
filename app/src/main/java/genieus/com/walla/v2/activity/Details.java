@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,10 +53,12 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     private GoogleMap mMap;
     private WallaApi api;
 
+    private ImageButton interested_btn, going_btn, share_btn, invite_btn;
+    private ProgressBar progress;
     private RecyclerView tabs, groups;
     private CircleImageView host_image;
     private CardView details_cv;
-    private RelativeLayout host_container;
+    private RelativeLayout host_container, main_container;
     private TextView duration, title, location_label, location, show_on_map, interested, going, invitees_label, invitee_in,
             host_name, details_in, details_label, host_info, get_directions;
 
@@ -71,7 +76,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         initGoogleClient();
-
+        main_container = (RelativeLayout) findViewById(R.id.main_container);
+        main_container.setVisibility(View.GONE);
         api = new WallaApi(this);
 
         Bundle extras = getIntent().getExtras();
@@ -88,6 +94,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
     private void initUi() {
         fonts = new Fonts(this);
+
+        main_container.setVisibility(View.VISIBLE);
 
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -122,7 +130,19 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         host_container = (RelativeLayout) findViewById(R.id.host_container);
         host_container.setOnClickListener(this);
 
+        progress = (ProgressBar) findViewById(R.id.progress);
+        progress.setVisibility(View.GONE);
+
         details_cv = (CardView) findViewById(R.id.details_card);
+
+        interested_btn = (ImageButton) findViewById(R.id.interested_btn);
+        interested_btn.setOnClickListener(this);
+        going_btn = (ImageButton) findViewById(R.id.going_btn);
+        going_btn.setOnClickListener(this);
+        share_btn = (ImageButton) findViewById(R.id.share_btn);
+        share_btn.setOnClickListener(this);
+        invite_btn = (ImageButton) findViewById(R.id.invite_btn);
+        invite_btn.setOnClickListener(this);
 
         duration = (TextView) findViewById(R.id.duration);
         duration.setTypeface(fonts.AzoSansRegular);
@@ -224,6 +244,17 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 String uri = String.format(Locale.ENGLISH, "geo:%f,%f", event.getLocation_lat(), event.getLocation_long());
                 Intent directions = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 startActivity(directions);
+                break;
+            case R.id.interested_btn:
+                break;
+            case R.id.going_btn:
+                break;
+            case R.id.invite_btn:
+                break;
+            case R.id.share_btn:
+                break;
+            default:
+                break;
         }
     }
 

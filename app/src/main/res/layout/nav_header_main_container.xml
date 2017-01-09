@@ -13,7 +13,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:src="@color/LightGrey"
+        android:src="@mipmap/walla_pic"
         android:layout_width="80dp"
         android:layout_height="80dp" />
 

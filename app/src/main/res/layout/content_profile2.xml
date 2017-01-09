@@ -63,7 +63,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:src="@color/LightGrey" />
+                        android:src="@mipmap/walla_pic" />
 
 
                 </RelativeLayout>
