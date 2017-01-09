@@ -47,6 +47,7 @@ public class WallaApi {
     public static final int GET_ACTIVITIES = 8;
     public static final int GET_GROUP = 9;
     public static final int GET_NOTIFICATIONS = 10;
+    public static final int GET_USER = 101;
 
 
     public interface OnDataReceived {
@@ -81,6 +82,7 @@ public class WallaApi {
     private static String get_group = "/api/get_group?";
     private static String get_notifications = "/api/get_notifications?";
     private static String approve_friend = "/api/approve_friend?";
+    private static String add_user = "/api/add_user?";
 
 
     private static String domain = "duke";
@@ -845,6 +847,30 @@ public class WallaApi {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void addUser(final OnDataReceived listener, JSONObject params){
+        final String url = site + approve_friend + "token=" + token;
+
+        try {
+            params.put("school_identifier", domain);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
             }
         });
 

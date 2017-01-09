@@ -164,7 +164,7 @@ public class MainContainer extends AppCompatActivity
         ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "compose")
                 .setShortLabel("Compose")
                 .setLongLabel("Create event")
-                .setIcon(Icon.createWithResource(this, R.drawable.ic_create))
+                .setIcon(Icon.createWithResource(this, R.mipmap.circle_add))
                 .setIntent(shortcutIntent)
                 .build();
 
