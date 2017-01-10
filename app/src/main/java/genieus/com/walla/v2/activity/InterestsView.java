@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
     private double width;
     private WallaApi api;
     private UserInfo user;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
         interests_rv = (RecyclerView) findViewById(R.id.interests_rv);
         selected = new ArrayList<>();
         data = new ArrayList<>();
+        auth = FirebaseAuth.getInstance();
 
        if(!startedForResult()){
             api.getUserInfo(new WallaApi.OnDataReceived() {
@@ -70,7 +74,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
                     }
                     initUi();
                 }
-            }, "user");
+            }, auth.getCurrentUser().getUid());
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -229,7 +233,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
         super.onStop();
         if(!startedForResult()) {
             JSONArray array = new JSONArray(selected);
-            api.saveUserInterests("user", array);
+            api.saveUserInterests(auth.getCurrentUser().getUid(), array);
         }
     }
 }

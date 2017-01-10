@@ -53,6 +53,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -94,6 +95,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private AlertDialog guestInviteAlert;
     private CharSequence[] guestsInviteOptions = {"Yes", "No"};
     private CharSequence[] createOptions = {"Yes", "No"};
+    private FirebaseAuth auth;
 
     private JSONObject postObj;
     private EditText details_in;
@@ -128,6 +130,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     }
 
     private void initUi() {
+        auth = FirebaseAuth.getInstance();
         api = new WallaApi(this);
         fonts = new Fonts(this);
         postObj = new JSONObject();
@@ -563,7 +566,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         try {
             postObj.put("title", title_in.getText().toString());
             postObj.put("details", details_in.getText().toString());
-            postObj.put("host", "user69");
+            postObj.put("host", auth.getCurrentUser().getUid());
         } catch (JSONException e) {
             e.printStackTrace();
         }

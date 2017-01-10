@@ -10,24 +10,48 @@ import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
+import genieus.com.walla.v2.api.WallaApi;
+import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.info.Utility;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener {
+public class SignUp extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener, OnCompleteListener<AuthResult>, OnFailureListener {
 
     private static final int CAMERA_INTENT_RESULT = 1;
     private static final int GALLERY_INTENT_RESULT = 2;
@@ -37,8 +61,17 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
     private TextView email_label, major_label, grad_label, pass_label, confirm_label, year_label;
     private Button signup;
 
+    private WallaApi api;
+    private JSONObject data;
+    private Bitmap pic;
+    private FirebaseAuth auth;
+    private DatabaseReference database;
     private Fonts fonts;
     private String[] sourceOptions = {"Take Photo", "Choose from Library", "Cancel"};
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    private String school;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +82,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
     }
 
     private void initUi() {
+        api = new WallaApi(this);
+        data = new JSONObject();
         fonts = new Fonts(this);
+        auth = FirebaseAuth.getInstance();
+        pic = null;
 
         image = (CircleImageView) findViewById(R.id.profile_picture);
+        image.setOnClickListener(this);
 
         email_label = (TextView) findViewById(R.id.email_label);
         email_label.setTypeface(fonts.AzoSansRegular);
@@ -96,39 +134,111 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         changeBackGroundColor(signup, getResources().getColor(R.color.lightblue));
     }
 
-    private void attemptSignup() {
+    private void attemptSignup(){
+        try {
+            if(!isInformationValid()) {
+                Toast.makeText(this, "invalid input", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            final String emailStr = email.getText().toString().trim().toLowerCase();
+            final String emailDomain = getDomailFromEmail(emailStr);
+
+            api.getAllowedDomains(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object data, int call) {
+                    List<DomainInfo> domains = (List<DomainInfo>) data;
+                    String domain = getDomailFromEmail(emailDomain);
+                    Log.d("domains", domain.toString());
+                    if(isDomainAllowed(domains, domain)){
+                        signUpUser();
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("domainerror", e.toString());
+        }
+
+
+    }
+
+    private void signUpUser() {
+        String emailStr = email.getText().toString().toLowerCase().trim();
+        String passStr = pass.getText().toString();
+
+        auth.createUserWithEmailAndPassword(emailStr, passStr)
+                .addOnCompleteListener(this)
+                .addOnFailureListener(this);
+    }
+
+    private boolean isDomainAllowed(List<DomainInfo> domains, String search){
+        boolean found = false;
+        for(DomainInfo domain : domains){
+            if(search.equalsIgnoreCase(domain.getDomain())) {
+                Log.d("userdata", search + " " + domain.getDomain());
+                found = true;
+                school = domain.getName();
+                break;
+            }
+        }
+
+        return found;
+    }
+
+    private String getDomailFromEmail(String emailStr) {
+        String[] splitEmail = emailStr.split("(\\.|@)");
+
+        String domain = "";
+        if(splitEmail.length >= 2){
+            int len = splitEmail.length;
+            domain = String.format("%s.%s", splitEmail[len - 2], splitEmail[len - 1]);
+        }
+
+        return domain;
+    }
+
+    private boolean isInformationValid() throws JSONException {
         boolean valid = true;
 
         String fnameStr = fname.getText().toString().trim();
+        data.put("first_name", fnameStr);
         if (fnameStr.isEmpty()) {
             fname.setError("required");
             valid = false;
         }
 
         String lnameStr = lname.getText().toString().trim();
+        data.put("last_name", lnameStr);
         if (lnameStr.isEmpty()) {
             lname.setError("required");
             valid = false;
         }
 
         String emailStr = email.getText().toString().trim();
+        data.put("email", emailStr);
         if (emailStr.isEmpty()) {
             email.setError("required");
             valid = false;
+        } else if (!isValidEmail(emailStr)) {
+            email.setError("enter a valid email");
         }
 
         String yearStr = year.getText().toString().trim();
+        data.put("academic_level", yearStr);
         if (yearStr.isEmpty()) {
             year.setError("required");
         }
 
         String majorStr = major.getText().toString().trim();
+        data.put("major", majorStr);
         if (majorStr.isEmpty()) {
             major.setError("required");
             valid = false;
         }
 
         String gradStr = grad.getText().toString().trim();
+        data.put("graduation_year", gradStr);
         if (gradStr.isEmpty()) {
             grad.setError("required");
             valid = false;
@@ -146,9 +256,24 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
             valid = false;
         }
 
-        if(valid){
-            
+        if (!passStr.equals(confirmStr)) {
+            valid = false;
+            confirm.setError("passwords don't match");
+            pass.setError("passwords don't match");
         }
+
+        if (valid) {
+            data.put("hometown", "");
+            data.put("description", "");
+        }
+
+        return valid;
+    }
+
+    private boolean isValidEmail(String email) {
+        if (email == null || email.isEmpty()) return false;
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
+        return matcher.find();
     }
 
     private void chooseProfilePicture() {
@@ -178,6 +303,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
 
     private void setProfilePic(Bitmap bmp) {
         image.setImageBitmap(bmp);
+        pic = bmp;
     }
 
 
@@ -252,5 +378,37 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onComplete(@NonNull Task<AuthResult> task) {
+        String uid = task.getResult().getUser().getUid();
+
+        if(pic != null)
+            Utility.saveProfilePic(pic, uid);
+
+        try {
+            data.put("uid", uid);
+            data.put("profile_image_url", "");
+            data.put("school_identifier", school);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("userdata", data.toString());
+        api.addUser(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+
+            }
+        }, data);
+
+        Toast.makeText(this, "Account created", Toast.LENGTH_LONG).show();
+        startActivity(new Intent(this, LoginScreen.class));
+    }
+
+    @Override
+    public void onFailure(@NonNull Exception e) {
+
     }
 }

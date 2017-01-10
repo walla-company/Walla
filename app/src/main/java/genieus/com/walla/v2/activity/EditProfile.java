@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,6 +48,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
 
     private UserInfo info;
+    private FirebaseAuth auth;
     private WallaApi api;
     private Fonts fonts;
     private CircleImageView profile_pic;
@@ -67,7 +69,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        String uid = "user";
+        auth = FirebaseAuth.getInstance();
+
+        String uid = auth.getCurrentUser().getUid();
 
         api = new WallaApi(this);
         api.getUserInfo(new WallaApi.OnDataReceived() {

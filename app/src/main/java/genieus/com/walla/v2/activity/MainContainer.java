@@ -45,6 +45,7 @@ import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.Utility;
 
 public class MainContainer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, View.OnClickListener {
@@ -78,6 +79,7 @@ public class MainContainer extends AppCompatActivity
         auth = FirebaseAuth.getInstance();
         if(!isLoggedIn()){
             startActivity(new Intent(this, LoginScreen.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -190,7 +192,7 @@ public class MainContainer extends AppCompatActivity
                             .into(profile_pic);//an ImageView Object to show the loaded image
                 }
             }
-        }, uid);
+        }, auth.getCurrentUser().getUid());
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);

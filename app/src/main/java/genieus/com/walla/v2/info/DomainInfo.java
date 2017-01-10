@@ -41,4 +41,5 @@ public class DomainInfo {
     public String toString(){
         return String.format("%s(%s)", name, fullname);
     }
+
 }

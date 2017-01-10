@@ -12,6 +12,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
 import com.shaded.fasterxml.jackson.databind.util.JSONPObject;
 
 import org.json.JSONArray;
@@ -47,7 +48,7 @@ public class WallaApi {
     public static final int GET_ACTIVITIES = 8;
     public static final int GET_GROUP = 9;
     public static final int GET_NOTIFICATIONS = 10;
-    public static final int GET_USER = 101;
+    public static final int ADD_USER = 11;
 
 
     public interface OnDataReceived {
@@ -85,13 +86,36 @@ public class WallaApi {
     private static String add_user = "/api/add_user?";
 
 
-    private static String domain = "duke";
+    public static String domain = "";
     private static RequestQueue queue;
 
 
     public WallaApi(Context context) {
         queue = Volley.newRequestQueue(context);
         this.context = context;
+        if(domain == null || domain.isEmpty()){
+           if(FirebaseAuth.getInstance().getCurrentUser() != null){
+               String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+               String domainExt = getDomailFromEmail(email);
+               int dot = domainExt.indexOf('.');
+               if(dot >= 0)
+                   domain = domainExt.substring(0, dot);
+               else
+                   domain = "";
+           }
+        }
+    }
+
+    private String getDomailFromEmail(String emailStr) {
+        String[] splitEmail = emailStr.split("(\\.|@)");
+
+        String domain = "";
+        if(splitEmail.length >= 2){
+            int len = splitEmail.length;
+            domain = String.format("%s.%s", splitEmail[len - 2], splitEmail[len - 1]);
+        }
+
+        return domain;
     }
 
     public static void getMinVersion(final OnDataReceived listener) {
@@ -854,23 +878,18 @@ public class WallaApi {
     }
 
     public static void addUser(final OnDataReceived listener, JSONObject params){
-        final String url = site + approve_friend + "token=" + token;
-
-        try {
-            params.put("school_identifier", domain);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        final String url = site + add_user + "token=" + token;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                Log.d("userdata", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                error.printStackTrace();
+                Log.d("jsonerror", error.toString());
             }
         });
 
