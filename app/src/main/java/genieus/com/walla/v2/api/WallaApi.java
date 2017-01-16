@@ -85,6 +85,8 @@ public class WallaApi {
     private static String approve_friend = "/api/approve_friend?";
     private static String add_user = "/api/add_user?";
     private static String request_friend = "/api/request_friend?";
+    private static String going = "/api/going?";
+    private static String interested = "/api/interested?";
 
 
     public static String domain = "";
@@ -967,6 +969,61 @@ public class WallaApi {
 
         queue.add(request);
 
+    }
+
+    public static void going(String uid, String auid){
+        final String url = site + going + "token=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("auid", auid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+
+    }
+
+    public static void interested(String uid, String auid){
+        final String url = site + interested + "token=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("auid", auid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
     }
 
 

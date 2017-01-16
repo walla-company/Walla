@@ -67,6 +67,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     private EventInfo event;
     private RelativeLayout map_container;
 
+    private boolean isGoing, isInterested;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -215,6 +217,16 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         details_label = (TextView) findViewById(R.id.details_label);
         details_label.setTypeface(fonts.AzoSansRegular);
 
+        if(event.getInterested_list().contains(auth.getCurrentUser().getUid())){
+            interested_btn.setImageResource(R.mipmap.interestedbuttonpressed);
+            isInterested = true;
+            isGoing = false;
+        }else if(event.getGoing_list().contains(auth.getCurrentUser().getUid())){
+            going_btn.setImageResource(R.mipmap.goingbuttonpressed);
+            isInterested = false;
+            isGoing = true;
+        }
+
         host_image = (CircleImageView) findViewById(R.id.host_image);
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
@@ -282,6 +294,52 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         }
     }
 
+    private void interested(){
+        if(isInterested){
+            Toast.makeText(this, "You are already interested in this event", Toast.LENGTH_LONG).show();
+        }else{
+            event.getGoing_list().remove(auth.getCurrentUser().getUid());
+            event.getInterested_list().add(auth.getCurrentUser().getUid());
+
+            api.interested(auth.getCurrentUser().getUid(), event.getAuid());
+
+            interested_btn.setImageResource(R.mipmap.interestedbuttonpressed);
+            going_btn.setImageResource(R.mipmap.goingbtn);
+
+            going_in.setText(getGoingString());
+            interested_in.setText(getInterestedString());
+
+            going_count.setText("" + event.getGoing_list().size());
+            interested_count.setText("" + event.getInterested_list().size());
+
+            isInterested = true;
+            isGoing = false;
+        }
+    }
+
+    private void going(){
+        if(isGoing){
+            Toast.makeText(this, "You are already going to this event", Toast.LENGTH_LONG).show();
+        }else{
+            event.getGoing_list().add(auth.getCurrentUser().getUid());
+            event.getInterested_list().remove(auth.getCurrentUser().getUid());
+
+            api.going(auth.getCurrentUser().getUid(), event.getAuid());
+
+            going_btn.setImageResource(R.mipmap.goingbuttonpressed);
+            interested_btn.setImageResource(R.mipmap.interestedbtn);
+
+            going_in.setText(getGoingString());
+            interested_in.setText(getInterestedString());
+
+            going_count.setText("" + event.getGoing_list().size());
+            interested_count.setText("" + event.getInterested_list().size());
+
+            isInterested = false;
+            isGoing = true;
+        }
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -295,8 +353,10 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 startActivity(directions);
                 break;
             case R.id.interested_btn:
+                interested();
                 break;
             case R.id.going_btn:
+                going();
                 break;
             case R.id.invite_btn:
                 break;
