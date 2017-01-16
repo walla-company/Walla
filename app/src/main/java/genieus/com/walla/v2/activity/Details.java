@@ -29,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -52,6 +53,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     private GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
     private WallaApi api;
+    private FirebaseAuth auth;
 
     private ImageButton interested_btn, going_btn, share_btn, invite_btn;
     private ProgressBar progress;
@@ -60,7 +62,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     private CardView details_cv;
     private RelativeLayout host_container, main_container;
     private TextView duration, title, location_label, location, show_on_map, interested, going, invitees_label, invitee_in,
-            host_name, details_in, details_label, host_info, get_directions;
+            host_name, details_in, details_label, host_info, get_directions, interested_count, going_count, interested_in, going_in;
 
     private EventInfo event;
     private RelativeLayout map_container;
@@ -79,6 +81,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         main_container = (RelativeLayout) findViewById(R.id.main_container);
         main_container.setVisibility(View.GONE);
         api = new WallaApi(this);
+        auth = FirebaseAuth.getInstance();
 
         Bundle extras = getIntent().getExtras();
         String auid = extras.getString("auid");
@@ -192,6 +195,20 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         get_directions.setTypeface(fonts.AzoSansRegular);
         get_directions.setOnClickListener(this);
 
+        interested_count = (TextView) findViewById(R.id.interested_count);
+        interested_count.setTypeface(fonts.AzoSansRegular);
+        interested_count.setText("" + event.getInterested_list().size());
+        going_count = (TextView) findViewById(R.id.going_count);
+        going_count.setTypeface(fonts.AzoSansRegular);
+        going_count.setText("" + event.getGoing_list().size());
+        interested_in = (TextView) findViewById(R.id.interested_in);
+        interested_in.setTypeface(fonts.AzoSansRegular);
+        interested_in.setText(getInterestedString());
+        going_in = (TextView) findViewById(R.id.going_in);
+        going_in.setTypeface(fonts.AzoSansRegular);
+        going_in.setText(getGoingString());
+
+
         if(event.getDetails() == null || event.getDetails().equals(""))
             details_cv.setVisibility(View.GONE);
 
@@ -215,6 +232,29 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
     }
 
+    private String getInterestedString(){
+        int people = event.getInterested_list().size();
+        switch (people){
+            case 0:
+                return "Are you interested?";
+            default:
+                return people + ((people >= 2) ? " people are " : " person is ") + " interested";
+
+        }
+
+    }
+
+    private String getGoingString(){
+        int people = event.getGoing_list().size();
+        switch (people){
+            case 0:
+                return "Be the first to RSVP";
+            default:
+                return people + ((people >= 2) ? " people are " : " person is ") + " going";
+
+        }
+    }
+
     private void initGoogleClient() {
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -231,14 +271,23 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         mMap.animateCamera(cameraUpdate);
     }
 
+    private void hostAction(){
+        if(event.getHost().equals(auth.getCurrentUser().getUid())){
+            Intent intent = new Intent(this, EditProfile.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(this, ViewProfile.class);
+            intent.putExtra("uid", event.getHost());
+            startActivity(intent);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch(id){
             case R.id.host_container:
-                Intent intent = new Intent(this, ViewProfile.class);
-                intent.putExtra("uid", "Goy6Z9tKSNgA8KIGveGQpUqmrQ72");
-                startActivity(intent);
+                hostAction();
                 break;
             case R.id.get_directions:
                 String uri = String.format(Locale.ENGLISH, "geo:%f,%f", event.getLocation_lat(), event.getLocation_long());

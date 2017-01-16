@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class Notifications extends Fragment {
     private NotificationInfoLVAdapter infoAdapter;
     private List<NotificationInfo> list;
     private WallaApi api;
+    private FirebaseAuth auth;
 
 
     // TODO: Rename and change types of parameters
@@ -83,6 +86,7 @@ public class Notifications extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         info_lv = (ListView) view.findViewById(R.id.info_lv);
         api = new WallaApi(getContext());
+        auth = FirebaseAuth.getInstance();
 
         api.getNotifications(new WallaApi.OnDataReceived() {
             @Override
@@ -90,7 +94,7 @@ public class Notifications extends Fragment {
                 list = (List<NotificationInfo>) data;
                 initUi();
             }
-        }, "user2");
+        }, auth.getCurrentUser().getUid());
 
         return view;
     }

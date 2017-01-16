@@ -84,6 +84,7 @@ public class WallaApi {
     private static String get_notifications = "/api/get_notifications?";
     private static String approve_friend = "/api/approve_friend?";
     private static String add_user = "/api/add_user?";
+    private static String request_friend = "/api/request_friend?";
 
 
     public static String domain = "";
@@ -446,6 +447,29 @@ public class WallaApi {
                 EventInfo event = new EventInfo();
 
                 try {
+                    List<String> going, interested;
+                    going = new ArrayList<>();
+                    interested = new ArrayList<>();
+
+                    if(response.has("replies")){
+                        JSONObject replies = response.getJSONObject("replies");
+                        Iterator<String> keys = replies.keys();
+
+                        String type, key;
+                        while(keys.hasNext()){
+                            key = keys.next();
+                            type = replies.getString(key);
+
+                            if(type.equals("going"))
+                                going.add(key);
+                            else
+                                interested.add(key);
+                        }
+                    }
+
+                    event.setGoing_list(going);
+                    event.setInterested_list(interested);
+
                     event.setHost_group(response.getString("host_group"));
                     event.setTitle(response.getString("title"));
                     event.setAuid(response.getString("activity_id"));
@@ -485,14 +509,35 @@ public class WallaApi {
             @Override
             public void onResponse(JSONArray array) {
 
-                Log.d("apiinfo", array.toString());
-
                 List<EventInfo> events = new ArrayList<>();
 
                 for (int i = 0; i < array.length(); i++) {
                     try {
                         JSONObject response = array.getJSONObject(i);
                         EventInfo event = new EventInfo();
+
+                        List<String> going, interested;
+                        going = new ArrayList<>();
+                        interested = new ArrayList<>();
+
+                        if(response.has("replies")){
+                            JSONObject replies = response.getJSONObject("replies");
+                            Iterator<String> keys = replies.keys();
+
+                            String type, key;
+                            while(keys.hasNext()){
+                                key = keys.next();
+                                type = replies.getString(key);
+
+                                if(type.equals("going"))
+                                    going.add(key);
+                                else
+                                    interested.add(key);
+                            }
+                        }
+
+                        event.setGoing_list(going);
+                        event.setInterested_list(interested);
 
                         if(response.has("host_group") && response.getString("host_group").equals(""))
                             event.setHost_group(response.getString("host_group"));
@@ -894,6 +939,34 @@ public class WallaApi {
         });
 
         queue.add(request);
+    }
+
+    public static void requestFriend(String uid, String fuid){
+        final String url = site + request_friend + "token=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("friend", fuid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+
     }
 
 

@@ -141,7 +141,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
                 }
             } else {
                 if (selected.size() >= MAX_INTERESTS)
-                    Toast.makeText(this, "You can only selected a maximum of " + MAX_INTERESTS + " interests", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "You can only select a maximum of " + MAX_INTERESTS + " interests", Toast.LENGTH_LONG).show();
                 else {
                     selected.add(name);
                     data.get(pos).setSelected(chosen);

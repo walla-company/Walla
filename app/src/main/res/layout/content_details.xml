@@ -19,18 +19,18 @@
 
         <ProgressBar
             android:id="@+id/progress"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
     </FrameLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentStart="true">
 
 
         <RelativeLayout
@@ -153,97 +153,12 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                app:cardCornerRadius="10dp"
-                android:id="@+id/location_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title_card"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/rounded">
-
-                <RelativeLayout
-                    android:id="@+id/location_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp">
-
-                    <TextView
-                        android:id="@+id/show_on_map_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@id/location_label"
-                        android:layout_alignParentRight="true"
-                        android:paddingRight="8dp"
-                        android:text="show on map"
-                        android:textSize="13sp"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/location_in"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/location_label"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center_vertical"
-                        android:paddingBottom="8dp"
-                        android:text="Love Auditorium"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/location_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="4dp"
-                        android:text="Location"
-                        android:textSize="17sp" />
-
-                    <RelativeLayout
-                        android:background="@drawable/rounded"
-                        android:id="@+id/map_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_below="@id/location_in"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:visibility="visible">
-
-                        <fragment
-                            android:id="@+id/map"
-                            class="com.google.android.gms.maps.SupportMapFragment"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/get_directions"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/map_container"
-                        android:drawableLeft="@drawable/ic_location"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="4dp"
-                        android:text="Get directions"
-                        android:textSize="16sp"
-                        android:visibility="visible" />
-
-                </RelativeLayout>
-
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                app:cardCornerRadius="10dp"
                 android:id="@+id/interactions_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/location_card"
-                android:layout_marginTop="16dp">
+                android:layout_below="@id/title_card"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="10dp">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -289,10 +204,10 @@
                         android:id="@+id/interactions_subcontainer1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true">
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:paddingTop="8dp">
 
                         <TextView
                             android:id="@+id/going_label"
@@ -309,12 +224,14 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_below="@id/going_label">
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="120dp"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginTop="24dp"
                                 android:orientation="vertical">
 
                                 <LinearLayout
@@ -336,10 +253,11 @@
                                             android:src="@mipmap/star" />
 
                                         <TextView
-                                            android:id="@+id/interested_tv"
+                                            android:id="@+id/interested_count"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_centerVertical="true"
+                                            android:layout_marginLeft="3dp"
                                             android:layout_toRightOf="@id/interested_icon"
                                             android:text="7"
                                             android:textSize="17sp" />
@@ -384,10 +302,11 @@
                                             android:src="@mipmap/check" />
 
                                         <TextView
-                                            android:id="@+id/going_tv"
+                                            android:id="@+id/going_count"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_centerVertical="true"
+                                            android:layout_marginLeft="3dp"
                                             android:layout_toRightOf="@id/going_icon"
                                             android:text="5"
                                             android:textSize="17sp" />
@@ -420,10 +339,10 @@
                     </RelativeLayout>
 
                     <LinearLayout
-                        android:layout_below="@id/interactions_subcontainer1"
                         android:id="@+id/actions"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
+                        android:layout_below="@id/interactions_subcontainer1"
                         android:orientation="horizontal"
                         android:padding="0dp">
 
@@ -466,13 +385,100 @@
 
             </android.support.v7.widget.CardView>
 
+
             <android.support.v7.widget.CardView
-                app:cardCornerRadius="10dp"
+                android:id="@+id/location_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/interactions_details"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded"
+                app:cardCornerRadius="10dp">
+
+                <RelativeLayout
+                    android:id="@+id/location_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
+
+                    <TextView
+                        android:id="@+id/show_on_map_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@id/location_label"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="8dp"
+                        android:text="show on map"
+                        android:textSize="13sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/location_in"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/location_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="8dp"
+                        android:text="Love Auditorium"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/location_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Location"
+                        android:textSize="17sp" />
+
+                    <RelativeLayout
+                        android:id="@+id/map_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_below="@id/location_in"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:background="@drawable/rounded"
+                        android:visibility="visible">
+
+                        <fragment
+                            android:id="@+id/map"
+                            class="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/get_directions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/map_container"
+                        android:drawableLeft="@drawable/ic_location"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Get directions"
+                        android:textSize="16sp"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
                 android:id="@+id/host_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/interactions_details"
-                android:layout_marginTop="16dp">
+                android:layout_below="@id/location_card"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="10dp">
 
                 <RelativeLayout
                     android:id="@+id/host_container"
@@ -533,12 +539,12 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                app:cardCornerRadius="10dp"
                 android:id="@+id/details_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/host_card"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="10dp">
 
                 <RelativeLayout
                     android:id="@+id/details_container"
@@ -573,13 +579,13 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="10dp"
                 android:id="@+id/discussion_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/details_card"
-                android:layout_marginTop="16dp">
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="10dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

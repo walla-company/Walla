@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
     private boolean doneIconVisible;
     private UserInfo user;
     private WallaApi api;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +42,10 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        auth = FirebaseAuth.getInstance();
+
         api = new WallaApi(this);
-        String uid = "user";
+        String uid = auth.getCurrentUser().getUid();
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {

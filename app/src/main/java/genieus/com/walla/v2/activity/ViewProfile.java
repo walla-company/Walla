@@ -1,13 +1,18 @@
 package genieus.com.walla.v2.activity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,7 +36,7 @@ import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.UserInfo;
 
-public class ViewProfile extends AppCompatActivity {
+public class ViewProfile extends AppCompatActivity implements View.OnClickListener {
     private String BUTTONBLUE = "#63CAF9";
     private String BUTTONGREY = "#D8D8D8";
 
@@ -44,6 +50,10 @@ public class ViewProfile extends AppCompatActivity {
     private Fonts fonts;
     private WallaApi api;
     private UserInfo user;
+    private FirebaseAuth auth;
+    private AlertDialog.Builder confirm;
+    private String[] options = {"Yes", "No"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +66,7 @@ public class ViewProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         api = new WallaApi(this);
+        auth = FirebaseAuth.getInstance();
         progress = (ProgressBar) findViewById(R.id.progress_bar);
         container = (RelativeLayout) findViewById(R.id.data_container);
         container.setVisibility(View.GONE);
@@ -77,6 +88,7 @@ public class ViewProfile extends AppCompatActivity {
             Toast.makeText(this, "Error retrieving user", Toast.LENGTH_LONG).show();
             finish();
         }
+
     }
 
     private void initUi() {
@@ -110,13 +122,13 @@ public class ViewProfile extends AppCompatActivity {
         details_label.setTypeface(fonts.AzoSansMedium);
         add = (Button) findViewById(R.id.add_btn);
         add.setTypeface(fonts.AzoSansBold);
+        add.setOnClickListener(this);
         profile_pic = (CircleImageView) findViewById(R.id.profile_picture);
-        if(user.getFriends().contains("user")) {
+        if(user.getFriends().contains(auth.getCurrentUser().getUid())) {
+            add.setVisibility(View.GONE);
+        }else{
             changeBackgroundColor(add, BUTTONBLUE);
             add.setText("Add friend");
-        }else{
-            changeBackgroundColor(add, BUTTONGREY);
-            add.setText("Remove friend");
         }
 
         if(user.getProfile_url() != null && !user.getProfile_url().equals("")) {
@@ -124,6 +136,32 @@ public class ViewProfile extends AppCompatActivity {
                     .load(user.getProfile_url()) //URL/FILE
                     .into(profile_pic);//an ImageView Object to show the loaded image
         }
+
+        confirm = new AlertDialog.Builder(this);
+        confirm.setTitle("Confirm");
+
+        confirm.setTitle("Are you sure you want to friend " + user.getFirst_name());
+        confirm.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:
+                        //yes
+                        addFriend();
+                        dialog.cancel();
+                        break;
+                    case 1:
+                        //no
+                        dialog.cancel();
+                        break;
+                    default:
+                        dialog.cancel();
+                        break;
+                }
+            }
+        });
+
+        confirm.setCancelable(false);
 
     }
 
@@ -138,6 +176,13 @@ public class ViewProfile extends AppCompatActivity {
         }
     }
 
+    private void addFriend(){
+        api.requestFriend(auth.getCurrentUser().getUid(), user.getUid());
+        add.setEnabled(false);
+        changeBackgroundColor(add, BUTTONGREY);
+        add.setText("Friend request sent");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
@@ -148,4 +193,15 @@ public class ViewProfile extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.add_btn:
+                confirm.show();
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -17,11 +17,19 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 
+import genieus.com.walla.v2.api.WallaApi;
+
 /**
  * Created by anesu on 12/24/16.
  */
 
 public class Utility {
+    private static WallaApi api;
+
+    public static void initApi(Context context){
+        api = new WallaApi(context);
+    }
+
     public static int calculateNoOfColumns(View view, double cellWidth, double padding) {
         double width = pxToDp(view.getMeasuredWidth());
         Log.d("Span", "" + width);
@@ -51,7 +59,7 @@ public class Utility {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
-    public static void saveProfilePic(Bitmap picture, String uid){
+    public static void saveProfilePic(Bitmap picture, final String uid){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://walla-launch.appspot.com");
 
@@ -69,6 +77,8 @@ public class Utility {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                //better make sure you have called the initApi method before calling this
+                api.saveUserProfileImageUrl(uid, downloadUrl.toString());
             }
         });
     }

@@ -30,64 +30,125 @@
                 android:id="@+id/title_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="16dp">
+                android:padding="8dp">
 
 
                 <RelativeLayout
-                    android:id="@+id/profile_picture_container"
-                    android:layout_width="85dp"
-                    android:layout_height="110dp"
+                    android:id="@+id/profile_pic_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true">
 
+                    <TextView
+                        android:id="@+id/pic_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:text="Profile picture"
+                        android:textSize="17sp" />
+
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profile_picture"
-                        android:layout_width="85dp"
-                        android:layout_height="85dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:src="@color/LightGrey" />
+                        android:src="@color/LightGrey"
+                        android:layout_below="@id/pic_label"
+                        android:id="@+id/profile_image"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="4dp"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="10dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <RelativeLayout
+                    android:id="@+id/fname_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/fname_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/title_in"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="First name"
+                        android:textSize="17sp" />
+
+                    <EditText
+                        android:id="@+id/fname_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/fname_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/rounded_corners"
+                        android:minHeight="32dp"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="4dp"
+                        android:textSize="16sp" />
 
 
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_toRightOf="@id/profile_picture_container">
+                    android:id="@+id/lname_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fname_container"
+                    android:layout_marginTop="8dp">
 
-                    <RelativeLayout
+                    <TextView
+                        android:id="@+id/lname_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true">
+                        android:labelFor="@id/title_in"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Last name"
+                        android:textSize="17sp" />
 
-
-                        <EditText
-                            android:id="@+id/fname_in"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@drawable/rounded_corners"
-                            android:hint="First name"
-                            android:paddingLeft="8dp"
-                            android:textSize="17sp" />
-
-                        <EditText
-                            android:id="@+id/lname_in"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_below="@id/fname_in"
-                            android:layout_marginTop="5dp"
-                            android:background="@drawable/rounded_corners"
-                            android:hint="First name"
-                            android:paddingLeft="8dp"
-                            android:textSize="17sp" />
-
-
-                    </RelativeLayout>
+                    <EditText
+                        android:id="@+id/lname_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lname_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/rounded_corners"
+                        android:minHeight="32dp"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="4dp"
+                        android:textSize="16sp" />
 
 
                 </RelativeLayout>
@@ -200,7 +261,7 @@
                         android:text="Academic Level"
                         android:textSize="17sp" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/year_in"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

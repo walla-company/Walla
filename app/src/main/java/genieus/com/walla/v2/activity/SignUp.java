@@ -1,5 +1,6 @@
 package genieus.com.walla.v2.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,7 +14,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,24 +23,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,8 +49,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
     private static final int GALLERY_INTENT_RESULT = 2;
 
     private CircleImageView image;
-    private EditText fname, lname, email, year, major, grad, pass, confirm;
-    private TextView email_label, major_label, grad_label, pass_label, confirm_label, year_label;
+    private EditText fname, lname, email, major, pass, confirm;
+    private TextView email_label, major_label, grad_label, pass_label, confirm_label, year_label, grad, level;
     private Button signup;
 
     private WallaApi api;
@@ -72,6 +64,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     private String school;
+    private ProgressDialog loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +81,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         auth = FirebaseAuth.getInstance();
         pic = null;
 
-        image = (CircleImageView) findViewById(R.id.profile_picture);
+        loading = ProgressDialog.show(this, "", "Creating account...", true);
+        loading.cancel();
+
+        image = (CircleImageView) findViewById(R.id.profile_image);
         image.setOnClickListener(this);
 
         email_label = (TextView) findViewById(R.id.email_label);
@@ -113,13 +109,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         email = (EditText) findViewById(R.id.email_in);
         email.setTypeface(fonts.AzoSansRegular);
         email.setTextColor(email_label.getTextColors());
-        year = (EditText) findViewById(R.id.year_in);
-        year.setTypeface(fonts.AzoSansRegular);
-        year.setTextColor(email_label.getTextColors());
+        level = (TextView) findViewById(R.id.year_in);
+        level.setTypeface(fonts.AzoSansRegular);
+        level.setTextColor(email_label.getTextColors());
         major = (EditText) findViewById(R.id.major_in);
         major.setTypeface(fonts.AzoSansRegular);
         major.setTextColor(email_label.getTextColors());
-        grad = (EditText) findViewById(R.id.grad_year_in);
+        grad = (TextView) findViewById(R.id.grad_year_in);
         grad.setTypeface(fonts.AzoSansRegular);
         grad.setTextColor(email_label.getTextColors());
         pass = (EditText) findViewById(R.id.password_in);
@@ -224,10 +220,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
             email.setError("enter a valid email");
         }
 
-        String yearStr = year.getText().toString().trim();
+        String yearStr = level.getText().toString().trim();
         data.put("academic_level", yearStr);
         if (yearStr.isEmpty()) {
-            year.setError("required");
+            level.setError("required");
         }
 
         String majorStr = major.getText().toString().trim();
@@ -372,7 +368,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
             case R.id.signup:
                 attemptSignup();
                 break;
-            case R.id.profile_picture:
+            case R.id.profile_image:
                 chooseProfilePicture();
                 break;
             default:
@@ -382,29 +378,33 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
 
     @Override
     public void onComplete(@NonNull Task<AuthResult> task) {
-        String uid = task.getResult().getUser().getUid();
+        if(task.isSuccessful() && task.isComplete()) {
+            String uid = task.getResult().getUser().getUid();
 
-        if(pic != null)
-            Utility.saveProfilePic(pic, uid);
+            if (pic != null)
+                Utility.saveProfilePic(pic, uid);
 
-        try {
-            data.put("uid", uid);
-            data.put("profile_image_url", "");
-            data.put("school_identifier", school);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.d("userdata", data.toString());
-        api.addUser(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-
+            try {
+                data.put("uid", uid);
+                data.put("profile_image_url", "");
+                data.put("school_identifier", school);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }, data);
 
-        Toast.makeText(this, "Account created", Toast.LENGTH_LONG).show();
-        startActivity(new Intent(this, LoginScreen.class));
+            Log.d("userdata", data.toString());
+            api.addUser(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object data, int call) {
+
+                }
+            }, data);
+
+            Toast.makeText(this, "Account created", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, LoginScreen.class));
+        }else{
+            Toast.makeText(this, task.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

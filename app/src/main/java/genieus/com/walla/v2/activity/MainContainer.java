@@ -97,7 +97,7 @@ public class MainContainer extends AppCompatActivity
     }
 
     private boolean isLoggedIn(){
-        return auth.getCurrentUser() != null;
+        return auth != null && auth.getCurrentUser() != null;
     }
 
     private void testApi() {
@@ -178,21 +178,26 @@ public class MainContainer extends AppCompatActivity
         fonts = new Fonts(this);
         api = new WallaApi(this);
 
-        String uid = "user";
-        api.getUserInfo(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                user = (UserInfo) data;
-                name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
+        if(auth == null || auth.getCurrentUser() == null){
+            startActivity(new Intent(this, LoginScreen.class));
+            finish();
+        }else {
 
-                if (user.getProfile_url() != null && !user.getProfile_url().equals("")) {
-                    showWelcomeMessage();
-                    Picasso.with(MainContainer.this) //Context
-                            .load(user.getProfile_url()) //URL/FILE
-                            .into(profile_pic);//an ImageView Object to show the loaded image
+            api.getUserInfo(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object data, int call) {
+                    user = (UserInfo) data;
+                    name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
+
+                    if (user.getProfile_url() != null && !user.getProfile_url().equals("")) {
+                        showWelcomeMessage();
+                        Picasso.with(MainContainer.this) //Context
+                                .load(user.getProfile_url()) //URL/FILE
+                                .into(profile_pic);//an ImageView Object to show the loaded image
+                    }
                 }
-            }
-        }, auth.getCurrentUser().getUid());
+            }, auth.getCurrentUser().getUid());
+        }
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);

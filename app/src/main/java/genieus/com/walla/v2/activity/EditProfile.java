@@ -40,6 +40,7 @@ import genieus.com.walla.v2.fragment.Home;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.RoundedTransformation;
 import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.Utility;
 
 public class EditProfile extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener {
 
@@ -164,6 +165,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
     private void setProfilePic(Bitmap bmp){
         profile_pic.setImageBitmap(bmp);
+        Utility.initApi(this);
+        Utility.saveProfilePic(bmp, auth.getCurrentUser().getUid());
     }
 
 
