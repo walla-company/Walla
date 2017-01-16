@@ -11,6 +11,7 @@ import java.util.List;
 public class UserInfo {
     private String name, year, profile_url, major, hometown, description, uid, first_name, last_name, email;
     private List<String> interests, friends;
+    private List<String> activities;
     private boolean verified;
 
     public UserInfo(){};
@@ -119,6 +120,14 @@ public class UserInfo {
 
     public void setFriends(List<String> friends) {
         this.friends = friends;
+    }
+
+    public List<String> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<String> activities) {
+        this.activities = activities;
     }
 
     @Override

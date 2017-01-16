@@ -204,6 +204,18 @@ public class WallaApi {
                     }
                     info.setFriends(friends);
 
+                    List<String> events = new ArrayList<>();
+                    if(response.has("activities")){
+                        JSONObject eventsArr= response.getJSONObject("activities");
+                        Iterator<String> ekeys = eventsArr.keys();
+                        while(ekeys.hasNext()){
+                            events.add(ekeys.next());
+                        }
+
+                        info.setActivities(events);
+
+                    }
+
                     info.setFirst_name(response.getString("first_name"));
                     info.setLast_name(response.getString("last_name"));
                     info.setProfile_url(response.getString("profile_image_url"));
@@ -485,8 +497,6 @@ public class WallaApi {
                     event.setInterests(interestsJsontoList(response.getJSONArray("interests")));
                     event.setDetails(response.getString("details"));
                     event.setHost(response.getString("host"));
-
-                    Log.d("apidata", response.toString());
 
                 } catch (JSONException e) {
                     e.printStackTrace();

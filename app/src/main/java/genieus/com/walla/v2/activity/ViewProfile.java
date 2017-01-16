@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,19 +31,22 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
+import genieus.com.walla.v2.adapter.listview.EventsLVAdapter;
 import genieus.com.walla.v2.adapter.listview.GroupProfileLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
+import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.UserInfo;
 
-public class ViewProfile extends AppCompatActivity implements View.OnClickListener {
+public class ViewProfile extends AppCompatActivity implements View.OnClickListener, WallaApi.OnDataReceived {
     private String BUTTONBLUE = "#63CAF9";
     private String BUTTONGREY = "#D8D8D8";
 
     private CircleImageView profile_pic;
-    private ListView groups_lv;
+    private ListView groups_lv, events_lv;
     private GroupProfileLVAdapter groupsAdapter;
+    private EventsLVAdapter adapterEvents;
     private TextView name, year, major, hometown, details_in, details_label;
     private Button add;
     private ProgressBar progress;
@@ -53,6 +57,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
     private FirebaseAuth auth;
     private AlertDialog.Builder confirm;
     private String[] options = {"Yes", "No"};
+    private List<EventInfo> events;
 
 
     @Override
@@ -95,6 +100,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         fonts = new Fonts(this);
         getSupportActionBar().setTitle(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
         List<GroupInfo> data = new ArrayList<>();
+        events = new ArrayList<>();
         data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
         data.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
         data.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
@@ -102,6 +108,15 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         groups_lv = (ListView) findViewById(R.id.groups_lv);
         groupsAdapter = new GroupProfileLVAdapter(this, R.layout.single_group_profile, data);
         groups_lv.setAdapter(groupsAdapter);
+
+        events_lv = (ListView) findViewById(R.id.events);
+        adapterEvents = new EventsLVAdapter(this, R.layout.single_activity, events);
+        events_lv.setAdapter(adapterEvents);
+        adapterEvents.getFilter().filter("");
+
+        for(String key : user.getActivities()){
+            api.getActivity(this, key);
+        }
 
         name = (TextView) findViewById(R.id.name);
         name.setTypeface(fonts.AzoSansMedium);
@@ -203,5 +218,12 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onDataReceived(Object data, int call) {
+        events.add((EventInfo) data);
+        events_lv.setAdapter(adapterEvents);
+        adapterEvents.getFilter().filter("");
     }
 }
