@@ -75,8 +75,9 @@ public class MyGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
         TextView title = (TextView) convertView.findViewById(R.id.title);
         title.setTypeface(fonts.AzoSansRegular);
         title.setText(info.getName());
-        TextView memberInfo = (TextView) convertView.findViewById(R.id.members_info);
-        memberInfo.setTypeface(fonts.AzoSansRegular);
+        TextView details = (TextView) convertView.findViewById(R.id.details);
+        details.setTypeface(fonts.AzoSansRegular);
+        details.setText(info.getDescription());
         TextView abbr = (TextView) convertView.findViewById(R.id.abbr);
         abbr.setTypeface(fonts.AzoSansRegular);
         abbr.setText(info.getAbbr());

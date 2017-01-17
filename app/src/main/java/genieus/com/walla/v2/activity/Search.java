@@ -14,6 +14,7 @@ import java.util.List;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.SuggestedGroupsLVAdapter;
 import genieus.com.walla.v2.adapter.recyclerview.SuggestFriendsRVAdapter;
+import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.MutualFriendInfo;
@@ -27,6 +28,7 @@ public class Search extends AppCompatActivity {
     private SuggestedGroupsLVAdapter suggestGroupAdapter;
 
     private TextView friends_label, group_label;
+    private WallaApi api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class Search extends AppCompatActivity {
 
     private void initUi() {
         fonts = new Fonts(this);
+        api = new WallaApi(this);
 
         List<MutualFriendInfo> data = new ArrayList<>();
         data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
@@ -61,6 +64,9 @@ public class Search extends AppCompatActivity {
 
         suggested_friends_rv.setAdapter(suggestFriendsAdapter);
 
+
+
+        /*
         List<GroupInfo> data2 = new ArrayList<>();
         data2.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
         data2.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
@@ -69,10 +75,17 @@ public class Search extends AppCompatActivity {
         data2.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
         data2.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
 
-        suggested_group_lv = (ListView) findViewById(R.id.suggested_groups_lv);
-        suggestGroupAdapter = new SuggestedGroupsLVAdapter(this, R.layout.single_suggest_group, data2);
+        */
 
-        suggested_group_lv.setAdapter(suggestGroupAdapter);
+        suggested_group_lv = (ListView) findViewById(R.id.suggested_groups_lv);
+
+        api.getSuggestedGroups(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                suggestGroupAdapter = new SuggestedGroupsLVAdapter(Search.this, R.layout.single_suggest_group, (List<GroupInfo>) data );
+                suggested_group_lv.setAdapter(suggestGroupAdapter);
+            }
+        });
 
         friends_label = (TextView) findViewById(R.id.suggest_friends_label);
         group_label = (TextView) findViewById(R.id.suggest_group_label);

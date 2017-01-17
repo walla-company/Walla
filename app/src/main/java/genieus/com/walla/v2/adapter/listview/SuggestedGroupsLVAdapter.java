@@ -1,6 +1,7 @@
 package genieus.com.walla.v2.adapter.listview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.activity.Group;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 
@@ -44,15 +46,25 @@ public class SuggestedGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
 
-        GroupInfo info = data.get(position);
+        final GroupInfo info = data.get(position);
 
         RelativeLayout container = (RelativeLayout) convertView.findViewById(R.id.group_icon_container);
+        RelativeLayout entire_container = (RelativeLayout) convertView.findViewById(R.id.entire_container);
+        entire_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), Group.class);
+                intent.putExtra("guid", info.getGuid());
+                getContext().startActivity(intent);
+            }
+        });
         TextView abbr = (TextView) convertView.findViewById(R.id.group_abbr);
         TextView groupName = (TextView) convertView.findViewById(R.id.group_name);
-        TextView members = (TextView) convertView.findViewById(R.id.members_info);
+        TextView details = (TextView) convertView.findViewById(R.id.details);
+        details.setTypeface(fonts.AzoSansRegular);
+        details.setText(info.getDescription());
 
         groupName.setTypeface(fonts.AzoSansMedium);
-        members.setTypeface(fonts.AzoSansRegular);
         abbr.setTypeface(fonts.AzoSansRegular);
 
         abbr.setText(info.getAbbr());

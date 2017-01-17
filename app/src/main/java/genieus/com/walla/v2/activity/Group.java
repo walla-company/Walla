@@ -18,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,13 +31,14 @@ import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 
-public class Group extends AppCompatActivity {
+public class Group extends AppCompatActivity implements View.OnClickListener {
     private String BUTTONBLUE = "#63CAF9";
     private Fonts fonts;
 
     private ListView activities_lv;
     private Button join_btn;
     private ProgressBar progress;
+    private FirebaseAuth auth;
 
     private GroupInfo info;
 
@@ -52,6 +55,7 @@ public class Group extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         api = new WallaApi(this);
+        auth = FirebaseAuth.getInstance();
 
 
         //String guid = "-K_QNzIlm31gNgepdtTk";
@@ -69,7 +73,6 @@ public class Group extends AppCompatActivity {
                 initUi();
             }
         }, guid);
-
     }
 
     private void initUi() {
@@ -118,6 +121,9 @@ public class Group extends AppCompatActivity {
 
         activities_lv.addHeaderView(myHeader, null, false);
 
+        join_btn = (Button) activities_lv.findViewById(R.id.join_btn);
+        join_btn.setOnClickListener(this);
+
         TextView title = (TextView) activities_lv.findViewById(R.id.title);
         title.setText(info.getName());
         title.setTypeface(fonts.AzoSansRegular);
@@ -154,6 +160,12 @@ public class Group extends AppCompatActivity {
         }
     }
 
+    private void joinGroup(){
+        api.joinGroup(auth.getCurrentUser().getUid(), guid);
+        join_btn.setText("Joined");
+        join_btn.setEnabled(false);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
@@ -164,4 +176,13 @@ public class Group extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.join_btn:
+                joinGroup();
+                break;
+        }
+    }
 }

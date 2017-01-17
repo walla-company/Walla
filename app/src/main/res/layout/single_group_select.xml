@@ -21,13 +21,13 @@
             android:layout_centerVertical="true" />
 
         <TextView
-            android:id="@+id/members_info"
+            android:id="@+id/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/group_container_1"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
-            android:text="121 members · 4 friends in the group"
+            android:text=""
             android:textSize="15sp" />
 
         <RelativeLayout

@@ -49,6 +49,8 @@ public class WallaApi {
     public static final int GET_GROUP = 9;
     public static final int GET_NOTIFICATIONS = 10;
     public static final int ADD_USER = 11;
+    public static final int GET_SUGGESTED_USERS = 12;
+    public static final int GET_SUGGESTED_GROUPS = 13;
 
 
     public interface OnDataReceived {
@@ -87,6 +89,8 @@ public class WallaApi {
     private static String request_friend = "/api/request_friend?";
     private static String going = "/api/going?";
     private static String interested = "/api/interested?";
+    private static String suggested_groups = "/api/get_suggested_groups?";
+    private static String join_group = "/api/join_group?";
 
 
     public static String domain = "";
@@ -1017,6 +1021,71 @@ public class WallaApi {
             params.put("school_identifier", domain);
             params.put("uid", uid);
             params.put("auid", auid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void getSuggestedGroups(final OnDataReceived listener){
+        final String url = site + suggested_groups + "token=" + token + "&school_identifier=" + domain;
+
+        final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                List<GroupInfo> groups = new ArrayList<>();
+                Log.d("groupdata", response.toString());
+                for(int i = 0; i < response.length(); i++){
+                    try {
+                        JSONObject groupObj = response.getJSONObject(i);
+
+                        GroupInfo group = new GroupInfo();
+                        group.setName(groupObj.getString("name"));
+                        group.setAbbr((groupObj.getString("short_name")));
+                        group.setColor(groupObj.getString("color"));
+                        group.setGuid(groupObj.getString("group_id"));
+                        group.setDescription(groupObj.getString("details"));
+
+                        groups.add(group);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                listener.onDataReceived(groups, GET_SUGGESTED_GROUPS);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void joinGroup(String uid, String guid){
+        final String url = site + join_group + "token=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("guid", guid);
         } catch (JSONException e) {
             e.printStackTrace();
         }
