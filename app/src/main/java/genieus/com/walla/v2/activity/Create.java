@@ -431,7 +431,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
             try {
                 list.add(new GroupInfo(group.getString("name"), group.getString("abbr"), group.getString("color")));
-                identifiers.add(group.getString("name"));
+                identifiers.add(group.getString("guid"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

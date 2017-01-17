@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UserInfo {
     private String name, year, profile_url, major, hometown, description, uid, first_name, last_name, email;
-    private List<String> interests, friends;
+    private List<String> interests, friends, groups;
     private List<String> activities;
     private boolean verified;
 
@@ -97,7 +97,6 @@ public class UserInfo {
     }
 
     public List<String> getInterests() {
-        Log.d("added1", interests.toString());
         return interests;
     }
 
@@ -128,6 +127,14 @@ public class UserInfo {
 
     public void setActivities(List<String> activities) {
         this.activities = activities;
+    }
+
+    public List<String> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<String> groups) {
+        this.groups = groups;
     }
 
     @Override

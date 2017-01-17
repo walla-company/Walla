@@ -1,6 +1,7 @@
 package genieus.com.walla.v2.adapter.listview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.activity.Group;
+import genieus.com.walla.v2.activity.MyGroups;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 
@@ -69,6 +72,16 @@ public class MyGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
                 }
             });
         }
+
+        RelativeLayout container2 = (RelativeLayout) convertView.findViewById(R.id.container);
+        container2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), Group.class);
+                intent.putExtra("guid", info.getGuid());
+                getContext().startActivity(intent);
+            }
+        });
 
         RelativeLayout container = (RelativeLayout) convertView.findViewById(R.id.group_icon_container);
          changeBackgroundColor(container, info.getColor());

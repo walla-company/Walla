@@ -197,7 +197,17 @@ public class WallaApi {
                         }
                     }
 
-                    info.setInterests(new ArrayList<String>(list));
+                    List<String> list2 = new ArrayList<>();
+                    if (response.has("groups")) {
+                        JSONObject groups = response.getJSONObject("groups");
+                        Iterator<String> keys = groups.keys();
+
+                        while(keys.hasNext()){
+                            list2.add(keys.next());
+                        }
+                    }
+
+                    info.setGroups(list2);
 
                     List<String> friends = new ArrayList<>();
                     if(response.has("friends")){
@@ -1104,7 +1114,6 @@ public class WallaApi {
 
         queue.add(request);
     }
-
 
     private static List<String> interestsJsontoList(JSONArray array) {
         List<String> data = new ArrayList<>();

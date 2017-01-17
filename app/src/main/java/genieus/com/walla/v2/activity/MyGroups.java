@@ -12,7 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,16 +26,22 @@ import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.MyGroupsLVAdapter;
+import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.GroupInfo;
+import genieus.com.walla.v2.info.UserInfo;
 
 public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnGroupStateChangeListener, MenuItem.OnMenuItemClickListener {
     private ListView group_lv;
+    private RelativeLayout container;
     private MyGroupsLVAdapter adapter;
     private List<Integer> selected;
     private MenuItem done;
     private boolean doneIconVisible;
     private List<GroupInfo> data;
     private int max;
+    private WallaApi api;
+    private UserInfo user;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +50,25 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        auth = FirebaseAuth.getInstance();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
-        initUi();
+        api.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                user = (UserInfo) data;
+                initUi();
+            }
+        }, auth.getCurrentUser().getUid());
 
     }
 
     private void initUi() {
         data = new ArrayList<>();
+
+        /*
         data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
         data.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
         data.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
@@ -60,20 +78,34 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
         data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
         data.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
         data.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
+        */
 
         group_lv = (ListView) findViewById(R.id.my_groups_lv);
+        selected = new ArrayList<>();
 
         if(startedForResult()) {
-            adapter = new MyGroupsLVAdapter(this, this, R.layout.single_group_select, data);
-            selected = new ArrayList<>();
-
             max = getIntent().getExtras().getInt("max");
         }
-        else {
-            adapter = new MyGroupsLVAdapter(this, this, R.layout.single_group, data);
-        }
 
-        group_lv.setAdapter(adapter);
+        for(String key : user.getGroups()){
+            api.getGroup(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object group, int call) {
+                    data.add((GroupInfo) group);
+
+                    if(startedForResult()) {
+                        adapter = new MyGroupsLVAdapter(MyGroups.this, MyGroups.this, R.layout.single_group_select, data);
+
+                        max = getIntent().getExtras().getInt("max");
+                    }
+                    else {
+                        adapter = new MyGroupsLVAdapter(MyGroups.this, MyGroups.this, R.layout.single_group, data);
+                    }
+
+                    group_lv.setAdapter(adapter);
+                }
+            }, key);
+        }
     }
 
     private boolean startedForResult(){
@@ -92,6 +124,7 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
        for(int elm : selected){
            JSONObject group = new JSONObject();
            try {
+               group.put("guid", data.get(elm).getGuid());
                group.put("name", data.get(elm).getName());
                group.put("abbr", data.get(elm).getAbbr());
                group.put("color", data.get(elm).getColor());

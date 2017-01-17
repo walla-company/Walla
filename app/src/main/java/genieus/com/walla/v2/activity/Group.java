@@ -1,5 +1,6 @@
 package genieus.com.walla.v2.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
