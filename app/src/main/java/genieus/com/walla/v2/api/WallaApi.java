@@ -90,6 +90,7 @@ public class WallaApi {
     private static String going = "/api/going?";
     private static String interested = "/api/interested?";
     private static String suggested_groups = "/api/get_suggested_groups?";
+    private static String suggested_users = "/api/get_suggested_users?";
     private static String join_group = "/api/join_group?";
     private static String leave_group = "/api/leave_group?";
 
@@ -1100,6 +1101,100 @@ public class WallaApi {
 
         queue.add(request);
     }
+
+    public static void getSuggestedUsers(final OnDataReceived listener){
+        final String url = site + suggested_users + "token=" + token + "&school_identifier=" + domain;
+
+        final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                List<UserInfo> users = new ArrayList<>();
+                for(int k = 0; k < response.length(); k++){
+                    try {
+                        JSONObject userObj = response.getJSONObject(k);
+
+                        UserInfo info = new UserInfo();
+
+                        try {
+                            List<String> list = new ArrayList<>();
+                            if (userObj.has("interests")) {
+                                JSONArray interests = userObj.getJSONArray("interests");
+
+                                for (int i = 0; i < interests.length(); i++) {
+                                    list.add(interests.getString(i));
+                                }
+                            }
+
+                            info.setInterests(list);
+
+                            List<String> list2 = new ArrayList<>();
+                            if (userObj.has("groups")) {
+                                JSONObject groups = userObj.getJSONObject("groups");
+                                Iterator<String> keys = groups.keys();
+
+                                while(keys.hasNext()){
+                                    list2.add(keys.next());
+                                }
+                            }
+
+                            info.setGroups(list2);
+
+                            List<String> friends = new ArrayList<>();
+                            if(userObj.has("friends")){
+                                Iterator<String> keys = userObj.getJSONObject("friends").keys();
+                                while(keys.hasNext()){
+                                    friends.add(keys.next());
+                                }
+                            }
+                            info.setFriends(friends);
+
+                            List<String> events = new ArrayList<>();
+                            if(userObj.has("activities")){
+                                JSONObject eventsArr= userObj.getJSONObject("activities");
+                                Iterator<String> ekeys = eventsArr.keys();
+                                while(ekeys.hasNext()){
+                                    events.add(ekeys.next());
+                                }
+
+                                info.setActivities(events);
+
+                            }
+
+                            info.setFirst_name(userObj.getString("first_name"));
+                            info.setLast_name(userObj.getString("last_name"));
+                            info.setProfile_url(userObj.getString("profile_image_url"));
+                            info.setMajor(userObj.getString("major"));
+                            info.setYear(userObj.getString("academic_level"));
+                            info.setHometown(userObj.getString("hometown"));
+                            info.setUid(userObj.getString("user_id"));
+                            info.setDescription(userObj.getString("description"));
+                            info.setEmail(userObj.getString("email"));
+                            info.setVerified(userObj.getBoolean("verified"));
+                        } catch (JSONException e) {
+                            Log.d("readerror", e.toString());
+                            e.printStackTrace();
+                        }
+
+                        users.add(info);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                listener.onDataReceived(users, GET_SUGGESTED_USERS);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
 
     public static void joinGroup(String uid, String guid){
         final String url = site + join_group + "token=" + token;

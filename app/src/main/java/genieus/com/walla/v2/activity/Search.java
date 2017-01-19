@@ -18,6 +18,7 @@ import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.MutualFriendInfo;
+import genieus.com.walla.v2.info.UserInfo;
 
 public class Search extends AppCompatActivity {
     private Fonts fonts;
@@ -29,6 +30,8 @@ public class Search extends AppCompatActivity {
 
     private TextView friends_label, group_label;
     private WallaApi api;
+
+    private List<UserInfo> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,21 @@ public class Search extends AppCompatActivity {
         fonts = new Fonts(this);
         api = new WallaApi(this);
 
+        api.getSuggestedUsers(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                users = (List<UserInfo>) data;
+                suggested_friends_rv = (RecyclerView) findViewById(R.id.suggested_friends_rv);
+                suggestFriendsAdapter = new SuggestFriendsRVAdapter(Search.this, users);
+
+                LinearLayoutManager horizontal = new LinearLayoutManager(Search.this, LinearLayoutManager.HORIZONTAL, false);
+                suggested_friends_rv.setLayoutManager(horizontal);
+
+                suggested_friends_rv.setAdapter(suggestFriendsAdapter);
+            }
+        });
+
+        /*
         List<MutualFriendInfo> data = new ArrayList<>();
         data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
         data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
@@ -55,14 +73,8 @@ public class Search extends AppCompatActivity {
         data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
         data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
         data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
+        */
 
-        suggested_friends_rv = (RecyclerView) findViewById(R.id.suggested_friends_rv);
-        suggestFriendsAdapter = new SuggestFriendsRVAdapter(this, data);
-
-        LinearLayoutManager horizontal = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        suggested_friends_rv.setLayoutManager(horizontal);
-
-        suggested_friends_rv.setAdapter(suggestFriendsAdapter);
 
 
 

@@ -11,11 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.MutualFriendInfo;
+import genieus.com.walla.v2.info.UserInfo;
 import genieus.com.walla.v2.viewholder.SuggestFriendsHolder;
 
 /**
@@ -24,12 +27,12 @@ import genieus.com.walla.v2.viewholder.SuggestFriendsHolder;
 
 public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriendsHolder>{
     private Context context;
-    private List<MutualFriendInfo> data;
+    private List<UserInfo> data;
     private String BUTTONBLUE = "#63CAF9";
     private Fonts fonts;
 
 
-    public SuggestFriendsRVAdapter(Context context, List<MutualFriendInfo> data){
+    public SuggestFriendsRVAdapter(Context context, List<UserInfo> data){
         this.context = context;
         this.data = data;
 
@@ -44,13 +47,18 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
 
     @Override
     public void onBindViewHolder(SuggestFriendsHolder holder, int position) {
-        MutualFriendInfo info = data.get(position);
+        UserInfo info = data.get(position);
 
         holder.name.setTypeface(fonts.AzoSansRegular);
         holder.mutualFriends.setTypeface(fonts.AzoSansRegular);
 
-        holder.name.setText(info.getName());
-        holder.mutualFriends.setText(info.getMutualFriends() + " mutual friends");
+        holder.name.setText(String.format("%s %s", info.getFirst_name(), info.getLast_name()));
+        holder.mutualFriends.setVisibility(View.GONE);
+        if(info.getProfile_url() != null && !info.getProfile_url().equals("")) {
+            Picasso.with(context) //Context
+                    .load(info.getProfile_url()) //URL/FILE
+                    .into(holder.icon);//an ImageView Object to show the loaded image;
+        }
         changeBackgroundColor(holder.addBtn, BUTTONBLUE);
     }
 
