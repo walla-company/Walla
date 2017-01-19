@@ -24,6 +24,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
+        <TextView
+            android:id="@+id/no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="You have not added any groups"
+            android:textSize="17sp"
+            android:visibility="gone" />
+
     </FrameLayout>
 
     <ListView

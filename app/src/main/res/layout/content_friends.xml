@@ -17,18 +17,28 @@
 
         <ProgressBar
             android:id="@+id/progress"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="You have not added any friends"
+            android:textSize="17sp"
+            android:visibility="gone" />
 
     </FrameLayout>
 
     <ListView
         android:id="@+id/friends_lv"
         android:layout_width="match_parent"
-        android:dividerHeight="8dp"
         android:layout_height="match_parent"
         android:divider="@android:color/transparent"
+        android:dividerHeight="8dp"
         android:scrollbars="none" />
 
 

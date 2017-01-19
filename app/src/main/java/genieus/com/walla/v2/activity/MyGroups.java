@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,11 +29,13 @@ import java.util.List;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.MyGroupsLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
+import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.UserInfo;
 
 public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnGroupStateChangeListener, MenuItem.OnMenuItemClickListener {
     private ListView group_lv;
+    private TextView no_data;
     private ProgressBar progress;
     private RelativeLayout container;
     private MyGroupsLVAdapter adapter;
@@ -43,6 +46,7 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
     private int max;
     private WallaApi api;
     private UserInfo user;
+    private Fonts fonts;
     private FirebaseAuth auth;
 
     @Override
@@ -71,6 +75,7 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
     }
 
     private void initUi() {
+        fonts = new Fonts(this);
         data = new ArrayList<>();
         progress.setVisibility(View.GONE);
 
@@ -111,6 +116,12 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
                     group_lv.setAdapter(adapter);
                 }
             }, key);
+        }
+
+        no_data = (TextView) findViewById(R.id.no_data);
+        no_data.setTypeface(fonts.AzoSansRegular);
+        if(user.getGroups().isEmpty()){
+            no_data.setVisibility(View.VISIBLE);
         }
     }
 
