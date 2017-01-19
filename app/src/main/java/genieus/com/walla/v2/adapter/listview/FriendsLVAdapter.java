@@ -1,6 +1,7 @@
 package genieus.com.walla.v2.adapter.listview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -16,6 +18,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
+import genieus.com.walla.v2.activity.Friends;
+import genieus.com.walla.v2.activity.ViewProfile;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.FriendInfo;
 
@@ -63,6 +67,16 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     listener.onFriendStateChanged(friend.getName(), isChecked);
+                }
+            });
+        }else{
+            RelativeLayout container = (RelativeLayout) convertView.findViewById(R.id.container);
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), ViewProfile.class);
+                    intent.putExtra("uid", friend.getUid());
+                    getContext().startActivity(intent);
                 }
             });
         }

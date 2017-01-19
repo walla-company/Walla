@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import genieus.com.walla.v2.info.UserInfo;
 
 public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnGroupStateChangeListener, MenuItem.OnMenuItemClickListener {
     private ListView group_lv;
+    private ProgressBar progress;
     private RelativeLayout container;
     private MyGroupsLVAdapter adapter;
     private List<Integer> selected;
@@ -51,9 +53,12 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
         setSupportActionBar(toolbar);
 
         auth = FirebaseAuth.getInstance();
+        progress = (ProgressBar) findViewById(R.id.progress);
+        progress.setVisibility(View.VISIBLE);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("My Groups");
 
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
@@ -67,6 +72,7 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
 
     private void initUi() {
         data = new ArrayList<>();
+        progress.setVisibility(View.GONE);
 
         /*
         data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));

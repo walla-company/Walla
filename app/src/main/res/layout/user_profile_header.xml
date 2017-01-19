@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/title_cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp">
+
+        <RelativeLayout
+            android:id="@+id/title_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+
+            <RelativeLayout
+                android:id="@+id/profile_picture_container"
+                android:layout_width="85dp"
+                android:layout_height="110dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_picture"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/walla_pic" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@id/profile_picture_container">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true">
+
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="Judy Zhu"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/year"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/name"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:text="Senior"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/major"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/year"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:text="Mechanical Engineering"
+                        android:textSize="15sp" />
+
+
+                    <TextView
+                        android:id="@+id/hometowen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/major"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:text="From Calgary, Canada"
+                        android:textSize="15sp" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <ListView
+                android:id="@+id/groups_lv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/profile_picture_container"
+                android:layout_marginTop="16dp"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="6dp"
+                android:scrollbars="none" />
+
+            <Button
+                android:id="@+id/add_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/groups_lv"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded"
+                android:text="Add friend!"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/details_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_cv"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="10dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/details_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/title_in"
+                android:paddingTop="4dp"
+                android:text="Details"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/details_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/details_label"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical"
+                android:paddingRight="8dp"
+                android:text="I love to sing, do startups, and connect to people"
+                android:textSize="17sp" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

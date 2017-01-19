@@ -77,8 +77,8 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
         ImageView visibility = (ImageView) convertView.findViewById(R.id.visibility);
         TextView title = (TextView) convertView.findViewById(R.id.title);
-        //TextView interested = (TextView) convertView.findViewById(R.id.interested);
-        //TextView going = (TextView) convertView.findViewById(R.id.going);
+        TextView interested = (TextView) convertView.findViewById(R.id.interested);
+        TextView going = (TextView) convertView.findViewById(R.id.going);
         TextView duration = (TextView) convertView.findViewById(R.id.duration);
         TextView date = (TextView) convertView.findViewById(R.id.date);
         TextView attendees_description = (TextView) convertView.findViewById(R.id.attendees_description);
@@ -112,15 +112,16 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         visibility.setImageResource(event.is_public() ? R.drawable.ic_lit_gray : R.drawable.ic_chill_gray);
         title.setText(event.getTitle());
         title.setTypeface(fonts.AzoSansRegular);
-        //interested.setText(event.getInterested());
-        //interested.setTypeface(fonts.AzoSansRegular);
-        //going.setText(event.getGoing());
-        //going.setTypeface(fonts.AzoSansRegular);
+        interested.setText(event.getInterested_list().size() + "");
+        interested.setTypeface(fonts.AzoSansRegular);
+        going.setText(event.getGoing_list().size() + "");
+        going.setTypeface(fonts.AzoSansRegular);
         date.setTypeface(fonts.AzoSansRegular);
         date.setText(event.getStringDate(event.getStart_time()));
         duration.setText(event.getStringTime(event.getStart_time(), true)+ "\nto " + event.getStringTime(event.getEnd_time(), false));
         duration.setTypeface(fonts.AzoSansRegular);
         attendees_description.setTypeface(fonts.AzoSansRegular);
+        attendees_description.setText("");
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

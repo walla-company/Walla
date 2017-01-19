@@ -8,7 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v1.Interests;
 import genieus.com.walla.v2.adapter.listview.FriendsLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.FriendInfo;
@@ -24,6 +28,7 @@ import genieus.com.walla.v2.info.UserInfo;
 
 public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFriendStateListener, MenuItem.OnMenuItemClickListener {
     private ListView friends_lv;
+    private ProgressBar progress;
     private FriendsLVAdapter adapter;
     private List<String> selected;
     private MenuItem done;
@@ -41,8 +46,11 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("My Friends");
 
         auth = FirebaseAuth.getInstance();
+        progress = (ProgressBar) findViewById(R.id.progress);
+        progress.setVisibility(View.VISIBLE);
 
         api = new WallaApi(this);
         String uid = auth.getCurrentUser().getUid();
@@ -58,6 +66,7 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
     }
 
     private void initUi() {
+        progress.setVisibility(View.GONE);
         final List<FriendInfo> list = new ArrayList<>();
 
         friends_lv = (ListView) findViewById(R.id.friends_lv);
@@ -72,12 +81,13 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
         friends_lv.setAdapter(adapter);
 
         for(String id : user.getFriends()){
+            final String nuid = id;
             api.getUserInfo(new WallaApi.OnDataReceived() {
                 @Override
                 public void onDataReceived(Object data, int call) {
                     UserInfo friend = (UserInfo) data;
                     list.add(new FriendInfo(String.format("%s %s", friend.getFirst_name(), friend.getLast_name()),
-                            friend.getYear(), friend.getMajor(), friend.getProfile_url()));
+                            friend.getYear(), friend.getMajor(), friend.getProfile_url(), nuid));
 
                     adapter.notifyDataSetChanged();
                 }

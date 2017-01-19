@@ -1,10 +1,13 @@
 package genieus.com.walla.v2.info;
 
+import java.util.List;
+
 /**
  * Created by anesu on 12/21/16.
  */
 public class GroupInfo {
-    String name, abbr, color, description, guid;
+    private String name, abbr, color, description, guid;
+    private List<String> members;
 
     public GroupInfo(String name, String abbr, String color){
         this.name = name;
@@ -52,5 +55,13 @@ public class GroupInfo {
 
     public void setGuid(String guid) {
         this.guid = guid;
+    }
+
+    public List<String> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<String> members) {
+        this.members = members;
     }
 }

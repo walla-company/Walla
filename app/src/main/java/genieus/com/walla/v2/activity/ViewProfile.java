@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -73,6 +74,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         api = new WallaApi(this);
         auth = FirebaseAuth.getInstance();
         progress = (ProgressBar) findViewById(R.id.progress_bar);
+        progress.setVisibility(View.VISIBLE);
         container = (RelativeLayout) findViewById(R.id.data_container);
         container.setVisibility(View.GONE);
 
@@ -97,6 +99,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
     }
 
     private void initUi() {
+        progress.setVisibility(View.GONE);
         fonts = new Fonts(this);
         getSupportActionBar().setTitle(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
         List<GroupInfo> data = new ArrayList<>();
@@ -105,40 +108,45 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         data.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
         data.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
 
+        events_lv = (ListView) findViewById(R.id.events);
+
+        View header = LayoutInflater.from(this).inflate(R.layout.user_profile_header, null);
+        events_lv.addHeaderView(header);
+
+        adapterEvents = new EventsLVAdapter(this, R.layout.single_activity, events);
+        events_lv.setAdapter(adapterEvents);
+        adapterEvents.getFilter().filter("");
+
         groups_lv = (ListView) findViewById(R.id.groups_lv);
         groupsAdapter = new GroupProfileLVAdapter(this, R.layout.single_group_profile, data);
         groups_lv.setAdapter(groupsAdapter);
 
-        events_lv = (ListView) findViewById(R.id.events);
-        adapterEvents = new EventsLVAdapter(this, R.layout.single_activity, events);
-        events_lv.setAdapter(adapterEvents);
-        adapterEvents.getFilter().filter("");
 
         for(String key : user.getActivities()){
             api.getActivity(this, key);
         }
 
-        name = (TextView) findViewById(R.id.name);
+        name = (TextView) events_lv.findViewById(R.id.name);
         name.setTypeface(fonts.AzoSansMedium);
         name.setText(user.getFirst_name() + " " +  user.getLast_name());
-        year = (TextView) findViewById(R.id.year);
+        year = (TextView) events_lv.findViewById(R.id.year);
         year.setTypeface(fonts.AzoSansRegular);
         year.setText(user.getYear());
-        major = (TextView) findViewById(R.id.major);
+        major = (TextView) events_lv.findViewById(R.id.major);
         major.setTypeface(fonts.AzoSansRegular);
         major.setText(user.getMajor());
-        hometown = (TextView) findViewById(R.id.hometowen);
+        hometown = (TextView) events_lv.findViewById(R.id.hometowen);
         hometown.setTypeface(fonts.AzoSansRegular);
         hometown.setText(user.getHometown());
-        details_in = (TextView) findViewById(R.id.details_in);
+        details_in = (TextView) events_lv.findViewById(R.id.details_in);
         details_in.setTypeface(fonts.AzoSansRegular);
         details_in.setText(user.getDescription());
-        details_label = (TextView) findViewById(R.id.details_label);
+        details_label = (TextView) events_lv.findViewById(R.id.details_label);
         details_label.setTypeface(fonts.AzoSansMedium);
         add = (Button) findViewById(R.id.add_btn);
         add.setTypeface(fonts.AzoSansBold);
         add.setOnClickListener(this);
-        profile_pic = (CircleImageView) findViewById(R.id.profile_picture);
+        profile_pic = (CircleImageView) events_lv.findViewById(R.id.profile_picture);
         if(user.getFriends().contains(auth.getCurrentUser().getUid())) {
             add.setVisibility(View.GONE);
         }else{
@@ -177,6 +185,12 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         });
 
         confirm.setCancelable(false);
+
+        if(user.getFriends().contains(auth.getCurrentUser().getUid())){
+            add.setEnabled(false);
+            changeBackgroundColor(add, BUTTONGREY);
+            //prevents someone fron removing a friend
+        }
 
     }
 

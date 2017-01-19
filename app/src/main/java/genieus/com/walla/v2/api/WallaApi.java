@@ -91,6 +91,7 @@ public class WallaApi {
     private static String interested = "/api/interested?";
     private static String suggested_groups = "/api/get_suggested_groups?";
     private static String join_group = "/api/join_group?";
+    private static String leave_group = "/api/leave_group?";
 
 
     public static String domain = "";
@@ -196,6 +197,8 @@ public class WallaApi {
                             list.add(interests.getString(i));
                         }
                     }
+
+                    info.setInterests(list);
 
                     List<String> list2 = new ArrayList<>();
                     if (response.has("groups")) {
@@ -306,6 +309,16 @@ public class WallaApi {
                     group.setColor(response.getString("color"));
                     group.setDescription(response.getString("details"));
                     group.setGuid(response.getString("group_id"));
+
+                    List<String> members = new ArrayList<>();
+                    if(response.has("members")){
+                        Iterator<String> keys = response.getJSONObject("members").keys();
+                        while(keys.hasNext())
+                            members.add(keys.next());
+                    }
+
+                    group.setMembers(members);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1090,6 +1103,33 @@ public class WallaApi {
 
     public static void joinGroup(String uid, String guid){
         final String url = site + join_group + "token=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("guid", guid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void leaveGroup(String uid, String guid){
+        final String url = site + leave_group + "token=" + token;
 
         JSONObject params = new JSONObject();
         try {

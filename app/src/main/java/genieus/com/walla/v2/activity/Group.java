@@ -34,14 +34,17 @@ import genieus.com.walla.v2.info.GroupInfo;
 
 public class Group extends AppCompatActivity implements View.OnClickListener {
     private String BUTTONBLUE = "#63CAF9";
+    private String BUTTONGREY = "#D8D8D8";
     private Fonts fonts;
 
     private ListView activities_lv;
+    TextView memberInfo;
     private Button join_btn;
     private ProgressBar progress;
     private FirebaseAuth auth;
 
     private GroupInfo info;
+    private boolean userInGroup;
 
     private WallaApi api;
     private String guid;
@@ -128,8 +131,9 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         TextView title = (TextView) activities_lv.findViewById(R.id.title);
         title.setText(info.getName());
         title.setTypeface(fonts.AzoSansRegular);
-        TextView memberInfo = (TextView) activities_lv.findViewById(R.id.members_info);
+        memberInfo = (TextView) activities_lv.findViewById(R.id.members_info);
         memberInfo.setTypeface(fonts.AzoSansRegular);
+        memberInfo.setText(info.getMembers().size() + (info.getMembers().size() == 1 ? " member" : " members"));
         TextView abbr = (TextView) activities_lv.findViewById(R.id.abbr);
         abbr.setText(info.getAbbr());
         abbr.setTypeface(fonts.AzoSansRegular);
@@ -148,6 +152,14 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         join_btn = (Button) findViewById(R.id.join_btn);
         changeBackgroundColor(abbrContainer, info.getColor());
         changeBackgroundColor(join_btn, BUTTONBLUE);
+
+        if(info.getMembers().contains(auth.getCurrentUser().getUid())){
+            join_btn.setText("Leave");
+            changeBackgroundColor(join_btn, BUTTONGREY);
+            userInGroup = true;
+        }
+
+        getSupportActionBar().setTitle(info.getAbbr());
     }
 
     private void changeBackgroundColor(View view, String color){
@@ -163,8 +175,24 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
 
     private void joinGroup(){
         api.joinGroup(auth.getCurrentUser().getUid(), guid);
-        join_btn.setText("Joined");
-        join_btn.setEnabled(false);
+        userInGroup = true;
+        join_btn.setText("Leave");
+        changeBackgroundColor(join_btn, BUTTONGREY);
+
+        info.getMembers().add(auth.getCurrentUser().getUid());
+        memberInfo.setTypeface(fonts.AzoSansRegular);
+        memberInfo.setText(info.getMembers().size() + (info.getMembers().size() == 1 ? " member" : " members"));
+    }
+
+    private void leaveGroup(){
+        api.leaveGroup(auth.getCurrentUser().getUid(), guid);
+        userInGroup = false;
+        join_btn.setText("Join");
+        changeBackgroundColor(join_btn, BUTTONBLUE);
+
+        info.getMembers().remove(auth.getCurrentUser().getUid());
+        memberInfo.setTypeface(fonts.AzoSansRegular);
+        memberInfo.setText(info.getMembers().size() + (info.getMembers().size() == 1 ? " member" : " members"));
     }
 
     @Override
@@ -182,7 +210,10 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         int id = v.getId();
         switch (id){
             case R.id.join_btn:
-                joinGroup();
+                if(userInGroup)
+                    leaveGroup();
+                else
+                    joinGroup();
                 break;
         }
     }

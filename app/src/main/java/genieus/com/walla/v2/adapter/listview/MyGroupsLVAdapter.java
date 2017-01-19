@@ -71,17 +71,17 @@ public class MyGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
                         check.setChecked(false);
                 }
             });
+        }else{
+            RelativeLayout container2 = (RelativeLayout) convertView.findViewById(R.id.container);
+            container2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), Group.class);
+                    intent.putExtra("guid", info.getGuid());
+                    getContext().startActivity(intent);
+                }
+            });
         }
-
-        RelativeLayout container2 = (RelativeLayout) convertView.findViewById(R.id.container);
-        container2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), Group.class);
-                intent.putExtra("guid", info.getGuid());
-                getContext().startActivity(intent);
-            }
-        });
 
         RelativeLayout container = (RelativeLayout) convertView.findViewById(R.id.group_icon_container);
          changeBackgroundColor(container, info.getColor());
