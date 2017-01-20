@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UserInfo {
     private String name, year, profile_url, major, hometown, description, uid, first_name, last_name, email;
-    private List<String> interests, friends, groups;
+    private List<String> interests, friends, groups, sent_requests, received_requests;
     private List<String> activities;
     private boolean verified;
 
@@ -135,6 +135,22 @@ public class UserInfo {
 
     public void setGroups(List<String> groups) {
         this.groups = groups;
+    }
+
+    public List<String> getSent_requests() {
+        return sent_requests;
+    }
+
+    public void setSent_requests(List<String> sent_requests) {
+        this.sent_requests = sent_requests;
+    }
+
+    public List<String> getReceived_requests() {
+        return received_requests;
+    }
+
+    public void setReceived_requests(List<String> received_requests) {
+        this.received_requests = received_requests;
     }
 
     @Override

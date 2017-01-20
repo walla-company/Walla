@@ -9,6 +9,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +49,8 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
 
     private WallaApi api;
     private String guid;
+
+    private List<EventInfo> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +89,9 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         progress.setVisibility(View.GONE);
 
         activities_lv = (ListView) findViewById(R.id.group_activities_lv);
-        List<EventInfo> list = new ArrayList<>();
+        list = new ArrayList<>();
 
+        /*
         EventInfo event1 = new EventInfo();
         event1.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
         event1.setInterests(Arrays.asList("Movies", "Academics"));
@@ -119,6 +123,7 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         data.add(event1);
         data.add(event2);
         data.add(event3);
+        */
 
         LayoutInflater myinflater = getLayoutInflater();
         ViewGroup myHeader = (ViewGroup)myinflater.inflate(R.layout.group_header_title, activities_lv, false);
@@ -144,7 +149,7 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         detailsIn.setText(info.getDescription());
         RelativeLayout abbrContainer = (RelativeLayout) activities_lv.findViewById(R.id.group_icon_container);
 
-        EventsLVAdapter adapter = new EventsLVAdapter(this, R.layout.single_activity, list);
+        final EventsLVAdapter adapter = new EventsLVAdapter(this, R.layout.single_activity, list);
         activities_lv.setAdapter(adapter);
 
         adapter.getFilter().filter("");
@@ -157,6 +162,18 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
             join_btn.setText("Leave");
             changeBackgroundColor(join_btn, BUTTONGREY);
             userInGroup = true;
+        }
+
+        for(String key : info.getActivities()){
+            api.getActivity(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object data, int call) {
+                    list.add((EventInfo) data);
+                    adapter.notifyDataSetChanged();
+                    adapter.getFilter().filter("");
+                    Log.d("actdata", list.toString());
+                }
+            }, key);
         }
 
         getSupportActionBar().setTitle(info.getAbbr());

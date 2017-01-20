@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class GroupInfo {
     private String name, abbr, color, description, guid;
-    private List<String> members;
+    private List<String> members, activities;
 
     public GroupInfo(String name, String abbr, String color){
         this.name = name;
@@ -59,6 +59,14 @@ public class GroupInfo {
 
     public List<String> getMembers() {
         return members;
+    }
+
+    public List<String> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<String> activities) {
+        this.activities = activities;
     }
 
     public void setMembers(List<String> members) {

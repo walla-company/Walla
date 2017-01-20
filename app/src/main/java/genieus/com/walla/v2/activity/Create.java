@@ -386,7 +386,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             }
 
             try {
-                postObj.put("host_group", group.getString("name"));
+                postObj.put("host_group", group.getString("guid"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

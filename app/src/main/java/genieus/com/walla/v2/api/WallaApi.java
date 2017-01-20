@@ -85,6 +85,7 @@ public class WallaApi {
     private static String get_group = "/api/get_group?";
     private static String get_notifications = "/api/get_notifications?";
     private static String approve_friend = "/api/approve_friend?";
+    private static String ignore_friend = "/api/ignore_friend_request?";
     private static String add_user = "/api/add_user?";
     private static String request_friend = "/api/request_friend?";
     private static String going = "/api/going?";
@@ -234,6 +235,26 @@ public class WallaApi {
 
                     }
 
+                    List<String> sent = new ArrayList<>();
+                    if(response.has("sent_friend_requests")){
+                        JSONObject sent_request = response.getJSONObject("sent_friend_requests");
+                        Iterator<String> keys = sent_request.keys();
+                        while(keys.hasNext()){
+                            sent.add(keys.next());
+                        }
+                    }
+                    info.setSent_requests(sent);
+
+                    List<String> recieved = new ArrayList<>();
+                    if(response.has("received_friend_requests")){
+                        JSONObject recieved_request = response.getJSONObject("received_friend_requests");
+                        Iterator<String> keys = recieved_request.keys();
+                        while(keys.hasNext()){
+                            sent.add(keys.next());
+                        }
+                    }
+                    info.setReceived_requests(recieved);
+
                     info.setFirst_name(response.getString("first_name"));
                     info.setLast_name(response.getString("last_name"));
                     info.setProfile_url(response.getString("profile_image_url"));
@@ -319,6 +340,16 @@ public class WallaApi {
                     }
 
                     group.setMembers(members);
+
+                    List<String> activities = new ArrayList<>();
+                    if(response.has("activities")){
+                        Iterator<String> keys = response.getJSONObject("activities").keys();
+                        while(keys.hasNext()){
+                            activities.add(keys.next());
+                        }
+                    }
+
+                    group.setActivities(activities);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -512,7 +543,11 @@ public class WallaApi {
                     event.setGoing_list(going);
                     event.setInterested_list(interested);
 
-                    event.setHost_group(response.getString("host_group"));
+                    if(response.has("host_group"))
+                        event.setHost_group(response.getString("host_group"));
+                    else
+                        event.setHost_group("");
+
                     event.setTitle(response.getString("title"));
                     event.setAuid(response.getString("activity_id"));
                     event.setCan_guests_invite(response.getBoolean("can_others_invite"));
@@ -579,8 +614,12 @@ public class WallaApi {
                         event.setGoing_list(going);
                         event.setInterested_list(interested);
 
-                        if(response.has("host_group") && response.getString("host_group").equals(""))
+                        if(response.has("host_group"))
                             event.setHost_group(response.getString("host_group"));
+                        else
+                            event.setHost_group("");
+                        Log.d("hostdata", event.getHost_group());
+
                         event.setTitle(response.getString("title"));
                         event.setAuid(response.getString("activity_id"));
                         event.setCan_guests_invite(response.getBoolean("can_others_invite"));
@@ -962,6 +1001,33 @@ public class WallaApi {
         queue.add(request);
     }
 
+    public static void ignoreFriendRequest(String uid, String friend){
+        final String url = site + ignore_friend + "token=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("friend", friend);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
     public static void addUser(final OnDataReceived listener, JSONObject params){
         final String url = site + add_user + "token=" + token;
 
@@ -993,12 +1059,7 @@ public class WallaApi {
             e.printStackTrace();
         }
 
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-            }
-        }, new Response.ErrorListener() {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, null, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("jsonerror", url + " " + error.toString());
@@ -1194,7 +1255,6 @@ public class WallaApi {
 
         queue.add(request);
     }
-
 
     public static void joinGroup(String uid, String guid){
         final String url = site + join_group + "token=" + token;

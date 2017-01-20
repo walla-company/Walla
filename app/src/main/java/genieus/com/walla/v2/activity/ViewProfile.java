@@ -147,8 +147,15 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         add.setTypeface(fonts.AzoSansBold);
         add.setOnClickListener(this);
         profile_pic = (CircleImageView) events_lv.findViewById(R.id.profile_picture);
+
+        Log.d("reqdata",user.getReceived_requests().toString());
+
         if(user.getFriends().contains(auth.getCurrentUser().getUid())) {
             add.setVisibility(View.GONE);
+        }else if(user.getReceived_requests().contains(auth.getCurrentUser().getUid())){
+            add.setEnabled(false);
+            changeBackgroundColor(add, BUTTONGREY);
+            add.setText("Friend request sent");
         }else{
             changeBackgroundColor(add, BUTTONBLUE);
             add.setText("Add friend");

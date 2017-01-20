@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
     private int resource;
     private Fonts fonts;
     private WallaApi api;
+    private FirebaseAuth auth;
     public NotificationInfoLVAdapter(Context context, int resource, List<NotificationInfo> data) {
         super(context, resource);
         this.data = data;
@@ -45,6 +47,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
 
         fonts = new Fonts(context);
         api = new WallaApi(context);
+        auth = FirebaseAuth.getInstance();
     }
 
     @NonNull
@@ -74,14 +77,18 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                 accept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        api.approveFriendRequest("user", notification.getSenderUId());
+                        api.approveFriendRequest(auth.getCurrentUser().getUid(), notification.getSenderUId());
+                        data.remove(notification);
+                        notifyDataSetChanged();
                     }
                 });
 
                 ignore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        api.ignoreFriendRequest(auth.getCurrentUser().getUid(), notification.getSenderUId());
+                        data.remove(notification);
+                        notifyDataSetChanged();
                     }
                 });
 

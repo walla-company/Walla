@@ -96,7 +96,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         groupsTabs.setLayoutManager(horizontal2);
         tabs.setLayoutManager(horizontal);
 
-        if(event.getHost_group() != null && event.getHost_group().equals("")) {
+        if(event.getHost_group() != null) {
             api.getGroup(new WallaApi.OnDataReceived() {
                 @Override
                 public void onDataReceived(Object data, int call) {
