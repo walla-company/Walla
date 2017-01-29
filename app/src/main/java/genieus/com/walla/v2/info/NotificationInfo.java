@@ -7,6 +7,7 @@ public class NotificationInfo {
     private String type, message;
     private int icon;
     private String senderUId, nuid, activityUid;
+    private double time_created;
 
     public NotificationInfo(String type, String message){
         this.type = type;
@@ -63,5 +64,13 @@ public class NotificationInfo {
 
     public void setActivityUid(String activityUid) {
         this.activityUid = activityUid;
+    }
+
+    public double getTime_created() {
+        return time_created;
+    }
+
+    public void setTime_created(double time_created) {
+        this.time_created = time_created;
     }
 }

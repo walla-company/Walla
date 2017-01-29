@@ -264,7 +264,6 @@ public class WallaApi {
                         }
                     }
                     info.setCalendar(calendar);
-
                     info.setFirst_name(response.getString("first_name"));
                     info.setLast_name(response.getString("last_name"));
                     info.setProfile_url(response.getString("profile_image_url"));
@@ -958,6 +957,7 @@ public class WallaApi {
 
                             NotificationInfo notif = new NotificationInfo();
                             try {
+                                notif.setTime_created(notifObj.getDouble("time_created"));
                                 notif.setNuid(notifObj.getString("notification_id"));
                                 notif.setSenderUId(notifObj.getString("sender"));
                                 notif.setType(notifObj.getString("type"));

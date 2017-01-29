@@ -12,6 +12,8 @@ import android.widget.ListView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import genieus.com.walla.R;
@@ -111,6 +113,12 @@ public class Notifications extends Fragment {
         */
 
 
+        Collections.sort(list, new Comparator<NotificationInfo>() {
+            @Override
+            public int compare(NotificationInfo o1, NotificationInfo o2) {
+                return Double.compare(o2.getTime_created(), o1.getTime_created());
+            }
+        });
         infoAdapter = new NotificationInfoLVAdapter(getContext(), R.layout.single_notification, list);
         info_lv.setAdapter(infoAdapter);
     }
