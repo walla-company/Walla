@@ -96,7 +96,11 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
             @Override
             public void onDataReceived(Object data, int call) {
                 event = (EventInfo) data;
-                initUi();
+                try {
+                    initUi();
+                }catch (Exception e){
+                    Toast.makeText(Details.this, "Could not open activity", Toast.LENGTH_LONG).show();
+                }
             }
         }, auid);
     }

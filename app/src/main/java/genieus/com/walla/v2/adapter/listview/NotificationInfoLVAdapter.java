@@ -1,6 +1,7 @@
 package genieus.com.walla.v2.adapter.listview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +26,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
+import genieus.com.walla.v2.activity.Details;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.fragment.Notifications;
 import genieus.com.walla.v2.info.Fonts;
@@ -59,6 +62,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
 
         final NotificationInfo notification = data.get(position);
 
+        final RelativeLayout container = (RelativeLayout) convertView.findViewById(R.id.container);
         final CircleImageView pic = (CircleImageView) convertView.findViewById(R.id.type_icon);
         final TextView info = (TextView) convertView.findViewById(R.id.message);
         info.setTypeface(fonts.AzoSansRegular);
@@ -104,6 +108,22 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                     }
                 }, notification.getSenderUId());
                 break;
+            case Notifications.USER_INVITED:
+                info.setText(notification.getMessage());
+                accept.setVisibility(View.GONE);
+                ignore.setVisibility(View.GONE);
+                pic.setVisibility(View.GONE);
+
+                Log.d("notif", notification.getActivityUid());
+
+                container.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), Details.class);
+                        intent.putExtra("auid", notification.getActivityUid());
+                        getContext().startActivity(intent);
+                    }
+                });
             default:
                 break;
         }

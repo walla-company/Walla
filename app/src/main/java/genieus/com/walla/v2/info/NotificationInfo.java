@@ -6,7 +6,7 @@ package genieus.com.walla.v2.info;
 public class NotificationInfo {
     private String type, message;
     private int icon;
-    private String senderUId, nuid;
+    private String senderUId, nuid, activityUid;
 
     public NotificationInfo(String type, String message){
         this.type = type;
@@ -55,5 +55,13 @@ public class NotificationInfo {
 
     public void setNuid(String nuid) {
         this.nuid = nuid;
+    }
+
+    public String getActivityUid() {
+        return activityUid;
+    }
+
+    public void setActivityUid(String activityUid) {
+        this.activityUid = activityUid;
     }
 }

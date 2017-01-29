@@ -28,6 +28,7 @@ import genieus.com.walla.v2.activity.Friends;
 import genieus.com.walla.v2.activity.ViewProfile;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.FriendInfo;
+import genieus.com.walla.v2.info.UserInfo;
 
 /**
  * Created by anesu on 12/20/16.
@@ -36,7 +37,7 @@ import genieus.com.walla.v2.info.FriendInfo;
 public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
 
     public interface OnFriendStateListener{
-        public void onFriendStateChanged(String name, boolean checked);
+        public void onFriendStateChanged(int pos, boolean checked);
     }
 
 
@@ -60,7 +61,7 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
@@ -72,7 +73,7 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
             check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    listener.onFriendStateChanged(friend.getName(), isChecked);
+                    listener.onFriendStateChanged(position, isChecked);
                 }
             });
         }else{

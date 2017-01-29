@@ -954,13 +954,19 @@ public class WallaApi {
                                 e.printStackTrace();
                                 return;
                             }
+
+
                             NotificationInfo notif = new NotificationInfo();
                             try {
                                 notif.setNuid(notifObj.getString("notification_id"));
                                 notif.setSenderUId(notifObj.getString("sender"));
                                 notif.setType(notifObj.getString("type"));
-                                if(notifObj.has("message")){
-                                    notif.setMessage(notifObj.getString("message"));
+                                if(notifObj.has("text")){
+                                    notif.setMessage(notifObj.getString("text"));
+                                }
+
+                                if(notifObj.has("activity_id")){
+                                    notif.setActivityUid(notifObj.getString("activity_id"));
                                 }
 
                                 list.add(notif);

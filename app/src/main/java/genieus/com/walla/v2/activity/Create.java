@@ -452,11 +452,18 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
     private void initFriends(Intent data) {
         String info = data.getStringExtra("result");
-        friends_in.setText(info);
-        String[] friends = info.replace(" ", "").split(",");
-        JSONArray array = new JSONArray(Arrays.asList(friends));
         try {
-            postObj.put("invited_users", array);
+            JSONArray array = new JSONArray(info);
+            JSONArray strArray = new JSONArray();
+            String[] friends = new String[array.length()];
+            for(int i = 0; i < array.length(); i++){
+                strArray.put(array.getJSONObject(i).get("uid"));
+                friends[i] = array.getJSONObject(i).getString("name");
+            }
+
+            JSONArray params = new JSONArray(Arrays.asList(friends));
+            postObj.put("invited_users", strArray);
+            friends_in.setText(Arrays.asList(friends).toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -17,6 +17,10 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +37,15 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
     private TextView no_data;
     private ProgressBar progress;
     private FriendsLVAdapter adapter;
-    private List<String> selected;
+    private List<Integer> selected;
     private MenuItem done;
     private boolean doneIconVisible;
     private UserInfo user;
     private WallaApi api;
     private Fonts fonts;
     private FirebaseAuth auth;
+    private JSONArray array;
+    private List<FriendInfo> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,7 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
     private void initUi() {
         fonts = new Fonts(this);
         progress.setVisibility(View.GONE);
-        final List<FriendInfo> list = new ArrayList<>();
+        list = new ArrayList<>();
 
         friends_lv = (ListView) findViewById(R.id.friends_lv);
 
@@ -120,17 +126,29 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
         return getCallingActivity() != null;
     }
 
-    private String listAsString(){
-        StringBuffer sb = new StringBuffer();
-        for(String name : selected) sb.append(", " + name);
-        return sb.toString().substring(2);
-    }
-
     private void returnData() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("result", listAsString());
+
+        array = new JSONArray();
+        for(int elm : selected){
+            FriendInfo info = list.get(elm);
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("uid", info.getUid());
+                obj.put("name", info.getName());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            array.put(obj);
+        }
+        returnIntent.putExtra("result", array.toString());
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
+    }
+
+    private void getElm(){
+
     }
 
     @Override
@@ -154,15 +172,15 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
     }
 
     @Override
-    public void onFriendStateChanged(String name, boolean checked) {
+    public void onFriendStateChanged(int pos, boolean checked) {
         if(!checked){
-            selected.remove(name);
+            selected.remove(new Integer(pos));
             if(selected.isEmpty()){
                 done.setVisible(false);
                 doneIconVisible = false;
             }
         }else{
-            selected.add(name);
+            selected.add(pos);
             if(!doneIconVisible){
                 done.setVisible(true);
                 doneIconVisible = true;
