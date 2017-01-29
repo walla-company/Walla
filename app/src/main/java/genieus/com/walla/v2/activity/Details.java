@@ -29,7 +29,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -234,11 +238,32 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 UserInfo user = (UserInfo) data;
                 host_name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
                 host_info.setText(String.format("%s · %s", user.getYear(), user.getMajor()));
+
                 if(user.getProfile_url() != null && !user.getProfile_url().equals("")) {
-                    Picasso.with(Details.this) //Context
-                            .load(user.getProfile_url()) //URL/FILE
-                            .into(host_image);//an ImageView Object to show the loaded image
+                    if(!user.getProfile_url().startsWith("gs://walla-launch.appspot.com")) {
+                        Picasso.with(Details.this) //Context
+                                .load(user.getProfile_url()) //URL/FILE
+                                .into(host_image);//an ImageView Object to show the loaded image;
+                    }else{
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        storage.getReferenceFromUrl(user.getProfile_url()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                if(task.isSuccessful()){
+                                    Picasso.with(Details.this) //Context
+                                            .load(task.getResult().toString()) //URL/FILE
+                                            .into(host_image);//an ImageView Object to show the loaded image;
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    }
                 }
+
             }
         }, event.getHost());
 

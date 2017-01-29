@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,6 +30,7 @@ public class Search extends AppCompatActivity {
     private SuggestFriendsRVAdapter suggestFriendsAdapter;
     private ListView suggested_group_lv;
     private SuggestedGroupsLVAdapter suggestGroupAdapter;
+    private SearchView search;
 
     private TextView friends_label, group_label;
     private WallaApi api;
@@ -46,6 +50,21 @@ public class Search extends AppCompatActivity {
     private void initUi() {
         fonts = new Fonts(this);
         api = new WallaApi(this);
+
+        search = (SearchView) findViewById(R.id.search);
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                suggestGroupAdapter.getFilter().filter(search.getQuery());
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                suggestGroupAdapter.getFilter().filter(search.getQuery());
+                return true;
+            }
+        });
 
         api.getSuggestedUsers(new WallaApi.OnDataReceived() {
             @Override
@@ -96,6 +115,7 @@ public class Search extends AppCompatActivity {
             public void onDataReceived(Object data, int call) {
                 suggestGroupAdapter = new SuggestedGroupsLVAdapter(Search.this, R.layout.single_suggest_group, (List<GroupInfo>) data );
                 suggested_group_lv.setAdapter(suggestGroupAdapter);
+                suggestGroupAdapter.getFilter().filter("");
             }
         });
 
@@ -103,6 +123,7 @@ public class Search extends AppCompatActivity {
         group_label = (TextView) findViewById(R.id.suggest_group_label);
         friends_label.setTypeface(fonts.AzoSansRegular);
         group_label.setTypeface(fonts.AzoSansRegular);
+
     }
 
 }

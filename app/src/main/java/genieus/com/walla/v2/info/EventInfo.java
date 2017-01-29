@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class EventInfo {
 
-    private String auid, title, location_name, location_address, host, host_group, details;
+    private String auid, title, location_name, location_address, host, host_group, details, group_name, group_abbr;
     private double location_lat, location_long;
     private long start_time, end_time;
     private boolean is_public, can_guests_invite;
@@ -161,6 +161,22 @@ public class EventInfo {
 
     public void setInterested(int interested) {
         this.interested = interested;
+    }
+
+    public String getGroup_name() {
+        return group_name;
+    }
+
+    public void setGroup_name(String group_name) {
+        this.group_name = group_name;
+    }
+
+    public String getGroup_abbr() {
+        return group_abbr;
+    }
+
+    public void setGroup_abbr(String group_abbr) {
+        this.group_abbr = group_abbr;
     }
 
     @Override

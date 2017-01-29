@@ -162,6 +162,10 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
             }
         }
 
+        if(!startedForResult()){
+            JSONArray array = new JSONArray(selected);
+            api.saveUserInterests(auth.getCurrentUser().getUid(), array);
+        }
 
         adapter.notifyDataSetChanged();
         //adapter = new InterestsViewRVAdapter(this, data, this, width);
@@ -226,14 +230,5 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
         }
 
         return true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(!startedForResult()) {
-            JSONArray array = new JSONArray(selected);
-            api.saveUserInterests(auth.getCurrentUser().getUid(), array);
-        }
     }
 }

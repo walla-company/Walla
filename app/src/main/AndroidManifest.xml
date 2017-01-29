@@ -107,10 +107,12 @@
         <receiver android:name=".v1.EventReceiver" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.Main"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.MainContainer"
             android:label="@string/title_activity_main_container"
             android:theme="@style/AppTheme.NoActionBar">
@@ -121,10 +123,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.Search"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.Create"
             android:label="@string/title_activity_create"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -141,45 +145,56 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.InterestsView"
             android:label="@string/title_activity_interests_view"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.Group"
             android:label="@string/title_activity_group"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.Details"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.EditProfile"
             android:label="@string/title_activity_edit_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.Friends"
             android:label="@string/title_activity_friends"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.ViewProfile"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.MyGroups"
             android:label="@string/title_activity_my_groups"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.LoginScreen"
             android:label="@string/title_activity_login_screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.ForgotPassword"
             android:label="@string/title_activity_forgot_password"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".v2.activity.SignUp"
             android:label="@string/title_activity_sign_up"
             android:theme="@style/AppTheme.NoActionBar"></activity>

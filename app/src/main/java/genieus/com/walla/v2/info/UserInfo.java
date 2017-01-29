@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UserInfo {
     private String name, year, profile_url, major, hometown, description, uid, first_name, last_name, email;
-    private List<String> interests, friends, groups, sent_requests, received_requests;
+    private List<String> interests, friends, groups, sent_requests, received_requests, calendar;
     private List<String> activities;
     private boolean verified;
 
@@ -151,6 +151,14 @@ public class UserInfo {
 
     public void setReceived_requests(List<String> received_requests) {
         this.received_requests = received_requests;
+    }
+
+    public List<String> getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(List<String> calendar) {
+        this.calendar = calendar;
     }
 
     @Override

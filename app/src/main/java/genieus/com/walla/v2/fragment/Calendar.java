@@ -4,11 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.adapter.listview.EventsLVAdapter;
+import genieus.com.walla.v2.api.WallaApi;
+import genieus.com.walla.v2.info.EventInfo;
+import genieus.com.walla.v2.info.UserInfo;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +38,13 @@ public class Calendar extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ListView events_lv;
+    private WallaApi api;
+    private FirebaseAuth auth;
+    private UserInfo user;
+    private EventsLVAdapter adapter;
+    List<EventInfo> events;
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,7 +83,36 @@ public class Calendar extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calendar, container, false);
+        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
+        events_lv = (ListView) view.findViewById(R.id.events);
+        events = new ArrayList<>();
+        api = new WallaApi(getContext());
+        auth = FirebaseAuth.getInstance();
+        api.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                user = (UserInfo) data;
+                initUi();
+            }
+        }, auth.getCurrentUser().getUid());
+
+        return view;
+    }
+
+    private void initUi() {
+        adapter = new EventsLVAdapter(getContext(), R.layout.single_activity, events);
+        events_lv.setAdapter(adapter);
+        Log.d("caldata", user.getCalendar().toString());
+        for(String key : user.getCalendar()){
+            api.getActivity(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object data, int call) {
+                    events.add((EventInfo) data);
+                    adapter.notifyDataSetChanged();
+                    adapter.getFilter().filter("");
+                }
+            }, key);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

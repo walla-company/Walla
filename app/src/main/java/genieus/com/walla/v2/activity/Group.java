@@ -138,7 +138,11 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         title.setTypeface(fonts.AzoSansRegular);
         memberInfo = (TextView) activities_lv.findViewById(R.id.members_info);
         memberInfo.setTypeface(fonts.AzoSansRegular);
-        memberInfo.setText(info.getMembers().size() + (info.getMembers().size() == 1 ? " member" : " members"));
+        if(info.getMembers() != null)
+            memberInfo.setText(info.getMembers().size() + (info.getMembers().size() == 1 ? " member" : " members"));
+        else
+            memberInfo.setText("0 members");
+
         TextView abbr = (TextView) activities_lv.findViewById(R.id.abbr);
         abbr.setText(info.getAbbr());
         abbr.setTypeface(fonts.AzoSansRegular);
@@ -155,13 +159,23 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         adapter.getFilter().filter("");
 
         join_btn = (Button) findViewById(R.id.join_btn);
-        changeBackgroundColor(abbrContainer, info.getColor());
+
+        try {
+            changeBackgroundColor(abbrContainer, info.getColor());
+        }catch(Exception e){
+            Log.d("groupcolor", e.toString());
+        }
+
         changeBackgroundColor(join_btn, BUTTONBLUE);
 
-        if(info.getMembers().contains(auth.getCurrentUser().getUid())){
-            join_btn.setText("Leave");
-            changeBackgroundColor(join_btn, BUTTONGREY);
-            userInGroup = true;
+        if(info.getMembers() != null){
+            if(info.getMembers().contains(auth.getCurrentUser().getUid())){
+                join_btn.setText("Leave");
+                changeBackgroundColor(join_btn, BUTTONGREY);
+                userInGroup = true;
+            }
+        }else{
+            info.setMembers(new ArrayList<String>());
         }
 
         for(String key : info.getActivities()){

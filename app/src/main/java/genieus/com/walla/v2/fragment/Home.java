@@ -21,6 +21,8 @@ import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +64,7 @@ public class Home extends Fragment {
     private static Context context;
 
     private static WallaApi api;
+    private static FirebaseAuth auth;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -149,7 +152,7 @@ public class Home extends Fragment {
 
         final Context context = getContext();
 
-        api.getActivities(new WallaApi.OnDataReceived() {
+        api.getActivities(auth.getCurrentUser().getUid(), new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
                 adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>) data);
@@ -207,7 +210,7 @@ public class Home extends Fragment {
 
     public static void refreshPage() {
         swipeRefreshLayout.setRefreshing(false);
-        api.getActivities(new WallaApi.OnDataReceived() {
+        api.getActivities(auth.getCurrentUser().getUid(), new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
                 adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>) data);
@@ -293,6 +296,8 @@ public class Home extends Fragment {
                 refreshPage();
             }
         });
+
+        auth = FirebaseAuth.getInstance();
 
         initUi();
         return view;

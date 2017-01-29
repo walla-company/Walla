@@ -6,11 +6,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
@@ -24,7 +27,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -48,6 +55,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
     private ListView groups_lv, events_lv;
     private GroupProfileLVAdapter groupsAdapter;
     private EventsLVAdapter adapterEvents;
+    private CardView details_container;
     private TextView name, year, major, hometown, details_in, details_label;
     private Button add;
     private ProgressBar progress;
@@ -121,9 +129,10 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         groupsAdapter = new GroupProfileLVAdapter(this, R.layout.single_group_profile, data);
         groups_lv.setAdapter(groupsAdapter);
 
-
-        for(String key : user.getActivities()){
-            api.getActivity(this, key);
+        if(user.getActivities() != null) {
+            for (String key : user.getActivities()) {
+                api.getActivity(this, key);
+            }
         }
 
         name = (TextView) events_lv.findViewById(R.id.name);
@@ -143,6 +152,9 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         details_in.setText(user.getDescription());
         details_label = (TextView) events_lv.findViewById(R.id.details_label);
         details_label.setTypeface(fonts.AzoSansMedium);
+        details_container = (CardView) events_lv.findViewById(R.id.details_container);
+        if(user.getDescription() == null || user.getDescription().isEmpty())
+            details_container.setVisibility(View.GONE);
         add = (Button) findViewById(R.id.add_btn);
         add.setTypeface(fonts.AzoSansBold);
         add.setOnClickListener(this);
@@ -162,9 +174,28 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         }
 
         if(user.getProfile_url() != null && !user.getProfile_url().equals("")) {
-            Picasso.with(this) //Context
-                    .load(user.getProfile_url()) //URL/FILE
-                    .into(profile_pic);//an ImageView Object to show the loaded image
+            if(!user.getProfile_url().startsWith("gs://walla-launch.appspot.com")) {
+                Picasso.with(ViewProfile.this) //Context
+                        .load(user.getProfile_url()) //URL/FILE
+                        .into(profile_pic);//an ImageView Object to show the loaded image;
+            }else{
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                storage.getReferenceFromUrl(user.getProfile_url()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()){
+                            Picasso.with(ViewProfile.this) //Context
+                                    .load(task.getResult().toString()) //URL/FILE
+                                    .into(profile_pic);//an ImageView Object to show the loaded image;
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            }
         }
 
         confirm = new AlertDialog.Builder(this);

@@ -272,5 +272,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     protected void onStop() {
         super.onStop();
         saveData();
+        MainContainer.refresh();
     }
 }

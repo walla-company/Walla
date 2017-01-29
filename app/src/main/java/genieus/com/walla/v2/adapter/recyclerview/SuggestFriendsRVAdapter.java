@@ -1,21 +1,29 @@
 package genieus.com.walla.v2.adapter.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import genieus.com.walla.R;
+import genieus.com.walla.v2.activity.ViewProfile;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.MutualFriendInfo;
 import genieus.com.walla.v2.info.UserInfo;
@@ -46,18 +54,55 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
     }
 
     @Override
-    public void onBindViewHolder(SuggestFriendsHolder holder, int position) {
-        UserInfo info = data.get(position);
+    public void onBindViewHolder(final SuggestFriendsHolder holder, int position) {
+        final UserInfo info = data.get(position);
 
         holder.name.setTypeface(fonts.AzoSansRegular);
         holder.mutualFriends.setTypeface(fonts.AzoSansRegular);
 
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ViewProfile.class);
+                intent.putExtra("uid", info.getUid());
+                context.startActivity(intent);
+            }
+        });
+
+        holder.addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ViewProfile.class);
+                intent.putExtra("uid", info.getUid());
+                context.startActivity(intent);
+            }
+        });
+
         holder.name.setText(String.format("%s %s", info.getFirst_name(), info.getLast_name()));
         holder.mutualFriends.setVisibility(View.GONE);
         if(info.getProfile_url() != null && !info.getProfile_url().equals("")) {
-            Picasso.with(context) //Context
-                    .load(info.getProfile_url()) //URL/FILE
-                    .into(holder.icon);//an ImageView Object to show the loaded image;
+            if(!info.getProfile_url().startsWith("gs://walla-launch.appspot.com")) {
+                Picasso.with(context) //Context
+                        .load(info.getProfile_url()) //URL/FILE
+                        .into(holder.icon);//an ImageView Object to show the loaded image;
+            }else{
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                storage.getReferenceFromUrl(info.getProfile_url()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()){
+                            Picasso.with(context) //Context
+                                    .load(task.getResult().toString()) //URL/FILE
+                                    .into(holder.icon);//an ImageView Object to show the loaded image;
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            }
         }
         changeBackgroundColor(holder.addBtn, BUTTONBLUE);
     }

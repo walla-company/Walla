@@ -12,13 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.Group;
+import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 
@@ -30,13 +33,21 @@ public class SuggestedGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
     private List<GroupInfo> data;
     private int resource;
     private Fonts fonts;
+    private List<String> filtered;
+    private Filter filter;
 
     public SuggestedGroupsLVAdapter(Context context, int resource, List<GroupInfo> data) {
         super(context, resource);
         this.data = data;
         this.resource = resource;
 
+        filtered = new ArrayList<>();
+        filter = new SuggestedGroupsLVAdapter.ItemFilter();
         fonts = new Fonts(context);
+    }
+
+    public Filter getFilter() {
+        return filter;
     }
 
     @NonNull
@@ -46,7 +57,7 @@ public class SuggestedGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
             convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
         }
 
-        final GroupInfo info = data.get(position);
+        final GroupInfo info = getGroup(data, filtered.get(position));
 
         RelativeLayout container = (RelativeLayout) convertView.findViewById(R.id.group_icon_container);
         RelativeLayout entire_container = (RelativeLayout) convertView.findViewById(R.id.entire_container);
@@ -74,9 +85,19 @@ public class SuggestedGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
         return convertView;
     }
 
+    private GroupInfo getGroup(List<GroupInfo> list, String query){
+        for(GroupInfo group : list){
+            if((group.getAbbr() + group.getName()).equals(query)){
+                return group;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public int getCount() {
-        return data.size();
+        return filtered.size();
     }
 
     private void changeBackgroundColor(View view, String color){
@@ -87,6 +108,42 @@ public class SuggestedGroupsLVAdapter extends ArrayAdapter<GroupInfo> {
             ((GradientDrawable)background).setColor(Color.parseColor(color));
         } else if (background instanceof ColorDrawable) {
             ((ColorDrawable)background).setColor(Color.parseColor(color));
+        }
+    }
+
+    private class ItemFilter extends Filter {
+        @Override
+        protected Filter.FilterResults performFiltering(CharSequence constraint) {
+
+            String filterString = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final List<GroupInfo> list = data;
+
+            int count = list.size();
+            final ArrayList<String> nlist = new ArrayList<>(count);
+
+            String filterableString;
+
+            for (int i = 0; i < count; i++) {
+                filterableString = list.get(i).getAbbr() + list.get(i).getName();
+                if (filterableString.toLowerCase().contains(filterString)) {
+                    nlist.add(filterableString);
+                }
+            }
+
+            results.values = nlist;
+            results.count = nlist.size();
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filtered = (ArrayList<String>) results.values;
+            notifyDataSetChanged();
         }
     }
 }

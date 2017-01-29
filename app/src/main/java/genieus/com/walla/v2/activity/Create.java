@@ -318,7 +318,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     public void findPlace(View view) {
         try {
             Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
                             .build(this);
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
@@ -387,6 +387,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
             try {
                 postObj.put("host_group", group.getString("guid"));
+                postObj.put("host_group_name", group.getString("name"));
+                postObj.put("host_group_short_name", group.getString("abbr"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

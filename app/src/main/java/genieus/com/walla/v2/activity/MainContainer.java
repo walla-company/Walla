@@ -1,5 +1,6 @@
 package genieus.com.walla.v2.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -53,16 +54,17 @@ public class MainContainer extends AppCompatActivity
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private com.github.clans.fab.FloatingActionMenu fab;
-    private CircleImageView profile_pic;
-    private TextView name;
+    private static CircleImageView profile_pic;
+    private static TextView name;
     private NavigationView navigationView;
     private View navHeader;
     private static UserInfo user;
 
     private MenuItem filter_icon;
     private Fonts fonts;
-    private WallaApi api;
-    private FirebaseAuth auth;
+    private static WallaApi api;
+    private static FirebaseAuth auth;
+    private static Context context;
 
     private int[] tabIcons, tabIconsColored;
     private String[] tabNames;
@@ -90,6 +92,8 @@ public class MainContainer extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        context = getApplicationContext();
 
         initUi();
         initShortcuts();
@@ -159,19 +163,25 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void initShortcuts() {
-        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
-        Intent shortcutIntent = new Intent(this, Create.class);
-        shortcutIntent.setAction(Intent.ACTION_VIEW);
+        /*
+        try {
+            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+            Intent shortcutIntent = new Intent(this, Create.class);
+            shortcutIntent.setAction(Intent.ACTION_VIEW);
 
-        ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "compose")
-                .setShortLabel("Compose")
-                .setLongLabel("Create event")
-                .setIcon(Icon.createWithResource(this, R.mipmap.circle_add))
-                .setIntent(shortcutIntent)
-                .build();
 
-        shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
+            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "compose")
+                    .setShortLabel("Compose")
+                    .setLongLabel("Create event")
+                    .setIcon(Icon.createWithResource(this, R.mipmap.circle_add))
+                    .setIntent(shortcutIntent)
+                    .build();
 
+            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
+        }catch (Exception e){
+
+        }
+        */
     }
 
     private void initUi() {
@@ -219,6 +229,22 @@ public class MainContainer extends AppCompatActivity
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+    }
+
+    public static void refresh(){
+        api.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                user = (UserInfo) data;
+                name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
+
+                if (user.getProfile_url() != null && !user.getProfile_url().equals("")) {
+                    Picasso.with(context) //Context
+                            .load(user.getProfile_url()) //URL/FILE
+                            .into(profile_pic);//an ImageView Object to show the loaded image
+                }
+            }
+        }, auth.getCurrentUser().getUid());
     }
 
     private void showWelcomeMessage() {

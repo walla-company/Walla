@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -59,7 +60,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
     private FirebaseAuth auth;
     private DatabaseReference database;
     private Fonts fonts;
+    private AlertDialog academicAlert;
     private String[] sourceOptions = {"Take Photo", "Choose from Library", "Cancel"};
+    private CharSequence[] academicOptions = {"undergrad", "grad"};
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
@@ -112,6 +115,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         level = (TextView) findViewById(R.id.year_in);
         level.setTypeface(fonts.AzoSansRegular);
         level.setTextColor(email_label.getTextColors());
+        level.setOnClickListener(this);
         major = (EditText) findViewById(R.id.major_in);
         major.setTypeface(fonts.AzoSansRegular);
         major.setTextColor(email_label.getTextColors());
@@ -128,6 +132,19 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         signup = (Button) findViewById(R.id.signup);
         signup.setOnClickListener(this);
         changeBackGroundColor(signup, getResources().getColor(R.color.lightblue));
+
+        final AlertDialog.Builder academic = new AlertDialog.Builder(this);
+        academic.setTitle("Select an option");
+        academic.setCancelable(false)
+                .setItems(academicOptions, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        level.setText(academicOptions[which]);
+                        dialog.cancel();
+                    }
+                });
+
+        academicAlert = academic.create();
     }
 
     private void attemptSignup(){
@@ -341,6 +358,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
         }
     }
 
+    private void showAcademicOptions(){
+        academicAlert.show();
+    }
+
     @Override
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
@@ -370,6 +391,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, D
                 break;
             case R.id.profile_image:
                 chooseProfilePicture();
+                break;
+            case R.id.year_in:
+                Log.d("graddata", "click");
+                showAcademicOptions();
                 break;
             default:
                 break;

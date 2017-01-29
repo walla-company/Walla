@@ -255,6 +255,16 @@ public class WallaApi {
                     }
                     info.setReceived_requests(recieved);
 
+                    List<String> calendar = new ArrayList<>();
+                    if(response.has("calendar")){
+                        JSONObject cal = response.getJSONObject("calendar");
+                        Iterator<String> keys = cal.keys();
+                        while(keys.hasNext()){
+                            calendar.add(keys.next());
+                        }
+                    }
+                    info.setCalendar(calendar);
+
                     info.setFirst_name(response.getString("first_name"));
                     info.setLast_name(response.getString("last_name"));
                     info.setProfile_url(response.getString("profile_image_url"));
@@ -548,6 +558,9 @@ public class WallaApi {
                     else
                         event.setHost_group("");
 
+
+                    event.setGroup_name(response.getString("host_group_name"));
+                    event.setGroup_abbr(response.getString("host_group_short_name"));
                     event.setTitle(response.getString("title"));
                     event.setAuid(response.getString("activity_id"));
                     event.setCan_guests_invite(response.getBoolean("can_others_invite"));
@@ -578,8 +591,8 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void getActivities(final OnDataReceived listener) {
-        final String url = site + get_activities + "token=" + token + "&school_identifier=" + domain;
+    public static void getActivities(String uid, final OnDataReceived listener) {
+        final String url = site + get_activities + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
         final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray array) {
@@ -618,8 +631,9 @@ public class WallaApi {
                             event.setHost_group(response.getString("host_group"));
                         else
                             event.setHost_group("");
-                        Log.d("hostdata", event.getHost_group());
 
+                        event.setGroup_name(response.getString("host_group_name"));
+                        event.setGroup_abbr(response.getString("host_group_short_name"));
                         event.setTitle(response.getString("title"));
                         event.setAuid(response.getString("activity_id"));
                         event.setCan_guests_invite(response.getBoolean("can_others_invite"));
@@ -1309,6 +1323,7 @@ public class WallaApi {
 
         queue.add(request);
     }
+
 
     private static List<String> interestsJsontoList(JSONArray array) {
         List<String> data = new ArrayList<>();

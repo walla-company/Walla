@@ -2,6 +2,8 @@ package genieus.com.walla.v2.adapter.listview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -81,16 +87,35 @@ public class FriendsLVAdapter extends ArrayAdapter<FriendInfo> {
             });
         }
 
-        CircleImageView image = (CircleImageView) convertView.findViewById(R.id.profile_picture);
+        final CircleImageView image = (CircleImageView) convertView.findViewById(R.id.profile_picture);
         TextView name = (TextView) convertView.findViewById(R.id.name);
         name.setTypeface(fonts.AzoSansMedium);
         TextView details = (TextView) convertView.findViewById(R.id.details);
         details.setTypeface(fonts.AzoSansRegular);
 
         if(friend.getImage_url() != null && !friend.getImage_url().equals("")) {
-            Picasso.with(getContext()) //Context
-                    .load(friend.getImage_url()) //URL/FILE
-                    .into(image);//an ImageView Object to show the loaded image
+            if(!friend.getImage_url().startsWith("gs://walla-launch.appspot.com")) {
+                Picasso.with(getContext()) //Context
+                        .load(friend.getImage_url()) //URL/FILE
+                        .into(image);//an ImageView Object to show the loaded image;
+            }else{
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                storage.getReferenceFromUrl(friend.getImage_url()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()){
+                            Picasso.with(getContext()) //Context
+                                    .load(task.getResult().toString()) //URL/FILE
+                                    .into(image);//an ImageView Object to show the loaded image;
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            }
         }
 
         name.setText(friend.getName());

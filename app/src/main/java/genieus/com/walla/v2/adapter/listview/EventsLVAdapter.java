@@ -20,6 +20,7 @@ import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.Details;
+import genieus.com.walla.v2.activity.Group;
 import genieus.com.walla.v2.adapter.recyclerview.GroupTabRVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.EventInfo;
@@ -96,14 +97,11 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         groupsTabs.setLayoutManager(horizontal2);
         tabs.setLayoutManager(horizontal);
 
-        if(event.getHost_group() != null) {
-            api.getGroup(new WallaApi.OnDataReceived() {
-                @Override
-                public void onDataReceived(Object data, int call) {
-                    GroupTabRVAdapter groupTabAdapter = new GroupTabRVAdapter(getContext(), new ArrayList<GroupInfo>(Arrays.asList((GroupInfo) data)));
-                    groupsTabs.setAdapter(groupTabAdapter);
-                }
-            }, event.getHost_group());
+        if(event.getGroup_name() != null && !event.getGroup_name().isEmpty()){
+            GroupInfo groupInfo = new GroupInfo(event.getGroup_name(), event.getGroup_abbr(), "");
+            groupInfo.setGuid(event.getHost_group());
+            GroupTabRVAdapter groupTabAdapter = new GroupTabRVAdapter(getContext(), new ArrayList<GroupInfo>(Arrays.asList(groupInfo)));
+            groupsTabs.setAdapter(groupTabAdapter);
         }
 
         TabRVAdapter tabAdapter = new TabRVAdapter(getContext(), event.getInterests());
