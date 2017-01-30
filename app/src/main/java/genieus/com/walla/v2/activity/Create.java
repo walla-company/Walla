@@ -71,6 +71,7 @@ import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.InterestInfo;
+import genieus.com.walla.v2.info.UserInfo;
 
 public class Create extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, DialogInterface.OnClickListener {
     private static final int INVITEFRIENDS = 2;
@@ -591,24 +592,42 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                     switch (which){
                         case 0:
                             //yes
-                            api.postActivity(postObj);
-                            Snackbar snack = Snackbar.make(map_container, "Activity created successfully", Snackbar.LENGTH_LONG);
-                            View view = snack.getView();
-                            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-                            tv.setTypeface(fonts.AzoSansRegular);
-                            tv.setTextColor(getResources().getColor(R.color.colorPrimary));
-                            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                            snack.show();
-
-                            new CountDownTimer(2000, 1000){
+                            api.getUserInfo(new WallaApi.OnDataReceived() {
                                 @Override
-                                public void onTick(long millisUntilFinished) {}
+                                public void onDataReceived(Object data, int call) {
+                                    UserInfo user = (UserInfo) data;
+                                    if(user.isVerified()){
+                                        api.postActivity(postObj);
+                                        Snackbar snack = Snackbar.make(map_container, "Activity created successfully", Snackbar.LENGTH_LONG);
+                                        View view = snack.getView();
+                                        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                                        tv.setTypeface(fonts.AzoSansRegular);
+                                        tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+                                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                                        snack.show();
 
-                                @Override
-                                public void onFinish() {
-                                    onBackPressed();
+                                        new CountDownTimer(2000, 1000){
+                                            @Override
+                                            public void onTick(long millisUntilFinished) {}
+
+                                            @Override
+                                            public void onFinish() {
+                                                onBackPressed();
+                                            }
+                                        }.start();
+                                    }else{
+                                        Toast.makeText(Create.this, "You must verify your email adress before you can post", Toast.LENGTH_LONG).show();
+                                        Snackbar.make(map_container, "Email not verified", Snackbar.LENGTH_INDEFINITE).setAction("VERIFY", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                api.requestVerification(auth.getCurrentUser().getEmail(), auth.getCurrentUser().getUid());
+                                                Toast.makeText(Create.this,  "Email sent to " + auth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
+                                            }
+                                        }).show();
+                                    }
                                 }
-                            }.start();
+                            }, auth.getCurrentUser().getUid());
+
                             dialog.cancel();
                             break;
                         case 1:
