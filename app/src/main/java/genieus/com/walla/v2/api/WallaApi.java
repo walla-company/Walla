@@ -94,6 +94,7 @@ public class WallaApi {
     private static String join_group = "/api/join_group?";
     private static String leave_group = "/api/leave_group?";
     private static String verify_email = "/api/request_verification?";
+    private static String add_token = "/api/add_notification_token?";
 
 
     public static String domain = "";
@@ -1331,13 +1332,40 @@ public class WallaApi {
     }
 
     public static void requestVerification(String email, String uid){
-        final String url = site + verify_email + "token=" + token;
+        final String url = site + verify_email;
 
         JSONObject params = new JSONObject();
         try {
             params.put("school_identifier", domain);
             params.put("uid", uid);
             params.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void registerToken(String uid, String token){
+        final String url = site + add_token + "domain=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("token", token);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -2,8 +2,11 @@ package genieus.com.walla.v2.info;
 
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import genieus.com.walla.v2.api.WallaApi;
 
 /**
  * Created by anesu on 1/29/17.
@@ -11,10 +14,17 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class MyFirebaseInstanceidService extends FirebaseInstanceIdService {
     private static final String REG_TOKEN = "REG_TOKEN";
+    WallaApi api;
+    FirebaseAuth auth;
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
+        api = new WallaApi(getApplicationContext());
+        auth = FirebaseAuth.getInstance();
+
         String token = FirebaseInstanceId.getInstance().getToken();
+        api.registerToken(auth.getCurrentUser().getUid(), token);
+
         Log.d(REG_TOKEN, token);
     }
 }

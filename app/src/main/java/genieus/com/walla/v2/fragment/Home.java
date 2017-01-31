@@ -54,6 +54,7 @@ public class Home extends Fragment {
     private InterestsRVAdapter adapter;
     private static EventsLVAdapter adapterEvents;
     private List<Interests> interests;
+    private List<EventInfo> events;
     private static TextView filter_tv;
     private static SwipeRefreshLayout swipeRefreshLayout;
 
@@ -107,6 +108,7 @@ public class Home extends Fragment {
         context = getContext();
         api = new WallaApi(getContext());
         fonts = new Fonts(getContext());
+        events = new ArrayList<>();
         initFilter();
         initEvents();
     }
@@ -155,9 +157,13 @@ public class Home extends Fragment {
         api.getActivities(auth.getCurrentUser().getUid(), new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>) data);
-                events_lv.setAdapter(adapterEvents);
-                adapterEvents.getFilter().filter("");
+                List<EventInfo> temp = (List<EventInfo>) data;
+                if(!temp.equals(events)) {
+                    events = temp;
+                    adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, events);
+                    events_lv.setAdapter(adapterEvents);
+                    adapterEvents.getFilter().filter("");
+                }
             }
         });
 

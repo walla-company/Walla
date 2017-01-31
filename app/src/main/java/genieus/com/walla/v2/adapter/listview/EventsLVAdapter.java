@@ -72,19 +72,20 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
-        }
+        View view = convertView;
 
-        ImageView visibility = (ImageView) convertView.findViewById(R.id.visibility);
-        TextView title = (TextView) convertView.findViewById(R.id.title);
-        TextView interested = (TextView) convertView.findViewById(R.id.interested);
-        TextView going = (TextView) convertView.findViewById(R.id.going);
-        TextView duration = (TextView) convertView.findViewById(R.id.duration);
-        TextView date = (TextView) convertView.findViewById(R.id.date);
-        TextView attendees_description = (TextView) convertView.findViewById(R.id.attendees_description);
-        RecyclerView tabs = (RecyclerView) convertView.findViewById(R.id.tabs_rv);
-        final RecyclerView groupsTabs = (RecyclerView) convertView.findViewById(R.id.groups_rv);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        view = inflater.inflate(resource, null);
+
+        ImageView visibility = (ImageView) view.findViewById(R.id.visibility);
+        TextView title = (TextView) view.findViewById(R.id.title);
+        TextView interested = (TextView) view.findViewById(R.id.interested);
+        TextView going = (TextView) view.findViewById(R.id.going);
+        TextView duration = (TextView) view.findViewById(R.id.duration);
+        TextView date = (TextView) view.findViewById(R.id.date);
+        TextView attendees_description = (TextView) view.findViewById(R.id.attendees_description);
+        RecyclerView tabs = (RecyclerView) view.findViewById(R.id.tabs_rv);
+        final RecyclerView groupsTabs = (RecyclerView) view.findViewById(R.id.groups_rv);
 
         final EventInfo event = getEvent(events, filtered.get(position));
 
@@ -121,7 +122,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         attendees_description.setTypeface(fonts.AzoSansRegular);
         attendees_description.setText("");
 
-        convertView.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), Details.class);
@@ -130,7 +131,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
             }
         });
 
-        return convertView;
+        return view;
     }
 
     private class ItemFilter extends Filter {

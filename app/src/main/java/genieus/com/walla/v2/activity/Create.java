@@ -97,6 +97,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private CharSequence[] guestsInviteOptions = {"Yes", "No"};
     private CharSequence[] createOptions = {"Yes", "No"};
     private FirebaseAuth auth;
+    private UserInfo user;
 
     private JSONObject postObj;
     private EditText details_in;
@@ -135,6 +136,33 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         api = new WallaApi(this);
         fonts = new Fonts(this);
         postObj = new JSONObject();
+
+        api.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                user = (UserInfo) data;
+                if(!user.isVerified()){
+                    AlertDialog.Builder unverifiedBuilder = new AlertDialog.Builder(Create.this);
+                    unverifiedBuilder.setTitle("Verify email");
+                    unverifiedBuilder.setMessage("You must verify you email adress before you can post activities on Walla");
+                    unverifiedBuilder.setCancelable(false)
+                            .setPositiveButton("Verify", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    api.verifyEmail(auth.getCurrentUser().getUid(), auth.getCurrentUser().getEmail());
+                                    Toast.makeText(Create.this, "Verification email sent to " + auth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                    finish();
+                                }
+                            });
+
+                    unverifiedBuilder.show();
+                }
+            }
+        }, auth.getCurrentUser().getUid());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -592,41 +620,35 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                     switch (which){
                         case 0:
                             //yes
-                            api.getUserInfo(new WallaApi.OnDataReceived() {
-                                @Override
-                                public void onDataReceived(Object data, int call) {
-                                    UserInfo user = (UserInfo) data;
-                                    if(user.isVerified()){
-                                        api.postActivity(postObj);
-                                        Snackbar snack = Snackbar.make(map_container, "Activity created successfully", Snackbar.LENGTH_LONG);
-                                        View view = snack.getView();
-                                        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-                                        tv.setTypeface(fonts.AzoSansRegular);
-                                        tv.setTextColor(getResources().getColor(R.color.colorPrimary));
-                                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                                        snack.show();
+                            if(user.isVerified()){
+                                api.postActivity(postObj);
+                                Snackbar snack = Snackbar.make(map_container, "Activity created successfully", Snackbar.LENGTH_LONG);
+                                View view = snack.getView();
+                                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                                tv.setTypeface(fonts.AzoSansRegular);
+                                tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+                                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                                snack.show();
 
-                                        new CountDownTimer(2000, 1000){
-                                            @Override
-                                            public void onTick(long millisUntilFinished) {}
+                                new CountDownTimer(2000, 1000){
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {}
 
-                                            @Override
-                                            public void onFinish() {
-                                                onBackPressed();
-                                            }
-                                        }.start();
-                                    }else{
-                                        Toast.makeText(Create.this, "You must verify your email adress before you can post", Toast.LENGTH_LONG).show();
-                                        Snackbar.make(map_container, "Email not verified", Snackbar.LENGTH_INDEFINITE).setAction("VERIFY", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                api.requestVerification(auth.getCurrentUser().getEmail(), auth.getCurrentUser().getUid());
-                                                Toast.makeText(Create.this,  "Email sent to " + auth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
-                                            }
-                                        }).show();
+                                    @Override
+                                    public void onFinish() {
+                                        onBackPressed();
                                     }
-                                }
-                            }, auth.getCurrentUser().getUid());
+                                }.start();
+                            }else{
+                                Toast.makeText(Create.this, "You must verify your email adress before you can post", Toast.LENGTH_LONG).show();
+                                Snackbar.make(map_container, "Email not verified", Snackbar.LENGTH_INDEFINITE).setAction("VERIFY", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        api.requestVerification(auth.getCurrentUser().getEmail(), auth.getCurrentUser().getUid());
+                                        Toast.makeText(Create.this,  "Email sent to " + auth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
+                                    }
+                                }).show();
+                            }
 
                             dialog.cancel();
                             break;
