@@ -21,7 +21,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,6 +39,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -58,6 +64,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     private GoogleMap mMap;
     private WallaApi api;
     private FirebaseAuth auth;
+
+    private static final int INVITEFRIENDS = 2;
 
     private ImageButton interested_btn, going_btn, share_btn, invite_btn;
     private ProgressBar progress;
@@ -370,6 +378,45 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == INVITEFRIENDS) {
+            if (resultCode == RESULT_OK) {
+                initFriends(data);
+            }
+        }
+    }
+
+    private void initFriends(Intent data) {
+        String info = data.getStringExtra("result");
+        try {
+            JSONArray array = new JSONArray(info);
+            for(int i = 0; i < array.length(); i++){
+                JSONObject person = array.getJSONObject(i);
+                api.inviteUser(auth.getCurrentUser().getUid(), person.getString("uid"), event.getAuid());
+            }
+
+            String msg = String.format("invitation sent to %d %s", array.length(), (array.length()) == 1 ? "person" : "people");
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void shareEvent(){
+        String msg = String.format("You are invited to '%s' from %s to %s at %s",
+                event.getTitle(), event.getStringTime(event.getStart_time(), true),
+                event.getStringTime(event.getStart_time(), true), event.getLocation_name());
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         switch(id){
@@ -388,8 +435,11 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 going();
                 break;
             case R.id.invite_btn:
+                Intent intent = new Intent(this, Friends.class);
+                startActivityForResult(intent, INVITEFRIENDS);
                 break;
             case R.id.share_btn:
+                shareEvent();
                 break;
             default:
                 break;

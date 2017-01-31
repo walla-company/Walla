@@ -95,6 +95,7 @@ public class WallaApi {
     private static String leave_group = "/api/leave_group?";
     private static String verify_email = "/api/request_verification?";
     private static String add_token = "/api/add_notification_token?";
+    private static String invite_user = "/api/invite_user?";
 
 
     public static String domain = "";
@@ -1332,7 +1333,7 @@ public class WallaApi {
     }
 
     public static void requestVerification(String email, String uid){
-        final String url = site + verify_email;
+        final String url = site + verify_email + "token=" + token;
 
         JSONObject params = new JSONObject();
         try {
@@ -1359,13 +1360,41 @@ public class WallaApi {
     }
 
     public static void registerToken(String uid, String token){
-        final String url = site + add_token + "domain=" + token;
+        final String url = site + add_token + "token=" + token;
 
         JSONObject params = new JSONObject();
         try {
             params.put("school_identifier", domain);
             params.put("uid", uid);
             params.put("token", token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void inviteUser(String senderUid, String uid, String auid){
+        final String url = site + invite_user + "token=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("sender", senderUid);
+            params.put("auid", auid);
         } catch (JSONException e) {
             e.printStackTrace();
         }

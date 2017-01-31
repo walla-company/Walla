@@ -148,7 +148,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                     unverifiedBuilder.setCancelable(false)
                             .setPositiveButton("Verify", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    api.verifyEmail(auth.getCurrentUser().getUid(), auth.getCurrentUser().getEmail());
+                                    api.requestVerification(auth.getCurrentUser().getEmail(), auth.getCurrentUser().getUid());
                                     Toast.makeText(Create.this, "Verification email sent to " + auth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
                                 }
                             })
