@@ -22,6 +22,10 @@ public class MyFirebaseInstanceidService extends FirebaseInstanceIdService {
         api = new WallaApi(getApplicationContext());
         auth = FirebaseAuth.getInstance();
 
+        if(auth.getCurrentUser() == null){
+            return;
+        }
+
         String token = FirebaseInstanceId.getInstance().getToken();
         api.registerToken(auth.getCurrentUser().getUid(), token);
 
