@@ -43,7 +43,7 @@
             android:gravity="center_vertical"
             android:background="#f1f1f1"
             android:layout_gravity="center_vertical"
-            android:text="Suggested friends"
+            android:text="Users"
             android:layout_width="match_parent"
             android:layout_height="30dp" />
 
@@ -61,7 +61,7 @@
             android:gravity="center_vertical"
             android:background="#f1f1f1"
             android:layout_gravity="center_vertical"
-            android:text="Suggested groups"
+            android:text="Groups"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:id="@+id/suggest_group_label" />

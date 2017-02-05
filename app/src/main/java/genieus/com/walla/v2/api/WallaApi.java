@@ -102,7 +102,7 @@ public class WallaApi {
     private static String invite_user = "/api/invite_user?";
     private static String post_comment = "/api/post_discussion?";
     private static String get_comments = "/api/get_discussions?";
-    private static String get_users = "/api/get_search_users_array?";
+    private static String get_users = "/api/get_users?";
     private static String get_groups = "/api/get_groups?";
 
 
@@ -1504,7 +1504,6 @@ public class WallaApi {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("userdata", response.toString());
                 List<UserInfo> list = new ArrayList<>();
 
                 JSONObject message;
@@ -1515,8 +1514,9 @@ public class WallaApi {
                         message = response.getJSONObject(key);
                         UserInfo info = new UserInfo();
                         info.setUid(key);
-                        info.setFirst_name(message.getString(key));
-                        info.setLast_name("");
+                        info.setFirst_name(message.getString("first_name"));
+                        info.setLast_name(message.getString("last_name"));
+                        info.setProfile_url(message.getString("profile_image_url"));
                         list.add(info);
                     } catch (JSONException e) {
                         e.printStackTrace();

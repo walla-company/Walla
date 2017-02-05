@@ -72,14 +72,14 @@ public class Search extends AppCompatActivity {
             }
         });
 
-        api.getSuggestedUsers(new WallaApi.OnDataReceived() {
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataReceived(Object data, int call) {
-
+            public void onClick(View v) {
+                search.onActionViewExpanded();
             }
         });
 
-        api.getSuggestedUsers(new WallaApi.OnDataReceived() {
+        api.getUsers(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
                 users = (List<UserInfo>) data;

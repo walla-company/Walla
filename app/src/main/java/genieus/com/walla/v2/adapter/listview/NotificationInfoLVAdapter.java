@@ -153,7 +153,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                     }
                 });
             default:
-                container.setVisibility(View.GONE);
+                //container.setVisibility(View.GONE);
                 break;
         }
 

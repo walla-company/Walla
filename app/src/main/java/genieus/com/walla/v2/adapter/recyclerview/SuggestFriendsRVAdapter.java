@@ -67,6 +67,7 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
     public void onBindViewHolder(final SuggestFriendsHolder holder, int position) {
         final UserInfo info = getUser(data, filtered.get(position));
 
+        holder.icon.setImageDrawable(null);
         holder.name.setTypeface(fonts.AzoSansRegular);
         holder.mutualFriends.setTypeface(fonts.AzoSansRegular);
 
@@ -119,7 +120,7 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
 
     private UserInfo getUser(List<UserInfo> list, String query){
         for(UserInfo group : list){
-            if((group.getFirst_name() + group.getLast_name()).equals(query)){
+            if((group.getFirst_name() + " " + group.getLast_name()).equals(query)){
                 return group;
             }
         }
@@ -164,7 +165,7 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
             String filterableString;
 
             for (int i = 0; i < count; i++) {
-                filterableString = list.get(i).getFirst_name() + list.get(i).getLast_name();
+                filterableString = list.get(i).getFirst_name() + " " + list.get(i).getLast_name();
                 if (filterableString.toLowerCase().contains(filterString)) {
                     nlist.add(filterableString);
                 }
