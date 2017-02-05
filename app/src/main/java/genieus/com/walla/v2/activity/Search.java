@@ -55,14 +55,27 @@ public class Search extends AppCompatActivity {
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                suggestGroupAdapter.getFilter().filter(search.getQuery());
+                if(suggestGroupAdapter != null)
+                    suggestGroupAdapter.getFilter().filter(search.getQuery());
+                if(suggestFriendsAdapter != null)
+                    suggestFriendsAdapter.getFilter().filter(search.getQuery());
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                suggestGroupAdapter.getFilter().filter(search.getQuery());
+                if(suggestGroupAdapter != null)
+                    suggestGroupAdapter.getFilter().filter(search.getQuery());
+                if(suggestFriendsAdapter != null)
+                    suggestFriendsAdapter.getFilter().filter(search.getQuery());
                 return true;
+            }
+        });
+
+        api.getSuggestedUsers(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+
             }
         });
 
@@ -77,6 +90,7 @@ public class Search extends AppCompatActivity {
                 suggested_friends_rv.setLayoutManager(horizontal);
 
                 suggested_friends_rv.setAdapter(suggestFriendsAdapter);
+                suggestFriendsAdapter.getFilter().filter("");
             }
         });
 
@@ -110,7 +124,7 @@ public class Search extends AppCompatActivity {
 
         suggested_group_lv = (ListView) findViewById(R.id.suggested_groups_lv);
 
-        api.getSuggestedGroups(new WallaApi.OnDataReceived() {
+        api.getAllGroups(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
                 suggestGroupAdapter = new SuggestedGroupsLVAdapter(Search.this, R.layout.single_suggest_group, (List<GroupInfo>) data );

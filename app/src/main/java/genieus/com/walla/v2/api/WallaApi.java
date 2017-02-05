@@ -55,7 +55,7 @@ public class WallaApi {
     public static final int GET_COMMENTS = 14;
     public static final int POST_COMMENT = 15;
     public static final int GET_USERS = 16;
-
+    public static final int GET_GROUPS = 17;
 
     public interface OnDataReceived {
         public void onDataReceived(Object data, int call);
@@ -103,6 +103,7 @@ public class WallaApi {
     private static String post_comment = "/api/post_discussion?";
     private static String get_comments = "/api/get_discussions?";
     private static String get_users = "/api/get_search_users_array?";
+    private static String get_groups = "/api/get_groups?";
 
 
     public static String domain = "";
@@ -1491,7 +1492,7 @@ public class WallaApi {
     }
 
     public static void getUsers(final OnDataReceived listener){
-        final String url = site + get_comments + "token=" + token + "&school_identifier=" + domain;
+        final String url = site + get_users + "token=" + token + "&school_identifier=" + domain;
 
         JSONObject params = new JSONObject();
         try {
@@ -1503,7 +1504,7 @@ public class WallaApi {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("commentdata", response.toString());
+                Log.d("userdata", response.toString());
                 List<UserInfo> list = new ArrayList<>();
 
                 JSONObject message;
@@ -1522,6 +1523,77 @@ public class WallaApi {
                     }
                 }
                 listener.onDataReceived(list, GET_USERS);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void getAllGroups(final OnDataReceived listener){
+        final String url = site + get_groups + "token=" + token + "&school_identifier=" + domain;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                List<GroupInfo> list = new ArrayList<>();
+
+                JSONObject grp;
+                Iterator<String> k = response.keys();
+                while(k.hasNext()){
+                    try {
+                        String key = k.next();
+                        grp = response.getJSONObject(key);
+                        GroupInfo group = new GroupInfo();
+
+                        try {
+                            group.setName(grp.getString("name"));
+                            group.setAbbr(grp.getString("short_name"));
+                            group.setColor(grp.getString("color"));
+                            group.setDescription(grp.getString("details"));
+                            group.setGuid(grp.getString("group_id"));
+
+                            List<String> members = new ArrayList<>();
+                            if(grp.has("members")){
+                                Iterator<String> keys = grp.getJSONObject("members").keys();
+                                while(keys.hasNext())
+                                    members.add(keys.next());
+                            }
+
+                            group.setMembers(members);
+
+                            List<String> activities = new ArrayList<>();
+                            if(grp.has("activities")){
+                                Iterator<String> keys = grp.getJSONObject("activities").keys();
+                                while(keys.hasNext()){
+                                    activities.add(keys.next());
+                                }
+                            }
+
+                            group.setActivities(activities);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        list.add(group);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                listener.onDataReceived(list, GET_GROUPS);
             }
         }, new Response.ErrorListener() {
             @Override

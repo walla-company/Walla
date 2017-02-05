@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,11 +22,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.ViewProfile;
+import genieus.com.walla.v2.adapter.listview.SuggestedGroupsLVAdapter;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.MutualFriendInfo;
 import genieus.com.walla.v2.info.UserInfo;
 import genieus.com.walla.v2.viewholder.SuggestFriendsHolder;
@@ -33,11 +38,14 @@ import genieus.com.walla.v2.viewholder.SuggestFriendsHolder;
  * Created by anesu on 12/21/16.
  */
 
-public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriendsHolder>{
+public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriendsHolder> implements Filterable{
     private Context context;
     private List<UserInfo> data;
     private String BUTTONBLUE = "#63CAF9";
     private Fonts fonts;
+
+    private List<String> filtered;
+    private Filter filter;
 
 
     public SuggestFriendsRVAdapter(Context context, List<UserInfo> data){
@@ -45,6 +53,8 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
         this.data = data;
 
         fonts = new Fonts(context);
+        filtered = new ArrayList<>();
+        filter = new SuggestFriendsRVAdapter.ItemFilter();
     }
 
     @Override
@@ -55,7 +65,7 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
 
     @Override
     public void onBindViewHolder(final SuggestFriendsHolder holder, int position) {
-        final UserInfo info = data.get(position);
+        final UserInfo info = getUser(data, filtered.get(position));
 
         holder.name.setTypeface(fonts.AzoSansRegular);
         holder.mutualFriends.setTypeface(fonts.AzoSansRegular);
@@ -107,9 +117,19 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
         changeBackgroundColor(holder.addBtn, BUTTONBLUE);
     }
 
+    private UserInfo getUser(List<UserInfo> list, String query){
+        for(UserInfo group : list){
+            if((group.getFirst_name() + group.getLast_name()).equals(query)){
+                return group;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public int getItemCount() {
-        return data.size();
+        return filtered.size();
     }
 
     private void changeBackgroundColor(View view, String color){
@@ -120,6 +140,47 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
             ((GradientDrawable)background).setColor(Color.parseColor(color));
         } else if (background instanceof ColorDrawable) {
             ((ColorDrawable)background).setColor(Color.parseColor(color));
+        }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    private class ItemFilter extends Filter {
+        @Override
+        protected Filter.FilterResults performFiltering(CharSequence constraint) {
+
+            String filterString = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final List<UserInfo> list = data;
+
+            int count = list.size();
+            final ArrayList<String> nlist = new ArrayList<>(count);
+
+            String filterableString;
+
+            for (int i = 0; i < count; i++) {
+                filterableString = list.get(i).getFirst_name() + list.get(i).getLast_name();
+                if (filterableString.toLowerCase().contains(filterString)) {
+                    nlist.add(filterableString);
+                }
+            }
+
+            results.values = nlist;
+            results.count = nlist.size();
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filtered = (ArrayList<String>) results.values;
+            notifyDataSetChanged();
         }
     }
 }
