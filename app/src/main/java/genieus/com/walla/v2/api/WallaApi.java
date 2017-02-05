@@ -28,6 +28,7 @@ import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.InterestInfo;
+import genieus.com.walla.v2.info.MessageInfo;
 import genieus.com.walla.v2.info.NotificationInfo;
 import genieus.com.walla.v2.info.UserInfo;
 
@@ -51,6 +52,9 @@ public class WallaApi {
     public static final int ADD_USER = 11;
     public static final int GET_SUGGESTED_USERS = 12;
     public static final int GET_SUGGESTED_GROUPS = 13;
+    public static final int GET_COMMENTS = 14;
+    public static final int POST_COMMENT = 15;
+    public static final int GET_USERS = 16;
 
 
     public interface OnDataReceived {
@@ -96,6 +100,9 @@ public class WallaApi {
     private static String verify_email = "/api/request_verification?";
     private static String add_token = "/api/add_notification_token?";
     private static String invite_user = "/api/invite_user?";
+    private static String post_comment = "/api/post_discussion?";
+    private static String get_comments = "/api/get_discussions?";
+    private static String get_users = "/api/get_search_users_array?";
 
 
     public static String domain = "";
@@ -1359,22 +1366,22 @@ public class WallaApi {
         queue.add(request);
     }
 
-    public static void registerToken(String uid, String token){
+    public static void registerToken(String uid, String notifToken){
         final String url = site + add_token + "token=" + token;
 
         JSONObject params = new JSONObject();
         try {
             params.put("school_identifier", domain);
             params.put("uid", uid);
-            params.put("token", token);
+            params.put("notification_token", notifToken);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                Log.d("register-3", "works");
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1414,6 +1421,117 @@ public class WallaApi {
         queue.add(request);
     }
 
+    public static void postComment(final OnDataReceived listener, String uid, String msg, String auid){
+        final String url = site + post_comment + "token=" + token;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("auid", auid);
+            params.put("text", msg);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                listener.onDataReceived(true, POST_COMMENT);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void getComments(final OnDataReceived listener, String auid){
+        final String url = site + get_comments + "token=" + token + "&school_identifier=" + domain + "&auid=" + auid;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("auid", auid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("commentdata", response.toString());
+                List<MessageInfo> list = new ArrayList<>();
+
+                JSONObject message;
+                Iterator<String> keys = response.keys();
+                while(keys.hasNext()){
+                    try {
+                        message = response.getJSONObject(keys.next());
+                        MessageInfo info = new MessageInfo(message.getString("user_id"), message.getString("text"));
+                        list.add(info);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                listener.onDataReceived(list, GET_COMMENTS);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void getUsers(final OnDataReceived listener){
+        final String url = site + get_comments + "token=" + token + "&school_identifier=" + domain;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("commentdata", response.toString());
+                List<UserInfo> list = new ArrayList<>();
+
+                JSONObject message;
+                Iterator<String> keys = response.keys();
+                while(keys.hasNext()){
+                    try {
+                        String key = keys.next();
+                        message = response.getJSONObject(key);
+                        UserInfo info = new UserInfo();
+                        info.setUid(key);
+                        info.setFirst_name(message.getString(key));
+                        info.setLast_name("");
+                        list.add(info);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                listener.onDataReceived(list, GET_USERS);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
 
     private static List<String> interestsJsontoList(JSONArray array) {
         List<String> data = new ArrayList<>();

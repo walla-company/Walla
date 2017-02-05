@@ -1,5 +1,6 @@
 package genieus.com.walla.v2.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,13 +11,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,10 +28,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.vision.text.Line;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
@@ -45,7 +47,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +55,6 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
-import genieus.com.walla.v2.adapter.listview.DiscussionLVAdapter;
 import genieus.com.walla.v2.adapter.recyclerview.GroupTabRVAdapter;
 import genieus.com.walla.v2.adapter.recyclerview.TabRVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
@@ -79,6 +79,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     private CircleImageView host_image;
     private LinearLayout discussion_area;
     private CardView details_cv;
+    private EditText comment_in;
     private RelativeLayout host_container, main_container;
     private TextView duration, title, location_label, location, show_on_map, interested, going, invitees_label, invitee_in,
             host_name, details_in, details_label, host_info, get_directions, interested_count, going_count, interested_in, going_in;
@@ -114,7 +115,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 try {
                     initUi();
                 }catch (Exception e){
-                    Toast.makeText(Details.this, "Could not open activity", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Details.this, e.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         }, auid);
@@ -232,6 +233,35 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         going_in = (TextView) findViewById(R.id.going_in);
         going_in.setTypeface(fonts.AzoSansRegular);
         going_in.setText(getGoingString());
+        comment_in = (EditText) findViewById(R.id.comment_input);
+        comment_in.setTypeface(fonts.AzoSansRegular);
+        comment_in.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent ev) {
+                boolean handled = false;
+                String message = comment_in.getText().toString();
+
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(comment_in.getWindowToken(), 0);
+                    api.postComment(new WallaApi.OnDataReceived() {
+                        @Override
+                        public void onDataReceived(Object data, int call) {
+                            Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
+                            loadComments();
+                        }
+                    }, auth.getCurrentUser().getUid(), message, event.getAuid());
+
+                    Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
+                    loadComments();
+                    comment_in.clearComposingText();
+
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
 
 
         if(event.getDetails() == null || event.getDetails().equals(""))
@@ -287,42 +317,68 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         }, event.getHost());
 
         discussion_area = (LinearLayout) findViewById(R.id.comment_section);
-
-        List<MessageInfo> data;
-        MessageInfo m2 = new MessageInfo("Ben Yang", "Yes! there will be chips", "http://www.thinkgeek.com/images/products/frontsquare/ilop_mega_man_helmet_knit_cap_person.jpg");
-        MessageInfo m3 = new MessageInfo("Joseph Decchichis", "yea boiii", "https://userscontent2.emaze.com/images/291f19fa-70e3-417a-94c1-cbb4fd437203/d391321fbaf514be14ef398cb598bb94.jpg");
-        MessageInfo m4 = new MessageInfo("Anesu Mafuvadze", "what kind of chips", "https://userscontent2.emaze.com/images/291f19fa-70e3-417a-94c1-cbb4fd437203/d391321fbaf514be14ef398cb598bb94.jpg");
-        MessageInfo m5 = new MessageInfo("Judy Zhu", "mexican chips", "https://userscontent2.emaze.com/images/291f19fa-70e3-417a-94c1-cbb4fd437203/d391321fbaf514be14ef398cb598bb94.jpg");
-
-        data = new ArrayList<>(Arrays.asList(m2, m3, m4, m5));
-        for(MessageInfo info : data){
-            discussion_area.addView(getComment(info));
-        }
+        loadComments();
 
     }
 
-    private View getComment(MessageInfo info){
+    private void loadComments(){
+        discussion_area.removeAllViews();
+
+        api.getComments(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                List<MessageInfo> list = (List<MessageInfo>) data;
+                for(MessageInfo info : list){
+                    discussion_area.addView(getComment(info));
+                }
+            }
+        }, event.getAuid());
+    }
+
+    private View getComment(final MessageInfo info){
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.single_message, null);
 
         final CircleImageView image = (CircleImageView) view.findViewById(R.id.profile_image);
-        TextView name = (TextView) view.findViewById(R.id.name);
-        TextView message = (TextView) view.findViewById(R.id.message);
-
+        final TextView name = (TextView) view.findViewById(R.id.name);
+        final TextView message = (TextView) view.findViewById(R.id.message);
         name.setTypeface(fonts.AzoSansMedium);
         message.setTypeface(fonts.AzoSansRegular);
-
-        name.setText(info.getName());
         message.setText(info.getMessage());
 
-        if(info.getUrl() != null && !info.getUrl().equals("")) {
-            if(!info.getUrl().startsWith("gs://walla-launch.appspot.com")) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Details.this, ViewProfile.class);
+                intent.putExtra("uid", info.getUid());
+                startActivity(intent);
+            }
+        };
+
+        name.setOnClickListener(listener);
+        image.setOnClickListener(listener);
+
+        api.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                UserInfo user = (UserInfo) data;
+                name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
+                setImage(image, user.getProfile_url());
+            }
+        }, info.getUid());
+
+        return view;
+    }
+
+    private void setImage(final ImageView image, String url){
+        if(url != null && !url.equals("")) {
+            if(!url.startsWith("gs://walla-launch.appspot.com")) {
                 Picasso.with(this) //Context
-                        .load(info.getUrl()) //URL/FILE
+                        .load(url) //URL/FILE
                         .into(image);//an ImageView Object to show the loaded image;
             }else{
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                storage.getReferenceFromUrl(info.getUrl()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                storage.getReferenceFromUrl(url).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if(task.isSuccessful()){
@@ -339,8 +395,6 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 });
             }
         }
-
-        return view;
     }
 
     private String getInterestedString(){

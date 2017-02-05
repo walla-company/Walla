@@ -108,13 +108,41 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                     }
                 }, notification.getSenderUId());
                 break;
-            case Notifications.USER_INVITED:
+            case Notifications.GROUP_INVITED:
                 info.setText(notification.getMessage());
                 accept.setVisibility(View.GONE);
                 ignore.setVisibility(View.GONE);
                 pic.setVisibility(View.GONE);
 
-                Log.d("notif", notification.getActivityUid());
+                container.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), Details.class);
+                        intent.putExtra("auid", notification.getActivityUid());
+                        getContext().startActivity(intent);
+                    }
+                });
+                break;
+            case Notifications.DISCUSSION_POSTED:
+                info.setText(notification.getMessage());
+                accept.setVisibility(View.GONE);
+                ignore.setVisibility(View.GONE);
+                pic.setVisibility(View.GONE);
+
+                container.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), Details.class);
+                        intent.putExtra("auid", notification.getActivityUid());
+                        getContext().startActivity(intent);
+                    }
+                });
+                break;
+            case Notifications.USER_INVITED:
+                info.setText(notification.getMessage());
+                accept.setVisibility(View.GONE);
+                ignore.setVisibility(View.GONE);
+                pic.setVisibility(View.GONE);
 
                 container.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -125,6 +153,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                     }
                 });
             default:
+                container.setVisibility(View.GONE);
                 break;
         }
 

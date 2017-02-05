@@ -23,6 +23,7 @@ public class MyFirebaseInstanceidService extends FirebaseInstanceIdService {
         auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser() == null){
+            Log.d("notifdata", "user is null");
             return;
         }
 

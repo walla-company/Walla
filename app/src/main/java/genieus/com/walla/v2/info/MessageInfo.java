@@ -5,20 +5,19 @@ package genieus.com.walla.v2.info;
  */
 
 public class MessageInfo {
-    private String name, message, url;
+    private String uid, message;
 
-    public MessageInfo(String name, String message, String url){
-        this.name = name;
+    public MessageInfo(String uid, String message){
         this.message = message;
-        this.url = url;
+        this.uid = uid;
     }
 
-    public String getName() {
-        return name;
+    public String getUid() {
+        return uid;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUid(String name) {
+        this.uid = name;
     }
 
     public String getMessage() {
@@ -29,11 +28,4 @@ public class MessageInfo {
         this.message = message;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 }

@@ -37,6 +37,8 @@ public class Notifications extends Fragment {
 
     public static final String FRIEND_REQUEST = "friend_request";
     public static final String USER_INVITED = "user_invited";
+    public static final String GROUP_INVITED = "group_invited";
+    public static final String DISCUSSION_POSTED = "discussion_posted";
 
     private ListView info_lv;
     private NotificationInfoLVAdapter infoAdapter;

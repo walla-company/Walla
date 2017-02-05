@@ -25,6 +25,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -43,6 +44,8 @@ import genieus.com.walla.v2.fragment.Home;
 import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.info.MyFirebaseInstanceidService;
+import genieus.com.walla.v2.info.MyFirebaseMessagingService;
 import genieus.com.walla.v2.info.UserInfo;
 import genieus.com.walla.v2.info.Utility;
 
@@ -92,6 +95,16 @@ public class MainContainer extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         context = getApplicationContext();
+        api = new WallaApi(this);
+
+        Intent intent = new Intent(this, MyFirebaseInstanceidService.class);
+        Intent intent2 = new Intent(this, MyFirebaseMessagingService.class);
+        startService(intent);
+        startService(intent2);
+
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d("token-id", token);
+        api.registerToken(auth.getCurrentUser().getUid(), token);
 
         initUi();
         initShortcuts();
@@ -103,7 +116,6 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void testApi() {
-        WallaApi api = new WallaApi(this);
         api.getMinVersion(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
