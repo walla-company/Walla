@@ -102,9 +102,10 @@ public class MainContainer extends AppCompatActivity
         startService(intent);
         startService(intent2);
 
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.d("token-id", token);
-        api.registerToken(auth.getCurrentUser().getUid(), token);
+        if(auth.getCurrentUser() != null) {
+            String token = FirebaseInstanceId.getInstance().getToken();
+            api.registerToken(auth.getCurrentUser().getUid(), token);
+        }
 
         initUi();
         initShortcuts();
