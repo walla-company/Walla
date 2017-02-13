@@ -8,13 +8,20 @@
         android:id="@+id/action_flag"
         android:orderInCategory="100"
         android:title="Flag as inappropriate"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:icon="@drawable/ic_star"
-        android:id="@+id/action_star"
+        android:id="@+id/action_interested"
         android:orderInCategory="100"
         android:title="I'm Interested!"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+
+    <item
+        android:icon="@drawable/ic_check_single"
+        android:id="@+id/action_going"
+        android:orderInCategory="100"
+        android:title="I'm going!"
+        app:showAsAction="always" />
 
 </menu>
