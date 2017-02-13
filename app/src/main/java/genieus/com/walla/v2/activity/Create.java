@@ -297,6 +297,26 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         host_group_rv = (RecyclerView) findViewById(R.id.group_host_rv);
         groups_rv.setLayoutManager(manager);
         host_group_rv.setLayoutManager(manager2);
+
+        api.isUserSuspended(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                boolean isSuspended = (boolean) data;
+                if(isSuspended){
+                    AlertDialog.Builder suspendedBuilder = new AlertDialog.Builder(Create.this);
+                    suspendedBuilder.setTitle("Cannot post");
+                    suspendedBuilder.setMessage("Your account has been suspended, you cannot post activities");
+                    suspendedBuilder.setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                   finish();
+                                }
+                            });
+
+                    suspendedBuilder.show();
+                }
+            }
+        }, auth.getInstance().getCurrentUser().getUid());
     }
 
     private void changeBackgroundColor(View view, String color) {

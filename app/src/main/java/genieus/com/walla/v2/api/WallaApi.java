@@ -56,6 +56,8 @@ public class WallaApi {
     public static final int POST_COMMENT = 15;
     public static final int GET_USERS = 16;
     public static final int GET_GROUPS = 17;
+    public static final int IS_SUSPENDED = 17;
+
 
     public interface OnDataReceived {
         public void onDataReceived(Object data, int call);
@@ -104,6 +106,9 @@ public class WallaApi {
     private static String get_comments = "/api/get_discussions?";
     private static String get_users = "/api/get_users?";
     private static String get_groups = "/api/get_groups?";
+    private static String is_suspended = "/api/is_user_suspended?";
+
+
 
 
     public static String domain = "";
@@ -1604,6 +1609,31 @@ public class WallaApi {
 
         queue.add(request);
     }
+
+    public static void isUserSuspended(final OnDataReceived listener, String uid){
+        final String url = site + is_suspended + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    boolean isSuspended = response.getBoolean("suspended");
+                    listener.onDataReceived(isSuspended, IS_SUSPENDED);
+                } catch (JSONException e) {
+                    listener.onDataReceived(false, IS_SUSPENDED);
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
 
     private static List<String> interestsJsontoList(JSONArray array) {
         List<String> data = new ArrayList<>();
