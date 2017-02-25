@@ -13,7 +13,7 @@ public class EventInfo {
     private String auid, title, location_name, location_address, host, host_group, details, group_name, group_abbr;
     private double location_lat, location_long;
     private long start_time, end_time;
-    private boolean is_public, can_guests_invite;
+    private boolean is_public, can_guests_invite, deleted;
     private List<String> interests, going_list, interested_list;
     private int going, interested;
 
@@ -226,5 +226,13 @@ public class EventInfo {
         }
 
         return date;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

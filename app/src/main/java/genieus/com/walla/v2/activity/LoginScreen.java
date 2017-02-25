@@ -74,7 +74,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         }
 
         if(!isValidPassword(passwordStr)){
-            password.setError("enter a password");
+            password.setError("enter a valid password");
             return;
         }
 
@@ -88,14 +88,14 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
                     startActivity(new Intent(LoginScreen.this, MainContainer.class));
                 }else{
                     loadingDialog.cancel();
-                    Toast.makeText(LoginScreen.this, "Authenication failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginScreen.this, "Authentication failed", Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 loadingDialog.cancel();
-                Toast.makeText(LoginScreen.this, "Authenication failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginScreen.this, "Authentication failed", Toast.LENGTH_SHORT).show();
             }
         });
 

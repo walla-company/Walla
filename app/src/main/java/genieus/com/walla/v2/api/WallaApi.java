@@ -107,7 +107,7 @@ public class WallaApi {
     private static String get_users = "/api/get_users?";
     private static String get_groups = "/api/get_groups?";
     private static String is_suspended = "/api/is_user_suspended?";
-
+    private static String delete_activity = "/api/delete_activity?";
 
 
 
@@ -587,6 +587,13 @@ public class WallaApi {
                     event.setInterests(interestsJsontoList(response.getJSONArray("interests")));
                     event.setDetails(response.getString("details"));
                     event.setHost(response.getString("host"));
+
+                    boolean isDeleted = false;
+                    if(response.has("deleted")){
+                        isDeleted = response.getBoolean("deleted");
+                    }
+
+                    event.setDeleted(isDeleted);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1623,6 +1630,33 @@ public class WallaApi {
                     listener.onDataReceived(false, IS_SUSPENDED);
                     e.printStackTrace();
                 }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void deleteActivity(String uid, String auid){
+        final String url = site + delete_activity + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("auid", auid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+               //empty
             }
         }, new Response.ErrorListener() {
             @Override

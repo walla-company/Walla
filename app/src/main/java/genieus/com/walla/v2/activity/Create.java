@@ -656,7 +656,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
                                     @Override
                                     public void onFinish() {
-                                        onBackPressed();
+                                        finish();
                                     }
                                 }.start();
                             }else{

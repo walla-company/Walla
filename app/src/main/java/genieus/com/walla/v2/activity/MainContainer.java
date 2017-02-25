@@ -36,6 +36,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
+import genieus.com.walla.v1.Interests;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.fragment.Notifications;
 import genieus.com.walla.v2.adapter.viewpager.ViewPagerAdapter;
@@ -108,91 +109,10 @@ public class MainContainer extends AppCompatActivity
         }
 
         initUi();
-        initShortcuts();
-        //testApi();
     }
 
     private boolean isLoggedIn(){
         return auth != null && auth.getCurrentUser() != null;
-    }
-
-    private void testApi() {
-        api.getMinVersion(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                Log.d("apidata", (String) data);
-            }
-        });
-
-
-        api.getAllowedDomains(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                Log.d("apidata", ((List<DomainInfo>) data).toString());
-            }
-        });
-
-        api.getActivities(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                Log.d("apidata", ((List<EventInfo>) data).toString());
-            }
-        }, 224);
-
-        api.getUserInfo(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                Log.d("apidata", ((UserInfo) data).toString());
-            }
-        }, "4jAEwvyIAdMNJxS5LEG4ynC9SaX2");
-
-        api.isAttendingEvent(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                Log.d("apidata", "" + (boolean) data);
-            }
-        }, "108XpHhxDyWkhbCHWvRK7zPqH8f1", "-KVYOoA3hxvZxHcmVF84");
-
-
-        api.getAttendees(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                Log.d("apidata", ((List<UserInfo>) data).toString());
-            }
-        }, "-KVYMmeugVkQLtLuuAsq");
-
-        api.verifyEmail("ZY59phLqRcNLPuEnTFDY0aym6MJ3", "mafuvadzeanesu@gmail.com");
-
-        api.reportPost("-KVYOoA3hxvZxHcmVF84", "ZY59phLqRcNLPuEnTFDY0aym6MJ3");
-
-        api.isVerified(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                Log.d("apidata", "verified: " + (boolean) data);
-            }
-        }, "ZY59phLqRcNLPuEnTFDY0aym6MJ3");
-    }
-
-    private void initShortcuts() {
-        /*
-        try {
-            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
-            Intent shortcutIntent = new Intent(this, Create.class);
-            shortcutIntent.setAction(Intent.ACTION_VIEW);
-
-
-            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "compose")
-                    .setShortLabel("Compose")
-                    .setLongLabel("Create event")
-                    .setIcon(Icon.createWithResource(this, R.mipmap.circle_add))
-                    .setIntent(shortcutIntent)
-                    .build();
-
-            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
-        }catch (Exception e){
-
-        }
-        */
     }
 
     private void initUi() {
@@ -216,9 +136,23 @@ public class MainContainer extends AppCompatActivity
                                 .load(user.getProfile_url()) //URL/FILE
                                 .into(profile_pic);//an ImageView Object to show the loaded image
                     }
+
                 }
             }, auth.getCurrentUser().getUid());
         }
+
+        //check to see if the user is suspended
+        api.isUserSuspended(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                boolean isSuspended = (boolean) data;
+                if(isSuspended){
+                    notifyUserOfSuspension();
+                }
+
+            }
+        }, auth.getCurrentUser().getUid());
+
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);
@@ -256,6 +190,12 @@ public class MainContainer extends AppCompatActivity
                 }
             }
         }, auth.getCurrentUser().getUid());
+    }
+
+    private void notifyUserOfSuspension(){
+        Intent intent = new Intent(this, AccountSuspension.class);
+        startActivity(intent);
+        finish();
     }
 
     private void showWelcomeMessage() {

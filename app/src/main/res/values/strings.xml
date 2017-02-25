@@ -52,4 +52,6 @@
     <string name="title_activity_login_screen">LoginScreen</string>
     <string name="title_activity_forgot_password">ForgotPassword</string>
     <string name="title_activity_sign_up">SignUp</string>
+    <string name="title_activity_create_group">CreateGroup</string>
+    <string name="title_activity_account_suspension">AccountSuspension</string>
 </resources>

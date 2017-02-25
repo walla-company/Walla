@@ -26,12 +26,12 @@
     </FrameLayout>
 
     <android.support.v4.widget.NestedScrollView
-        android:fillViewport="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:fillViewport="true">
 
 
         <RelativeLayout
@@ -487,6 +487,7 @@
                     android:layout_height="match_parent"
                     android:paddingBottom="8dp"
                     android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
                     android:paddingTop="8dp">
 
                     <TextView
@@ -498,6 +499,7 @@
                         android:textSize="17sp" />
 
                     <RelativeLayout
+                        android:id="@+id/info_container"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_below="@id/host_label">
@@ -534,6 +536,18 @@
                         </RelativeLayout>
 
                     </RelativeLayout>
+
+                    <Button
+                        android:id="@+id/delete_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/info_container"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded"
+                        android:text="Delete Activity"
+                        android:textColor="@color/white"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -611,13 +625,12 @@
                         android:layout_marginBottom="8dp">
 
                         <LinearLayout
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:orientation="vertical"
                             android:id="@+id/comment_section"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginTop="16dp"
+                            android:orientation="vertical">
 
 
                         </LinearLayout>

@@ -2,9 +2,15 @@ package genieus.com.walla.v2.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -77,6 +84,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
     private ImageButton interested_btn, going_btn, share_btn, invite_btn;
     private ProgressBar progress;
+    private Button delete_btn;
     private RecyclerView tabs, groups;
     private CircleImageView host_image;
     private LinearLayout discussion_area;
@@ -90,6 +98,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     private RelativeLayout map_container;
 
     private boolean isGoing, isInterested;
+    private UserInfo user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +124,13 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
             public void onDataReceived(Object data, int call) {
                 event = (EventInfo) data;
                 try {
-                    initUi();
+                    api.getUserInfo(new WallaApi.OnDataReceived() {
+                        @Override
+                        public void onDataReceived(Object data, int call) {
+                            user = (UserInfo) data;
+                            initUi();
+                        }
+                    }, auth.getCurrentUser().getUid());
                 }catch (Exception e){
                     Toast.makeText(Details.this, e.toString(), Toast.LENGTH_LONG).show();
                 }
@@ -127,6 +142,23 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         fonts = new Fonts(this);
 
         main_container.setVisibility(View.VISIBLE);
+
+        if(event.isDeleted()){
+            main_container.setVisibility(View.GONE);
+
+            AlertDialog.Builder alertOfDelete = new AlertDialog.Builder(Details.this);
+            alertOfDelete.setTitle("Activity cannot be viewed");
+            alertOfDelete.setMessage("This activity no longer exists");
+            alertOfDelete.setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            finish();
+                        }
+                    });
+
+            alertOfDelete.show();
+        }
 
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -241,22 +273,32 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent ev) {
                 boolean handled = false;
-                String message = comment_in.getText().toString();
+                final String message = comment_in.getText().toString();
 
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(comment_in.getWindowToken(), 0);
-                    api.postComment(new WallaApi.OnDataReceived() {
+                    api.isUserSuspended(new WallaApi.OnDataReceived() {
                         @Override
                         public void onDataReceived(Object data, int call) {
-                            Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
-                            loadComments();
-                        }
-                    }, auth.getCurrentUser().getUid(), message, event.getAuid());
+                            boolean isSuspended = (boolean) data;
+                            if(!isSuspended){
+                                api.postComment(new WallaApi.OnDataReceived() {
+                                    @Override
+                                    public void onDataReceived(Object data, int call) {
+                                        Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
+                                        loadComments();
+                                    }
+                                }, auth.getCurrentUser().getUid(), message, event.getAuid());
 
-                    Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
-                    loadComments();
-                    comment_in.clearComposingText();
+                            }else{
+                                Toast.makeText(getApplicationContext(), "You cannot post comment because your account is suspended", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }, auth.getCurrentUser().getUid());
+                    //Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
+                    //loadComments();
+                    comment_in.setText("");
 
                     handled = true;
                 }
@@ -264,6 +306,14 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
             }
         });
 
+        delete_btn = (Button) findViewById(R.id.delete_btn);
+        delete_btn.setTypeface(fonts.AzoSansRegular);
+        delete_btn.setOnClickListener(this);
+
+        if(event.getHost().equals(auth.getCurrentUser().getUid())){
+            delete_btn.setVisibility(View.VISIBLE);
+            changeBackGroundColor(delete_btn, getResources().getColor(R.color.lightred));
+        }
 
 
         if(event.getDetails() == null || event.getDetails().equals(""))
@@ -321,6 +371,17 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         discussion_area = (LinearLayout) findViewById(R.id.comment_section);
         loadComments();
 
+    }
+
+    private void changeBackGroundColor(View view, int color) {
+        Drawable background = view.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable) background).getPaint().setColor(color);
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(color);
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable) background).setColor(color);
+        }
     }
 
     private void loadComments(){
@@ -533,6 +594,26 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         startActivity(sendIntent);
     }
 
+    private void deleteActivity(){
+        AlertDialog.Builder confirmDelete = new AlertDialog.Builder(Details.this);
+        confirmDelete.setTitle("Are you sure?");
+        confirmDelete.setMessage("You cannot undo this action");
+        confirmDelete.setCancelable(false)
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        api.deleteActivity(auth.getCurrentUser().getUid(), event.getAuid());
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        confirmDelete.show();
+    }
+
     private void flag(){
 
     }
@@ -562,6 +643,9 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 break;
             case R.id.share_btn:
                 shareEvent();
+                break;
+            case R.id.delete_btn:
+                deleteActivity();
                 break;
             default:
                 break;
