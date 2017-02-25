@@ -46,4 +46,12 @@
         </menu>
     </item>
 
+    <item android:title="Information">
+        <menu>
+            <item
+                android:id="@+id/nav_terms"
+                android:icon="@drawable/ic_settings"
+                android:title="Terms and Conditions" />
+        </menu>
+    </item>
 </menu>

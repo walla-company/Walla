@@ -121,6 +121,7 @@ public class WallaApi {
         if(domain == null || domain.isEmpty()){
            if(FirebaseAuth.getInstance().getCurrentUser() != null){
                String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+               Log.d("uncbug", email);
                String domainExt = getDomailFromEmail(email);
                int dot = domainExt.indexOf('.');
                if(dot >= 0)

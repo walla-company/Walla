@@ -410,6 +410,9 @@ public class MainContainer extends AppCompatActivity
             case R.id.nav_logout:
                 logout();
                 break;
+            case R.id.nav_terms:
+                showTerms();
+                break;
             default:
                 break;
         }
@@ -430,6 +433,13 @@ public class MainContainer extends AppCompatActivity
         intent.putExtra(Intent.EXTRA_SUBJECT, "Walla v" + getVersion() + " Android, Report a Problem");
 
         startActivity(Intent.createChooser(intent, "Send Email"));
+    }
+
+    private void showTerms(){
+        String url = "https://www.wallasquad.com/terms-and-conditions/";
+        Intent in = new Intent(Intent.ACTION_VIEW);
+        in.setData(Uri.parse(url));
+        startActivity(in);
     }
 
     private void shareWalla() {
