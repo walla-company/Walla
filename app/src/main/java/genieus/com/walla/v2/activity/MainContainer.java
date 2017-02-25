@@ -117,8 +117,6 @@ public class MainContainer extends AppCompatActivity
 
     private void initUi() {
         fonts = new Fonts(this);
-        api = new WallaApi(this);
-
         if(auth == null || auth.getCurrentUser() == null){
             startActivity(new Intent(this, LoginScreen.class));
             finish();

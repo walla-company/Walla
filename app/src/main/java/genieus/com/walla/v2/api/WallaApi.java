@@ -2,7 +2,6 @@ package genieus.com.walla.v2.api;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,7 +12,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
-import com.shaded.fasterxml.jackson.databind.util.JSONPObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,12 +20,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.GroupInfo;
-import genieus.com.walla.v2.info.InterestInfo;
 import genieus.com.walla.v2.info.MessageInfo;
 import genieus.com.walla.v2.info.NotificationInfo;
 import genieus.com.walla.v2.info.UserInfo;
@@ -121,8 +117,7 @@ public class WallaApi {
         if(domain == null || domain.isEmpty()){
            if(FirebaseAuth.getInstance().getCurrentUser() != null){
                String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-               Log.d("uncbug", email);
-               String domainExt = getDomailFromEmail(email);
+               String domainExt = getDomainFromEmail(email);
                int dot = domainExt.indexOf('.');
                if(dot >= 0)
                    domain = domainExt.substring(0, dot);
@@ -132,7 +127,16 @@ public class WallaApi {
         }
     }
 
-    private String getDomailFromEmail(String emailStr) {
+    public void resetDomain(String email){
+        String domainExt = getDomainFromEmail(email);
+        int dot = domainExt.indexOf('.');
+        if(dot >= 0)
+            domain = domainExt.substring(0, dot);
+        else
+            domain = "";
+    }
+
+    private String getDomainFromEmail(String emailStr) {
         String[] splitEmail = emailStr.split("(\\.|@)");
 
         String domain = "";

@@ -65,7 +65,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
     }
 
     private void attemptLogin(){
-        String emailStr = email.getText().toString().trim().toLowerCase();
+        final String emailStr = email.getText().toString().trim().toLowerCase();
         String passwordStr = password.getText().toString().trim().toString();
 
         if(!isValidEmail(emailStr)){
@@ -85,6 +85,8 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     loadingDialog.cancel();
+                    WallaApi api = new WallaApi(LoginScreen.this);
+                    api.resetDomain(emailStr);
                     startActivity(new Intent(LoginScreen.this, MainContainer.class));
                 }else{
                     loadingDialog.cancel();
@@ -122,6 +124,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         int id = v.getId();
         switch (id){
             case R.id.login:
+                auth.signOut();
                 attemptLogin();
                 break;
             case R.id.signup:
