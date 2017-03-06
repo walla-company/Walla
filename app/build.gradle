@@ -8,8 +8,8 @@ android {
         applicationId "genieus.com.walla"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 16
-        versionName "2.0.3"
+        versionCode 17
+        versionName "2.0.4"
         multiDexEnabled true
     }
     buildTypes {

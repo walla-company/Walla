@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -25,18 +26,19 @@ import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
 import genieus.com.walla.v1.Interests;
+import genieus.com.walla.v1.OutdatedVersion;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.fragment.Notifications;
 import genieus.com.walla.v2.adapter.viewpager.ViewPagerAdapter;
@@ -71,6 +73,8 @@ public class MainContainer extends AppCompatActivity
     private int[] tabIcons, tabIconsColored;
     private String[] tabNames;
 
+    private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +85,7 @@ public class MainContainer extends AppCompatActivity
         setupFab();
 
         auth = FirebaseAuth.getInstance();
-        if(!isLoggedIn()){
+        if (!isLoggedIn()) {
             startActivity(new Intent(this, LoginScreen.class));
             finish();
         }
@@ -103,7 +107,7 @@ public class MainContainer extends AppCompatActivity
         startService(intent);
         startService(intent2);
 
-        if(auth.getCurrentUser() != null) {
+        if (auth.getCurrentUser() != null) {
             String token = FirebaseInstanceId.getInstance().getToken();
             api.registerToken(auth.getCurrentUser().getUid(), token);
         }
@@ -111,16 +115,16 @@ public class MainContainer extends AppCompatActivity
         initUi();
     }
 
-    private boolean isLoggedIn(){
+    private boolean isLoggedIn() {
         return auth != null && auth.getCurrentUser() != null;
     }
 
     private void initUi() {
         fonts = new Fonts(this);
-        if(auth == null || auth.getCurrentUser() == null){
+        if (auth == null || auth.getCurrentUser() == null) {
             startActivity(new Intent(this, LoginScreen.class));
             finish();
-        }else {
+        } else {
 
             api.getUserInfo(new WallaApi.OnDataReceived() {
                 @Override
@@ -144,12 +148,14 @@ public class MainContainer extends AppCompatActivity
             @Override
             public void onDataReceived(Object data, int call) {
                 boolean isSuspended = (boolean) data;
-                if(isSuspended){
+                if (isSuspended) {
                     notifyUserOfSuspension();
                 }
 
             }
         }, auth.getCurrentUser().getUid());
+
+        minVersionListener();
 
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -174,7 +180,7 @@ public class MainContainer extends AppCompatActivity
         setupTabIcons();
     }
 
-    public static void refresh(){
+    public static void refresh() {
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
@@ -190,7 +196,7 @@ public class MainContainer extends AppCompatActivity
         }, auth.getCurrentUser().getUid());
     }
 
-    private void notifyUserOfSuspension(){
+    private void notifyUserOfSuspension() {
         Intent intent = new Intent(this, AccountSuspension.class);
         startActivity(intent);
         finish();
@@ -213,17 +219,11 @@ public class MainContainer extends AppCompatActivity
         fab.setMenuButtonColorPressed(getResources().getColor(R.color.lightblue));
         fab.setClosedOnTouchOutside(true);
 
-        com.github.clans.fab.FloatingActionButton createGroup = new com.github.clans.fab.FloatingActionButton(this);
-        createGroup.setLabelText("Create a group");
-        createGroup.setImageResource(R.drawable.ic_group);
-
         com.github.clans.fab.FloatingActionButton createPost = new com.github.clans.fab.FloatingActionButton(this);
         createPost.setLabelText("Create an event");
         createPost.setImageResource(R.drawable.ic_create);
 
-        createGroup.setColorNormal(getResources().getColor(R.color.lightblue));
         createPost.setColorNormal(getResources().getColor(R.color.lightblue));
-        createGroup.setColorPressed(getResources().getColor(R.color.lightblue));
         createPost.setColorPressed(getResources().getColor(R.color.lightblue));
 
         createPost.setOnClickListener(new View.OnClickListener() {
@@ -233,17 +233,10 @@ public class MainContainer extends AppCompatActivity
                 startActivity(new Intent(MainContainer.this, Create.class));
             }
         });
-        createGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fab.close(true);
-            }
-        });
 
         fab.addMenuButton(createPost);
-        fab.addMenuButton(createGroup);
-
         fab.setClosedOnTouchOutside(true);
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -270,6 +263,26 @@ public class MainContainer extends AppCompatActivity
         });
 
         viewPager.setAdapter(adapter);
+    }
+
+    private void minVersionListener() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("app_settings/min_version/android").addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String minVersion = (String) dataSnapshot.getValue();
+                        if (getVersion().compareTo(minVersion) < 0) {
+                            startActivity(new Intent(MainContainer.this, OutdatedVersion.class));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("Cancelled", "getUser:onCancelled", databaseError.toException());
+                        // ...
+                    }
+                });
     }
 
     private void changeTabMenuItems(int position) {
@@ -433,7 +446,7 @@ public class MainContainer extends AppCompatActivity
         startActivity(Intent.createChooser(intent, "Send Email"));
     }
 
-    private void showTerms(){
+    private void showTerms() {
         String url = "https://www.wallasquad.com/terms-and-conditions/";
         Intent in = new Intent(Intent.ACTION_VIEW);
         in.setData(Uri.parse(url));
