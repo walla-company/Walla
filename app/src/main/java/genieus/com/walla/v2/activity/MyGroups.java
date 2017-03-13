@@ -79,18 +79,6 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
         data = new ArrayList<>();
         progress.setVisibility(View.GONE);
 
-        /*
-        data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
-        data.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
-        data.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
-        data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
-        data.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
-        data.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
-        data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
-        data.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
-        data.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
-        */
-
         group_lv = (ListView) findViewById(R.id.my_groups_lv);
         selected = new ArrayList<>();
 

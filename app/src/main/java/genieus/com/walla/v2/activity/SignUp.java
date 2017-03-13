@@ -235,7 +235,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, O
             try {
                 data.put("first_name", fname.getText().toString());
                 data.put("last_name", lname.getText().toString());
-                data.put("email", "");
+                data.put("email", getEmail());
                 data.put("academic_level", "");
                 data.put("major", "");
                 data.put("graduation_year", "");
@@ -244,6 +244,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, O
                 data.put("profile_image_url", "");
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.d("json param", e.toString());
             }
 
             api.addUser(new WallaApi.OnDataReceived() {

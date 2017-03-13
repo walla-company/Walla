@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
-        android:background="@android:color/transparent"
         android:id="@+id/tabs_container"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:orientation="horizontal">
+        android:background="@android:color/transparent"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-       <android.support.v7.widget.RecyclerView
-           android:id="@+id/tabs_rv"
-           android:layout_width="wrap_content"
-           android:layout_height="match_parent"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tabs_rv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/groups_rv"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
 
     </LinearLayout>
@@ -33,7 +34,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="175dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/rounded_corners"
             android:orientation="vertical">
 
@@ -50,58 +51,62 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="4dp"
-                    android:src="@drawable/ic_lit_gray" />
+                    android:src="@drawable/ic_lit_gray"
+                    android:visibility="gone" />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:paddingLeft="16dp">
+                        android:layout_weight="20">
 
-
-                        <TextView
-                            android:paddingTop="8dp"
-                            android:id="@+id/duration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="6:30 PM\nto 8:30"
-                            android:textSize="17sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/duration"
-                            android:layout_marginTop="4dp"
-                            android:text="Today" />
-
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/icon"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="16dp"
+                            android:src="@color/LightGrey" />
 
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="10">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="80">
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Judy"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/free_food"
+                            android:layout_marginRight="16dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignBottom="@+id/name"
+                            android:src="@mipmap/pizza_icon"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp" />
 
                         <TextView
                             android:id="@+id/title"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="8dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/name"
+                            android:paddingBottom="16dp"
                             android:paddingRight="8dp"
                             android:paddingTop="8dp"
                             android:text="Movie Night at Bryan Center Free Popcorn and drinks"
-                            android:textSize="23sp"
-                            />
+                            android:textSize="23sp" />
 
 
                     </RelativeLayout>
@@ -124,7 +129,8 @@
                 <RelativeLayout
                     android:id="@+id/interested_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/interested_icon"
@@ -149,7 +155,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4dp"
-                    android:layout_toRightOf="@id/interested_container">
+                    android:layout_toRightOf="@id/interested_container"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/going_icon"
@@ -168,24 +175,49 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@id/going_container">
+                    android:layout_height="wrap_content">
 
+                    <View
+                        android:layout_weight="17"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"/>
 
-                    <TextView
-                        android:id="@+id/attendees_description"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_weight="90"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:gravity="center_vertical"
-                        android:text="Judy and 4 others are going"
-                        android:textSize="15sp" />
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/going_container">
+
+                        <TextView
+                            android:id="@+id/duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:text="6:30 PM"
+                            android:textSize="19sp" />
 
 
-                </RelativeLayout>
+                        <TextView
+                            android:id="@+id/date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_toRightOf="@id/duration"
+                            android:gravity="center_vertical"
+                            android:text="Tommorrow (2/28)"
+                            android:textSize="16sp" />
+
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
 
             </RelativeLayout>

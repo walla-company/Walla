@@ -14,9 +14,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:drawableLeft="@drawable/ic_fitler_darker"
             android:gravity="center_vertical"
-            android:text="Showing type events"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:text="Activities"
             android:textSize="15sp" />
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -30,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="@android:color/transparent"
-                android:dividerHeight="16dp"
+                android:dividerHeight="12dp"
                 android:scrollbars="none" />
 
         </android.support.v4.widget.SwipeRefreshLayout>

@@ -293,7 +293,6 @@ public class Home extends Fragment {
 
         events_lv = (ListView) view.findViewById(R.id.events);
         filter_tv = (TextView) view.findViewById(R.id.filter_label);
-        filter_tv.setVisibility(View.GONE);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_container);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

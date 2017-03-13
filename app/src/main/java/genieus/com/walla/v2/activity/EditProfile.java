@@ -12,13 +12,18 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,13 +36,18 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
+import genieus.com.walla.v2.adapter.listview.MyGroupsLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.fragment.Home;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.RoundedTransformation;
 import genieus.com.walla.v2.info.UserInfo;
 import genieus.com.walla.v2.info.Utility;
@@ -54,9 +64,11 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private Fonts fonts;
     private CircleImageView profile_pic;
     private NestedScrollView parent;
+    private RelativeLayout add;
+    private LinearLayout group_container;
     private EditText hometown_in, description_in, fname_in, year_in, major_in, lname_in;
     private TextView profile_pic_label, year_label, major_label, hometown_label, description_label,
-            fname_label, lname_label;
+            fname_label, lname_label, group_label;
 
     private String[] sourceOptions = {"Take Photo", "Choose from Library", "Cancel"};
 
@@ -71,21 +83,17 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         auth = FirebaseAuth.getInstance();
-
-        String uid = auth.getCurrentUser().getUid();
-
         api = new WallaApi(this);
-        api.getUserInfo(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                info = (UserInfo) data;
-                initUi();
-            }
-        }, uid);
     }
 
     private void initUi() {
         fonts = new Fonts(this);
+
+        add = (RelativeLayout) findViewById(R.id.add_container);
+        add.setOnClickListener(this);
+
+        group_container = (LinearLayout) findViewById(R.id.groups);
+        group_container.removeAllViews();
 
         parent = (NestedScrollView) findViewById(R.id.content_edit_profile);
         profile_pic_label = (TextView) findViewById(R.id.profile_picture_label);
@@ -102,6 +110,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         fname_label.setTypeface(fonts.AzoSansRegular);
         lname_label = (TextView) findViewById(R.id.lname_label);
         lname_label.setTypeface(fonts.AzoSansRegular);
+        group_label = (TextView) findViewById(R.id.groups_label);
+        group_label.setTypeface(fonts.AzoSansRegular);
         year_in = (EditText) findViewById(R.id.year_in);
         year_in.setTypeface(fonts.AzoSansRegular);
         year_in.setText(info.getYear());
@@ -136,6 +146,38 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         }
 
         profile_pic.setOnClickListener(this);
+
+       showUserGroups();
+    }
+
+    private void showUserGroups(){
+        for(String key : info.getGroups()){
+            api.getGroup(new WallaApi.OnDataReceived() {
+                @Override
+                public void onDataReceived(Object data, int call) {
+                    GroupInfo group = (GroupInfo) data;
+                    addGroupToList(group);
+                }
+            }, key);
+        }
+    }
+
+    private void addGroupToList(final GroupInfo group) {
+        final View view = LayoutInflater.from(this).inflate(R.layout.single_group_v3, null);
+        TextView groupName = (TextView) view.findViewById(R.id.group_name);
+        groupName.setTypeface(fonts.AzoSansRegular);
+        groupName.setText(group.getName());
+
+        ImageButton removeGroup = (ImageButton) view.findViewById(R.id.remove_group);
+        removeGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                api.leaveGroup(auth.getCurrentUser().getUid(), group.getGuid());
+                view.setVisibility(View.GONE);
+            }
+        });
+
+        group_container.addView(view);
     }
 
     private void chooseProfilePicture() {
@@ -205,10 +247,19 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         api.saveUserHometown(info.getUid(), hometown_in.getText().toString());
         api.saveUserDescription(info.getUid(), description_in.getText().toString());
         //api.saveUserProfileImageUrl(info.getUid(), "");
-
-        Snackbar.make(parent, "Profile saved!", Snackbar.LENGTH_LONG).show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        api.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                info = (UserInfo) data;
+                initUi();
+            }
+        }, auth.getCurrentUser().getUid());
+    }
 
     @Override
     public void onClick(View v) {
@@ -216,6 +267,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         switch (id) {
             case R.id.profile_image_in:
                 chooseProfilePicture();
+                break;
+            case R.id.add_container:
+                startActivity(new Intent(this, Search.class));
                 break;
             default:
                 break;
@@ -261,6 +315,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 break;
             case android.R.id.home:
                 onBackPressed();
+                break;
             default:
                 break;
         }

@@ -2,6 +2,8 @@ package genieus.com.walla.v2.adapter.listview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,10 +16,17 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.Details;
 import genieus.com.walla.v2.activity.Group;
@@ -27,6 +36,7 @@ import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.adapter.recyclerview.TabRVAdapter;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
+import genieus.com.walla.v2.info.UserInfo;
 
 /**
  * Created by Anesu on 12/17/2016.
@@ -72,55 +82,43 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
+        View view;
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         view = inflater.inflate(resource, null);
 
-        ImageView visibility = (ImageView) view.findViewById(R.id.visibility);
         TextView title = (TextView) view.findViewById(R.id.title);
-        TextView interested = (TextView) view.findViewById(R.id.interested);
-        TextView going = (TextView) view.findViewById(R.id.going);
+        final TextView name = (TextView) view.findViewById(R.id.name);
         TextView duration = (TextView) view.findViewById(R.id.duration);
         TextView date = (TextView) view.findViewById(R.id.date);
-        TextView attendees_description = (TextView) view.findViewById(R.id.attendees_description);
-        RecyclerView tabs = (RecyclerView) view.findViewById(R.id.tabs_rv);
-        final RecyclerView groupsTabs = (RecyclerView) view.findViewById(R.id.groups_rv);
+
+        final CircleImageView icon = (CircleImageView) view.findViewById(R.id.icon);
+        final ImageView food = (ImageView) view.findViewById(R.id.free_food);
+        food.setVisibility(View.GONE);
 
         final EventInfo event = getEvent(events, filtered.get(position));
 
-        LinearLayoutManager horizontal
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        api.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                UserInfo user = (UserInfo) data;
+                name.setText(user.getFirst_name());
 
-        LinearLayoutManager horizontal2
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                setImage(icon, user.getProfile_url());
+            }
+        }, event.getHost());
 
-        groupsTabs.setLayoutManager(horizontal2);
-        tabs.setLayoutManager(horizontal);
-
-        if(event.getGroup_name() != null && !event.getGroup_name().isEmpty()){
-            GroupInfo groupInfo = new GroupInfo(event.getGroup_name(), event.getGroup_abbr(), "");
-            groupInfo.setGuid(event.getHost_group());
-            GroupTabRVAdapter groupTabAdapter = new GroupTabRVAdapter(getContext(), new ArrayList<GroupInfo>(Arrays.asList(groupInfo)));
-            groupsTabs.setAdapter(groupTabAdapter);
+        for(String interest : event.getInterests()){
+            if(interest.contains("food")){
+                food.setVisibility(View.VISIBLE);
+            }
         }
-
-        TabRVAdapter tabAdapter = new TabRVAdapter(getContext(), event.getInterests());
-        tabs.setAdapter(tabAdapter);
-
-        visibility.setImageResource(event.is_public() ? R.drawable.ic_lit_gray : R.drawable.ic_chill_gray);
         title.setText(event.getTitle());
         title.setTypeface(fonts.AzoSansRegular);
-        interested.setText(event.getInterested_list().size() + "");
-        interested.setTypeface(fonts.AzoSansRegular);
-        going.setText(event.getGoing_list().size() + "");
-        going.setTypeface(fonts.AzoSansRegular);
         date.setTypeface(fonts.AzoSansRegular);
         date.setText(event.getStringDate(event.getStart_time()));
-        duration.setText(event.getStringTime(event.getStart_time(), true)+ "\nto " + event.getStringTime(event.getEnd_time(), false));
+        duration.setText(event.getStringTime(event.getStart_time(), true));
         duration.setTypeface(fonts.AzoSansRegular);
-        attendees_description.setTypeface(fonts.AzoSansRegular);
-        attendees_description.setText("");
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +130,33 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         });
 
         return view;
+    }
+
+    private void setImage(final ImageView imageView, String url){
+        if(url != null && !url.equals("")) {
+            if(!url.startsWith("gs://walla-launch.appspot.com")) {
+                Picasso.with(getContext()) //Context
+                        .load(url) //URL/FILE
+                        .into(imageView);//an ImageView Object to show the loaded image;
+            }else{
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                storage.getReferenceFromUrl(url).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()){
+                            Picasso.with(getContext()) //Context
+                                    .load(task.getResult().toString()) //URL/FILE
+                                    .into(imageView);//an ImageView Object to show the loaded image;
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            }
+        }
     }
 
     private class ItemFilter extends Filter {

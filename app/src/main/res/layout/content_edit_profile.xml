@@ -5,7 +5,7 @@
     android:id="@+id/content_edit_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f1f1f1"
+    android:background="@color/white"
     android:padding="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="genieus.com.walla.v2.activity.EditProfile"
@@ -15,11 +15,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.CardView
+        <RelativeLayout
             android:id="@+id/profile_pic_cv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:id="@+id/profile_picture_container"
@@ -30,9 +29,9 @@
                 android:layout_alignParentTop="true">
 
                 <RelativeLayout
-                    android:layout_marginBottom="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp">
 
                     <TextView
                         android:id="@+id/profile_picture_label"
@@ -45,8 +44,8 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profile_image_in"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_below="@+id/profile_picture_label"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="8dp"
@@ -58,26 +57,25 @@
 
             </RelativeLayout>
 
-        </android.support.v7.widget.CardView>
+        </RelativeLayout>
 
-        <android.support.v7.widget.CardView
-            app:cardCornerRadius="10dp"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profile_pic_cv"
-            android:layout_marginTop="16dp">
+            android:layout_below="@id/profile_pic_cv">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
                 <RelativeLayout
                     android:id="@+id/fname_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone">
 
                     <EditText
                         android:id="@+id/fname_in"
@@ -108,7 +106,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/fname_container"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/lname_label"
@@ -142,19 +141,19 @@
                     android:layout_marginTop="16dp">
 
                     <TextView
-                    android:id="@+id/year_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="4dp"
-                    android:text="Year"
-                    android:textSize="17sp" />
+                        android:id="@+id/year_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Year"
+                        android:textSize="17sp" />
 
 
                     <EditText
                         android:id="@+id/year_in"
                         android:layout_width="match_parent"
-                        android:layout_height="32dp"
+                        android:layout_height="42dp"
                         android:layout_below="@+id/year_label"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
@@ -167,11 +166,11 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_marginTop="16dp"
                     android:id="@+id/major_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true">
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="16dp">
 
                     <TextView
                         android:id="@+id/major_label"
@@ -191,7 +190,7 @@
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="4dp"
                         android:background="@drawable/rounded_corners"
-                        android:minHeight="32dp"
+                        android:minHeight="42dp"
                         android:paddingLeft="8dp"
                         android:text="" />
 
@@ -206,13 +205,13 @@
                     android:layout_marginTop="16dp">
 
                     <TextView
-                    android:id="@+id/hometown_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="4dp"
-                    android:text="Where are you from?"
-                    android:textSize="17sp" />
+                        android:id="@+id/hometown_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="Where are you from?"
+                        android:textSize="17sp" />
 
                     <EditText
                         android:id="@+id/hometown_in"
@@ -223,16 +222,14 @@
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="4dp"
                         android:background="@drawable/rounded_corners"
-                        android:minHeight="32dp"
+                        android:minHeight="42dp"
                         android:paddingLeft="8dp"
                         android:text="" />
-
 
 
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_marginBottom="16dp"
                     android:id="@+id/description_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -258,15 +255,69 @@
                         android:layout_marginTop="4dp"
                         android:background="@drawable/rounded_corners"
                         android:gravity="start"
-                        android:minHeight="124dp"
+                        android:minHeight="64dp"
                         android:paddingLeft="8dp" />
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/groups_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/hometown_container"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:id="@+id/groups_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:text="My groups"
+                        android:textSize="17sp" />
+
+                    <LinearLayout
+                        android:id="@+id/groups"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/groups_label"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:orientation="vertical">
+
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/add_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:layout_below="@id/groups"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/rounded_corners">
+
+                        <ImageButton
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:background="@android:color/transparent"
+                            android:src="@mipmap/plus_btn" />
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+
             </LinearLayout>
 
 
-        </android.support.v7.widget.CardView>
+        </RelativeLayout>
 
     </RelativeLayout>
 

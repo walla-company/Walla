@@ -208,7 +208,7 @@ public class EventInfo {
         Calendar start = Calendar.getInstance();
         start.setTimeInMillis(time * 1000);
 
-        SimpleDateFormat format1 = new SimpleDateFormat("MMM d");
+        String day = String.format("%d/%d", start.get(Calendar.MONTH) + 1, start.get(Calendar.DAY_OF_MONTH));
         SimpleDateFormat format2 = new SimpleDateFormat("EEEE");
 
         if(start.get(Calendar.YEAR) == now.get(Calendar.YEAR)
@@ -218,14 +218,14 @@ public class EventInfo {
                 date = "Today";
             }else if(diff == 1){
                 date = "Tomorrow";
-            }else if(diff < 7){
+            }else {
                 date = format2.format(start.getTime());
             }
         }else{
-            date = format1.format(start.getTime());
+            date = format2.format(start.getTime());
         }
 
-        return date;
+        return String.format("%s %s", date, day);
     }
 
     public boolean isDeleted() {

@@ -79,6 +79,7 @@ public class Search extends AppCompatActivity {
             }
         });
 
+        /*
         api.getUsers(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
@@ -93,34 +94,9 @@ public class Search extends AppCompatActivity {
                 suggestFriendsAdapter.getFilter().filter("");
             }
         });
-
-        /*
-        List<MutualFriendInfo> data = new ArrayList<>();
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
-        data.add(new MutualFriendInfo(null, "Shray Gupta", 3));
         */
 
 
-
-
-        /*
-        List<GroupInfo> data2 = new ArrayList<>();
-        data2.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
-        data2.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
-        data2.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
-        data2.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
-        data2.add(new GroupInfo("Mechanical Engineers", "MechEng", "#FFA07A"));
-        data2.add(new GroupInfo("Residential Assistants", "RA", "#1E90FF"));
-
-        */
 
         suggested_group_lv = (ListView) findViewById(R.id.suggested_groups_lv);
 
