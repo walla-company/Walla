@@ -2,13 +2,11 @@ package genieus.com.walla.v2.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,7 +20,8 @@ import genieus.com.walla.v2.info.Fonts;
 public class ForgotPassword extends AppCompatActivity implements View.OnClickListener {
 
     private EditText email;
-    private ImageButton login, send;
+    private ImageButton confirm, back;
+    private TextView explanation, confirmation;
     private Fonts fonts;
     private FirebaseAuth auth;
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
@@ -42,16 +41,38 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
 
         email = (EditText) findViewById(R.id.email);
         email.setTypeface(fonts.AzoSansRegular);
-        login = (ImageButton) findViewById(R.id.login);
-        login.setOnClickListener(this);
-        send = (ImageButton) findViewById(R.id.send);
-        send.setOnClickListener(this);
+
+        confirm = (ImageButton) findViewById(R.id.confirm);
+        confirm.setOnClickListener(this);
+
+        back = (ImageButton) findViewById(R.id.back_btn);
+        back.setOnClickListener(this);
+
+        explanation = (TextView) findViewById(R.id.explation_msg);
+        explanation.setTypeface(fonts.AzoSansRegular);
+
+        confirmation = (TextView) findViewById(R.id.confirmation_msg);
+        confirmation.setTypeface(fonts.AzoSansRegular);
+
+        initPreConfirmState();
+    }
+
+    private void initPreConfirmState(){
+        back.setVisibility(View.GONE);
+        confirmation.setVisibility(View.GONE);
+        email.setVisibility(View.VISIBLE);
+        confirm.setVisibility(View.VISIBLE);
+    }
+
+    private void initPostConfirmState(){
+        back.setVisibility(View.VISIBLE);
+        confirmation.setVisibility(View.VISIBLE);
+        email.setVisibility(View.GONE);
+        confirm.setVisibility(View.GONE);
     }
 
     private void sendRecoveryEmail(String email){
         auth.sendPasswordResetEmail(email);
-        Toast.makeText(this, "Recovery email sent to " + email, Toast.LENGTH_LONG).show();
-        startActivity(new Intent(this, LoginScreen.class));
     }
 
     private boolean isValidEmail(String email){
@@ -60,20 +81,31 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
         return matcher.find();
     }
 
+    private void handleConfimClick(){
+        String emailStr = email.getText().toString().trim().toLowerCase();
+
+        if(isValidEmail(emailStr)) {
+            sendRecoveryEmail(emailStr);
+            initPostConfirmState();
+        }
+        else {
+            email.setError("invalid email");
+        }
+    }
+
+    private void handleBackClick(){
+        startActivity(new Intent(this, LoginScreenEmail.class));
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.login:
-                startActivity(new Intent(this, LoginScreen.class));
+            case R.id.confirm:
+                handleConfimClick();
                 break;
-            case R.id.send:
-                String emailStr = email.getText().toString().trim().toLowerCase();
-                if(isValidEmail(emailStr))
-                    sendRecoveryEmail(emailStr);
-                else
-                    email.setError("enter a valid email");
-                break;
+            case R.id.back_btn:
+                handleBackClick();
             default:
                 break;
         }

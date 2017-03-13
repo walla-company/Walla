@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -22,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,20 +34,16 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
-import genieus.com.walla.v1.Interests;
 import genieus.com.walla.v1.OutdatedVersion;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.fragment.Notifications;
 import genieus.com.walla.v2.adapter.viewpager.ViewPagerAdapter;
 import genieus.com.walla.v2.fragment.Calendar;
 import genieus.com.walla.v2.fragment.Home;
-import genieus.com.walla.v2.info.DomainInfo;
-import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.MyFirebaseInstanceidService;
 import genieus.com.walla.v2.info.MyFirebaseMessagingService;
 import genieus.com.walla.v2.info.UserInfo;
-import genieus.com.walla.v2.info.Utility;
 
 public class MainContainer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, View.OnClickListener {
@@ -86,7 +79,7 @@ public class MainContainer extends AppCompatActivity
 
         auth = FirebaseAuth.getInstance();
         if (!isLoggedIn()) {
-            startActivity(new Intent(this, LoginScreen.class));
+            startActivity(new Intent(this, LoginScreenEmail.class));
             finish();
         }
 
@@ -112,7 +105,12 @@ public class MainContainer extends AppCompatActivity
             api.registerToken(auth.getCurrentUser().getUid(), token);
         }
 
-        initUi();
+        try {
+            initUi();
+        }catch(Exception e){
+            Log.e("error handled", e.toString());
+            startActivity(new Intent(this, LoginScreenEmail.class));
+        }
     }
 
     private boolean isLoggedIn() {
@@ -122,7 +120,7 @@ public class MainContainer extends AppCompatActivity
     private void initUi() {
         fonts = new Fonts(this);
         if (auth == null || auth.getCurrentUser() == null) {
-            startActivity(new Intent(this, LoginScreen.class));
+            startActivity(new Intent(this, LoginScreenEmail.class));
             finish();
         } else {
 
@@ -435,7 +433,7 @@ public class MainContainer extends AppCompatActivity
 
     private void logout() {
         auth.signOut();
-        startActivity(new Intent(this, LoginScreen.class));
+        startActivity(new Intent(this, LoginScreenEmail.class));
     }
 
     private void contactWalla() {

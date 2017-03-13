@@ -182,7 +182,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".v2.activity.LoginScreen"
+            android:name=".v2.activity.LoginScreenEmail"
             android:label="@string/title_activity_login_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -208,6 +208,10 @@
         <activity
             android:name=".v2.activity.AccountSuspension"
             android:label="@string/title_activity_account_suspension"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".v2.activity.LoginScreenPassword"
+            android:label="@string/title_activity_login_screen_password"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
