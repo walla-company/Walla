@@ -60,6 +60,7 @@ public class WallaApi {
     }
 
     private static Context context;
+    private static WallaApi instance;
 
     private static String token = "3eaf7dFmNF447d";
     private static String platform = "android";
@@ -106,25 +107,36 @@ public class WallaApi {
     private static String delete_activity = "/api/delete_activity?";
 
 
-
     public static String domain = "";
     private static RequestQueue queue;
 
 
-    public WallaApi(Context context) {
-        queue = Volley.newRequestQueue(context);
-        this.context = context;
-        if(domain == null || domain.isEmpty()){
-           if(FirebaseAuth.getInstance().getCurrentUser() != null){
-               String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-               String domainExt = getDomainFromEmail(email);
-               int dot = domainExt.indexOf('.');
-               if(dot >= 0)
-                   domain = domainExt.substring(0, dot);
-               else
-                   domain = "";
-           }
+    private WallaApi(Context context1) {
+        if(instance == null){
+            queue = Volley.newRequestQueue(context1);
+            queue.getCache().clear();
+            Log.d("disc cache", "yikes");
+            context = context1;
+            if(domain == null || domain.isEmpty()){
+                if(FirebaseAuth.getInstance().getCurrentUser() != null){
+                    String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                    String domainExt = getDomainFromEmail(email);
+                    int dot = domainExt.indexOf('.');
+                    if(dot >= 0)
+                        domain = domainExt.substring(0, dot);
+                    else
+                        domain = "";
+                }
+            }
         }
+    }
+
+    public static WallaApi getInstance(Context context1){
+        if(instance == null){
+            instance = new WallaApi(context1);
+        }
+
+        return instance;
     }
 
     public void resetDomain(String email){
@@ -136,7 +148,7 @@ public class WallaApi {
             domain = "";
     }
 
-    private String getDomainFromEmail(String emailStr) {
+    private static String getDomainFromEmail(String emailStr) {
         String[] splitEmail = emailStr.split("(\\.|@)");
 
         String domain = "";

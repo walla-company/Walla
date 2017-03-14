@@ -79,7 +79,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
         auth = FirebaseAuth.getInstance();
         progress = (ProgressBar) findViewById(R.id.progress_bar);
         progress.setVisibility(View.VISIBLE);

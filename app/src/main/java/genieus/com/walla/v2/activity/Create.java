@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.ArrayRes;
@@ -31,12 +32,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -83,10 +86,12 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             end_time_label, location_label, details_label, host_label, group_label, interest_label,
             friends_label, guests_label, friends_in, guests_in,
             interest_in, title_in;
-    private RelativeLayout map_container, group_in, host_in;
+    private RelativeLayout map_container, group_in, host_in, host_container;
     private Button post;
     private ImageButton chill, lit;
+    private Button food_yes, food_no;
     private RecyclerView groups_rv, host_group_rv;
+    private FrameLayout host_click;
     private MiniGroupRVAdapter adapter, hostAdapter;
     private GoogleApiClient mGoogleApiClient;
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -133,7 +138,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
     private void initUi() {
         auth = FirebaseAuth.getInstance();
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
         fonts = new Fonts(this);
         postObj = new JSONObject();
 
@@ -168,6 +173,16 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        food_no = (Button) findViewById(R.id.no_btn);
+        food_no.setOnClickListener(this);
+        food_no.setTypeface(fonts.AzoSansRegular);
+        food_yes = (Button) findViewById(R.id.yes_btn);
+        food_yes.setOnClickListener(this);
+        food_yes.setTypeface(fonts.AzoSansRegular);
+
+        host_click = (FrameLayout) findViewById(R.id.host_click);
+        host_click.setOnClickListener(this);
 
         lit = (ImageButton) findViewById(R.id.fire_btn);
         lit.setOnClickListener(this);
@@ -317,6 +332,14 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 }
             }
         }, auth.getInstance().getCurrentUser().getUid());
+
+        JSONArray ar = new JSONArray();
+
+        try {
+            postObj.put("interests", ar);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void changeBackgroundColor(View view, String color) {
@@ -556,6 +579,14 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
         try {
             postObj.put("start_time", (long) time.getTimeInMillis() / 1000);
+
+            Calendar midnight = Calendar.getInstance();
+            midnight.setTimeInMillis(time.getTimeInMillis());
+            midnight.set(Calendar.HOUR_OF_DAY, 0);
+            midnight.set(Calendar.MINUTE, 0);
+            midnight.set(Calendar.DAY_OF_MONTH, time.get(Calendar.DAY_OF_MONTH) + 1);
+
+            postObj.put("end_time", (long) midnight.getTimeInMillis() / 1000);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -641,6 +672,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                         case 0:
                             //yes
                             if(user.isVerified()){
+                                Log.d("postdata", postObj.toString());
                                 api.postActivity(postObj);
                                 Snackbar snack = Snackbar.make(map_container, "Activity created successfully", Snackbar.LENGTH_LONG);
                                 View view = snack.getView();
@@ -749,6 +781,31 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         }
     }
 
+    private void foodYesClicked(){
+        food_no.setBackgroundResource(R.drawable.rounded_corners);
+        food_yes.setBackgroundResource(R.drawable.rounded_red);
+        JSONArray ar = new JSONArray();
+
+        try {
+            ar.put("Free Food");
+            postObj.put("interests", ar);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void foodNoClicked(){
+        food_no.setBackgroundResource(R.drawable.rounded_red);
+        food_yes.setBackgroundResource(R.drawable.rounded_corners);
+        JSONArray ar = new JSONArray();
+
+        try {
+            ar.put("-");
+            postObj.put("interests", ar);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         time = Calendar.getInstance();
@@ -787,7 +844,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             case R.id.group_in:
                 inviteGroups();
                 break;
-            case R.id.host_in:
+            case R.id.host_click:
+                Log.d("host_in", "click");
                 setGroupHost();
                 break;
             case R.id.guests_in:
@@ -817,6 +875,13 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                break;
+            case R.id.yes_btn:
+                foodYesClicked();
+                break;
+            case R.id.no_btn:
+                foodNoClicked();
+            default:
                 break;
 
 

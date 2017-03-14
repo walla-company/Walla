@@ -53,7 +53,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, O
     }
 
     private void initUi() {
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
         data = new JSONObject();
         fonts = new Fonts(this);
         auth = FirebaseAuth.getInstance();

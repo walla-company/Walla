@@ -90,7 +90,7 @@ public class Notifications extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         info_lv = (ListView) view.findViewById(R.id.info_lv);
-        api = new WallaApi(getContext());
+        api = WallaApi.getInstance(getContext());
         auth = FirebaseAuth.getInstance();
 
         api.getNotifications(new WallaApi.OnDataReceived() {

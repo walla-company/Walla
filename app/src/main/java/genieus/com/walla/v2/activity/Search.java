@@ -49,7 +49,7 @@ public class Search extends AppCompatActivity {
 
     private void initUi() {
         fonts = new Fonts(this);
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
 
         search = (SearchView) findViewById(R.id.search);
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

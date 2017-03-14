@@ -86,7 +86,7 @@ public class Calendar extends Fragment {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
         events_lv = (ListView) view.findViewById(R.id.events);
         events = new ArrayList<>();
-        api = new WallaApi(getContext());
+        api = WallaApi.getInstance(getContext());
         auth = FirebaseAuth.getInstance();
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override

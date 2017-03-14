@@ -113,7 +113,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         initGoogleClient();
         main_container = (RelativeLayout) findViewById(R.id.main_container);
         main_container.setVisibility(View.GONE);
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
         auth = FirebaseAuth.getInstance();
 
         Bundle extras = getIntent().getExtras();

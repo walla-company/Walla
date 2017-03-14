@@ -108,7 +108,7 @@ public class LoginScreenPassword extends AppCompatActivity implements View.OnCli
         loadingDialog.cancel();
 
         String emailStr = getEmail();
-        WallaApi api = new WallaApi(LoginScreenPassword.this);
+        WallaApi api = WallaApi.getInstance(LoginScreenPassword.this);
         api.resetDomain(emailStr);
         startActivity(new Intent(LoginScreenPassword.this, MainContainer.class));
     }

@@ -83,7 +83,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         auth = FirebaseAuth.getInstance();
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
     }
 
     private void initUi() {

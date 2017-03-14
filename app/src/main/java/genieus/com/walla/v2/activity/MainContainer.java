@@ -93,7 +93,7 @@ public class MainContainer extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         context = getApplicationContext();
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
 
         Intent intent = new Intent(this, MyFirebaseInstanceidService.class);
         Intent intent2 = new Intent(this, MyFirebaseMessagingService.class);

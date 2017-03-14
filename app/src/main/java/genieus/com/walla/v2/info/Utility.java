@@ -27,7 +27,7 @@ public class Utility {
     private static WallaApi api;
 
     public static void initApi(Context context){
-        api = new WallaApi(context);
+        api = WallaApi.getInstance(context);
     }
 
     public static int calculateNoOfColumns(View view, double cellWidth, double padding) {

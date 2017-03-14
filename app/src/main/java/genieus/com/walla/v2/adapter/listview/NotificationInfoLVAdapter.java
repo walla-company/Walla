@@ -49,7 +49,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
         this.resource = resource;
 
         fonts = new Fonts(context);
-        api = new WallaApi(context);
+        api = WallaApi.getInstance(context);
         auth = FirebaseAuth.getInstance();
     }
 

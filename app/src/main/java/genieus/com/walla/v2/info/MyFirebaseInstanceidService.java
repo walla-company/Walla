@@ -19,7 +19,7 @@ public class MyFirebaseInstanceidService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
-        api = new WallaApi(getApplicationContext());
+        api = WallaApi.getInstance(getApplicationContext());
         auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser() == null){

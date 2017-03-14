@@ -62,7 +62,7 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
         progress = (ProgressBar) findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
 
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
         String uid = auth.getCurrentUser().getUid();
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override

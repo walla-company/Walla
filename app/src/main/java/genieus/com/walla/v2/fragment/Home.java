@@ -106,7 +106,7 @@ public class Home extends Fragment {
 
     private void initUi() {
         context = getContext();
-        api = new WallaApi(getContext());
+        api = WallaApi.getInstance(getContext());
         fonts = new Fonts(getContext());
         events = new ArrayList<>();
         initFilter();

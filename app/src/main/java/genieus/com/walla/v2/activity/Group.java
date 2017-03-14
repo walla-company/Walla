@@ -61,7 +61,7 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
         auth = FirebaseAuth.getInstance();
 
 

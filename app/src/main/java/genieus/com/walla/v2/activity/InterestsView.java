@@ -58,7 +58,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        api = new WallaApi(this);
+        api = WallaApi.getInstance(this);
         interests_rv = (RecyclerView) findViewById(R.id.interests_rv);
         selected = new ArrayList<>();
         data = new ArrayList<>();

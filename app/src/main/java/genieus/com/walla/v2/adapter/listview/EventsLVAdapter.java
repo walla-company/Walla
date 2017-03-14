@@ -58,7 +58,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         filtered = new ArrayList<>();
         filter = new ItemFilter();
         fonts = new Fonts(context);
-        api = new WallaApi(context);
+        api = WallaApi.getInstance(context);
     }
 
     private EventInfo getEvent(List<EventInfo> events, String query){
@@ -77,6 +77,9 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
     @Override
     public int getCount() {
+        if(filtered == null){
+            return 0;
+        }
         return filtered.size();
     }
 
@@ -109,7 +112,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         }, event.getHost());
 
         for(String interest : event.getInterests()){
-            if(interest.contains("food")){
+            if(interest.toLowerCase().contains("Food")){
                 food.setVisibility(View.VISIBLE);
             }
         }
