@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context="genieus.com.walla.v2.fragment.Home">
 
     <RelativeLayout
@@ -11,12 +10,9 @@
 
         <TextView
             android:id="@+id/filter_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
             android:text="Activities"
             android:textSize="15sp" />
 
@@ -31,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="@android:color/transparent"
-                android:dividerHeight="12dp"
+                android:dividerHeight="10dp"
                 android:scrollbars="none" />
 
         </android.support.v4.widget.SwipeRefreshLayout>

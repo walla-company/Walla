@@ -40,13 +40,14 @@ import genieus.com.walla.v2.fragment.Notifications;
 import genieus.com.walla.v2.adapter.viewpager.ViewPagerAdapter;
 import genieus.com.walla.v2.fragment.Calendar;
 import genieus.com.walla.v2.fragment.Home;
+import genieus.com.walla.v2.fragment.UserProfile;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.MyFirebaseInstanceidService;
 import genieus.com.walla.v2.info.MyFirebaseMessagingService;
 import genieus.com.walla.v2.info.UserInfo;
 
 public class MainContainer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, UserProfile.OnFragmentInteractionListener, View.OnClickListener {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -164,9 +165,9 @@ public class MainContainer extends AppCompatActivity
         profile_pic.setOnClickListener(this);
         name.setTypeface(fonts.AzoSansRegular);
 
-        tabIcons = new int[]{R.mipmap.ic_home, R.mipmap.ic_calendar, R.mipmap.ic_notifications,};
-        tabIconsColored = new int[]{R.mipmap.ic_home_c, R.mipmap.ic_calendar_c, R.mipmap.ic_notifications_c,};
-        tabNames = new String[]{"Activities", "Calendar", "Notifications"};
+        tabIcons = new int[]{R.mipmap.ic_home, R.mipmap.ic_notifications, R.mipmap.ic_profile,};
+        tabIconsColored = new int[]{R.mipmap.ic_home_c, R.mipmap.ic_notifications_c, R.mipmap.ic_profile_c,};
+        tabNames = new String[]{"Activities", "Notifications", "My Profile"};
 
         getSupportActionBar().setTitle(tabNames[0]);
 
@@ -240,8 +241,9 @@ public class MainContainer extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(Home.newInstance("home", ""), "Home");
-        adapter.addFragment(Calendar.newInstance("calendar", ""), "Calendar");
         adapter.addFragment(Notifications.newInstance("notifications", ""), "Notifications");
+        adapter.addFragment(UserProfile.newInstance("profile", ""), "Profile");
+
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -398,18 +400,6 @@ public class MainContainer extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.nav_my_interests:
-                startActivity(new Intent(this, InterestsView.class));
-                break;
-            case R.id.nav_edit_profile:
-                startActivity(new Intent(this, EditProfile.class));
-                break;
-            case R.id.nav_my_friends:
-                startActivity(new Intent(this, Friends.class));
-                break;
-            case R.id.nav_my_groups:
-                startActivity(new Intent(this, MyGroups.class));
-                break;
             case R.id.nav_share:
                 shareWalla();
                 break;

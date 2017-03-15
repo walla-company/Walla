@@ -225,7 +225,7 @@ public class EventInfo {
             date = format2.format(start.getTime());
         }
 
-        return String.format("%s %s", date, day);
+        return String.format("%s (%s)", date, day);
     }
 
     public boolean isDeleted() {

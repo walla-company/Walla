@@ -117,7 +117,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
             }
         }
         title.setText(event.getTitle());
-        title.setTypeface(fonts.AzoSansRegular);
+        title.setTypeface(fonts.AzoSansMedium);
         date.setTypeface(fonts.AzoSansRegular);
         date.setText(event.getStringDate(event.getStart_time()));
         duration.setText(event.getStringTime(event.getStart_time(), true));
