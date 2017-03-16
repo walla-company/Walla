@@ -16,12 +16,19 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import genieus.com.walla.R;
+import genieus.com.walla.v1.OutdatedVersion;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.Fonts;
@@ -196,6 +203,27 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, O
 
     }
 
+    private void setOnBoardingCompleteListener(){
+        DatabaseReference mDatabase;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child(String.format("app_settings/schools/%s/%s/%s", api.getDomain(), auth.getCurrentUser().getUid(), "verified")).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        boolean isVerified = (boolean) dataSnapshot.getValue();
+                        if(isVerified){
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("Cancelled", "getUser:onCancelled", databaseError.toException());
+                        // ...
+                    }
+                });
+    }
+
     private void onSignUpSuccess() {
         Toast.makeText(this, "welcome to Walla!", Toast.LENGTH_LONG).show();
         initPostConfirmState();
@@ -233,15 +261,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, O
             api.resetDomain(getEmail());
 
             try {
+                data.put("uid", auth.getCurrentUser().getUid());
                 data.put("first_name", fname.getText().toString());
                 data.put("last_name", lname.getText().toString());
                 data.put("email", getEmail());
-                data.put("academic_level", "");
-                data.put("major", "");
-                data.put("graduation_year", "");
-                data.put("hometown", "");
-                data.put("description", "");
-                data.put("profile_image_url", "");
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.d("json param", e.toString());

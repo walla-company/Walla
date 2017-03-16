@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/orangerect"
-    android:padding="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="genieus.com.walla.v2.activity.SignUp"
     tools:showIn="@layout/activity_sign_up">
@@ -22,17 +21,17 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="475dp"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
             android:background="@mipmap/loginrect"
-            android:orientation="vertical">
+            android:orientation="vertical">">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="45">
+                android:layout_weight="15">
 
                 <ImageButton
                     android:id="@+id/back_btn"
@@ -42,13 +41,6 @@
                     android:background="@android:color/transparent"
                     android:src="@mipmap/back_btn" />
 
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:src="@mipmap/wallahead_3x" />
-
 
             </RelativeLayout>
 
@@ -56,7 +48,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="55">
+                android:layout_weight="85">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -78,7 +70,7 @@
                     <EditText
                         android:id="@+id/first_name"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="42dp"
                         android:layout_marginLeft="24dp"
                         android:layout_marginRight="24dp"
                         android:background="@drawable/rounded_corners"
@@ -91,7 +83,7 @@
                         android:layout_below="@id/first_name"
                         android:id="@+id/last_name"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="42dp"
                         android:layout_marginLeft="24dp"
                         android:layout_marginRight="24dp"
                         android:background="@drawable/rounded_corners"
@@ -104,11 +96,11 @@
                         android:layout_below="@+id/last_name"
                         android:id="@+id/password"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="42dp"
                         android:layout_marginLeft="24dp"
                         android:layout_marginRight="24dp"
                         android:background="@drawable/rounded_corners"
-                        android:hint="create password"
+                        android:hint="Create password"
                         android:inputType="textPassword"
                         android:paddingLeft="4dp"
                         android:textColorHint="#A3A3A3" />
@@ -117,7 +109,7 @@
                     <ImageButton
                         android:id="@+id/confirm"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="55dp"
                         android:layout_below="@id/password"
                         android:layout_marginLeft="24dp"
                         android:layout_marginRight="24dp"

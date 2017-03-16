@@ -101,7 +101,6 @@ public class LoginScreenEmail extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    //return true is user exists, false otherwise
     private void attemptLoginWithEmail(String emailStr){
         if(!isValidEmail(emailStr)){
             //email is invalid

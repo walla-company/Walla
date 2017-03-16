@@ -114,7 +114,7 @@ public class WallaApi {
     private WallaApi(Context context1) {
         if(instance == null){
             queue = Volley.newRequestQueue(context1);
-            queue.getCache().clear();
+            queue.getCache().clear(); //pls don't remove this line unless you want headaches
             Log.d("disc cache", "yikes");
             context = context1;
             if(domain == null || domain.isEmpty()){
@@ -129,6 +129,10 @@ public class WallaApi {
                 }
             }
         }
+    }
+
+    public static String getDomain(){
+        return domain;
     }
 
     public static WallaApi getInstance(Context context1){
@@ -1090,10 +1094,20 @@ public class WallaApi {
     public static void addUser(final OnDataReceived listener, JSONObject params){
         final String url = site + add_user + "token=" + token;
 
+        try {
+            params.put("school_identifier", domain);
+        } catch (JSONException e) {
+            Log.d("params", params.toString());
+            e.printStackTrace();
+        }
+
+        Log.d("json data", params.toString());
+
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("userdata", response.toString());
+                listener.onDataReceived("done", -1);
             }
         }, new Response.ErrorListener() {
             @Override
