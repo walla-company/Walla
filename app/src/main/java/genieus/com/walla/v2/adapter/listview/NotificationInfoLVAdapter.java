@@ -63,7 +63,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
         final NotificationInfo notification = data.get(position);
 
         final RelativeLayout container = (RelativeLayout) convertView.findViewById(R.id.container);
-        final CircleImageView pic = (CircleImageView) convertView.findViewById(R.id.type_icon);
+        final ImageView pic = (ImageView) convertView.findViewById(R.id.type_icon);
         final TextView info = (TextView) convertView.findViewById(R.id.message);
         info.setTypeface(fonts.AzoSansRegular);
         info.clearComposingText();
@@ -112,7 +112,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                 info.setText(notification.getMessage());
                 accept.setVisibility(View.GONE);
                 ignore.setVisibility(View.GONE);
-                pic.setVisibility(View.GONE);
+                //pic.setVisibility(View.GONE);
 
                 container.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -127,7 +127,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                 info.setText(notification.getMessage());
                 accept.setVisibility(View.GONE);
                 ignore.setVisibility(View.GONE);
-                pic.setVisibility(View.GONE);
+                //pic.setVisibility(View.GONE);
 
                 container.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -142,7 +142,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                 info.setText(notification.getMessage());
                 accept.setVisibility(View.GONE);
                 ignore.setVisibility(View.GONE);
-                pic.setVisibility(View.GONE);
+                //pic.setVisibility(View.GONE);
 
                 container.setOnClickListener(new View.OnClickListener() {
                     @Override

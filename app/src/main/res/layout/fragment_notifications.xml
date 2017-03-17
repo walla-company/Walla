@@ -6,7 +6,6 @@
     tools:context="genieus.com.walla.v2.fragment.Notifications">
 
     <ListView
-        android:layout_marginTop="30dp"
         android:id="@+id/info_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

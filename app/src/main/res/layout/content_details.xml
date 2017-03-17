@@ -122,7 +122,7 @@
                                 android:layout_weight="10">
 
                                 <TextView
-                                    android:id="@+id/title"
+                                    android:id="@+id/title0"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_alignParentBottom="true"
@@ -443,7 +443,7 @@
                         android:visibility="visible">
 
                         <fragment
-                            android:id="@+id/map"
+                            android:id="@+id/map0"
                             class="com.google.android.gms.maps.SupportMapFragment"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -451,7 +451,7 @@
                     </RelativeLayout>
 
                     <TextView
-                        android:id="@+id/get_directions"
+                        android:id="@+id/get_directions0"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/map_container"
@@ -621,7 +621,7 @@
                         android:layout_marginBottom="8dp">
 
                         <LinearLayout
-                            android:id="@+id/comment_section"
+                            android:id="@+id/comment_section0"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="16dp"
@@ -635,11 +635,11 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:layout_below="@id/comment_section"
+                            android:layout_below="@id/comment_section0"
                             android:layout_marginTop="4dp">
 
                             <EditText
-                                android:id="@+id/comment_input"
+                                android:id="@+id/comment_input0"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginBottom="8dp"
@@ -669,9 +669,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <LinearLayout
+            android:id="@+id/comment_area"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -679,142 +683,157 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="9"
+                android:layout_weight="12"
                 android:background="@color/white">
 
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+
+                    <ImageView
+                        android:id="@+id/interested_icon1"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/star" />
+
+                    <TextView
+                        android:id="@+id/interested_count1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="3dp"
+                        android:layout_toRightOf="@id/interested_icon1"
+                        android:text="7"
+                        android:textSize="17sp" />
+
+                    <ImageButton
+                        android:id="@+id/interested_btn1"
+                        android:layout_width="130dp"
+                        android:layout_height="39dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/interested_count1"
+                        android:background="@mipmap/interested_btn1" />
+
+                    <ImageView
+                        android:id="@+id/going_icon1"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:layout_toRightOf="@id/interested_btn1"
+                        android:src="@mipmap/check" />
+
+                    <TextView
+                        android:id="@+id/going_count1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="3dp"
+                        android:layout_toRightOf="@id/going_icon1"
+                        android:text="7"
+                        android:textSize="17sp" />
+
+                    <ImageButton
+                        android:id="@+id/going_btn1"
+                        android:layout_width="130dp"
+                        android:layout_height="39dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/going_count1"
+                        android:background="@mipmap/going_btn1" />
+
+                </RelativeLayout>
+
             </RelativeLayout>
 
-            <LinearLayout
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="91"
-                android:background="#f1f1f1"
-                android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="16dp">
+                android:layout_weight="91">
 
-
-                <RelativeLayout
+                <LinearLayout
+                    android:id="@+id/comment_section"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginRight="32dp">
+                    android:layout_height="0dp"
+                    android:layout_weight="91"
+                    android:background="#EDEDED"
+                    android:orientation="vertical"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="16dp">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profile_image1"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@color/LightGrey" />
-
-                    <TextView
-                        android:id="@+id/name1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_toRightOf="@id/profile_image1"
-                        android:text="Joseph"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/message1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/name1"
-                        android:layout_below="@id/name1"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/rounded_comments"
-                        android:gravity="center_vertical"
-                        android:minHeight="42dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
-                        android:text="Come to CS 201 Study Session! Free Food!"
-                        android:textSize="15sp" />
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginRight="32dp">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profile_image2"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@color/LightGrey" />
-
-                    <TextView
-                        android:id="@+id/name2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_toRightOf="@id/profile_image2"
-                        android:text="Judy"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/message2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/name2"
-                        android:layout_below="@id/name2"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/rounded_comments"
-                        android:gravity="center_vertical"
-                        android:minHeight="42dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
-                        android:text="What time is it?"
-                        android:textSize="15sp" />
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginRight="32dp">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profile_image3"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@color/LightGrey" />
-
-
-                    <TextView
-                        android:id="@+id/name3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_toEndOf="@+id/profile_image3"
-                        android:layout_toRightOf="@+id/profile_image3"
-                        android:text="Joseph"
-                        android:textSize="13sp" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/name3"
-                        android:layout_below="@id/name3"
-                        android:background="@drawable/rounded_comments">
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginRight="32dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/host_image1"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@color/LightGrey" />
 
                         <TextView
-                            android:id="@+id/message3"
+                            android:id="@+id/host_name1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_toRightOf="@id/host_image1"
+                            android:text="Joseph"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/host_name1"
+                            android:layout_below="@id/host_name1"
+                            android:layout_marginTop="2dp"
+                            android:background="@drawable/rounded_comments_tan"
+                            android:gravity="center_vertical"
+                            android:minHeight="42dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp"
+                            android:paddingTop="8dp"
+                            android:text="Come to CS 201 Study Session! Free Food!"
+                            android:textSize="19sp" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginRight="32dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profile_image2"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@color/LightGrey" />
+
+                        <TextView
+                            android:id="@+id/name2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_toRightOf="@id/profile_image2"
+                            android:text="Judy"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/message2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/name2"
+                            android:layout_below="@id/name2"
                             android:layout_marginTop="2dp"
                             android:background="@drawable/rounded_comments"
                             android:gravity="center_vertical"
@@ -823,35 +842,121 @@
                             android:paddingLeft="16dp"
                             android:paddingRight="16dp"
                             android:paddingTop="8dp"
-                            android:text="Tommorrow 6:30 pm at love auditorium!"
-                            android:textSize="15sp" />
+                            android:text="What time is it?"
+                            android:textSize="19sp" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginRight="32dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/host_image2"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@color/LightGrey" />
+
+
+                        <TextView
+                            android:id="@+id/host_name2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_toEndOf="@+id/host_image2"
+                            android:layout_toRightOf="@+id/host_image2"
+                            android:text="Joseph"
+                            android:textSize="17sp" />
 
                         <RelativeLayout
-                            android:id="@+id/map_container1"
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_below="@id/message3"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginRight="16dp"
-                            android:background="@drawable/rounded"
-                            android:visibility="visible">
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/host_name2"
+                            android:layout_below="@id/host_name2"
+                            android:background="@drawable/rounded_comments_tan">
 
-                            <fragment
-                                android:id="@+id/map1"
-                                class="com.google.android.gms.maps.SupportMapFragment"
+                            <TextView
+                                android:id="@+id/details"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:background="@drawable/rounded_comments_tan"
+                                android:gravity="center_vertical"
+                                android:minHeight="42dp"
+                                android:paddingBottom="8dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
+                                android:paddingTop="8dp"
+                                android:text="Tommorrow 6:30 pm at love auditorium!"
+                                android:textSize="19sp" />
+
+                            <RelativeLayout
+                                android:id="@+id/map_container1"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
+                                android:layout_height="200dp"
+                                android:layout_below="@id/details"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:background="@drawable/rounded"
+                                android:visibility="visible">
+
+                                <fragment
+                                    android:id="@+id/map"
+                                    class="com.google.android.gms.maps.SupportMapFragment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" />
+
+                            </RelativeLayout>
+
+                            <TextView
+                                android:id="@+id/get_directions"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/map_container1"
+                                android:layout_marginBottom="16dp"
+                                android:drawableLeft="@drawable/ic_location"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="16dp"
+                                android:paddingTop="4dp"
+                                android:text="Get directions"
+                                android:textSize="16sp"
+                                android:visibility="visible" />
+
 
                         </RelativeLayout>
+
 
                     </RelativeLayout>
 
 
-                </RelativeLayout>
+                </LinearLayout>
 
+            </android.support.v4.widget.NestedScrollView>
 
-            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <EditText
+                    android:id="@+id/comment_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:hint="Type a message"
+                    android:imeOptions="actionSend"
+                    android:inputType="text"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="16dp" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

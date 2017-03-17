@@ -55,6 +55,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,17 +83,16 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
     private static final int INVITEFRIENDS = 2;
 
-    private ImageButton interested_btn, going_btn, share_btn, invite_btn;
+    private ImageButton interested_btn, going_btn;
     private ProgressBar progress;
     private Button delete_btn;
-    private RecyclerView tabs, groups;
-    private CircleImageView host_image;
+    private CircleImageView host_image1, host_image2;
     private LinearLayout discussion_area;
     private CardView details_cv;
     private EditText comment_in;
     private RelativeLayout host_container, main_container;
-    private TextView duration, title, location_label, location, show_on_map, interested, going, invitees_label, invitee_in,
-            host_name, details_in, details_label, host_info, get_directions, interested_count, going_count, interested_in, going_in;
+    private TextView title, host_name1, host_name2, details,
+            get_directions, interested_count, going_count, interested_in, going_in;
 
     private EventInfo event;
     private RelativeLayout map_container;
@@ -166,107 +166,47 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
         map_container = (RelativeLayout) findViewById(R.id.map_container);
 
-        tabs = (RecyclerView) findViewById(R.id.tabs_rv);
-        groups = (RecyclerView) findViewById(R.id.groups_rv);
-        LinearLayoutManager horizontal
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-
-        LinearLayoutManager horizontal2
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-
-        tabs.setLayoutManager(horizontal);
-        groups.setLayoutManager(horizontal2);
-
-        if(event.getHost_group() != null && event.getHost_group().equals("")) {
-            api.getGroup(new WallaApi.OnDataReceived() {
-                @Override
-                public void onDataReceived(Object data, int call) {
-                    GroupTabRVAdapter groupTabAdapter = new GroupTabRVAdapter(Details.this, new ArrayList<GroupInfo>(Arrays.asList((GroupInfo) data)));
-                    groups.setAdapter(groupTabAdapter);
-                }
-            }, event.getHost_group());
-        }
-
-        TabRVAdapter tabAdapter = new TabRVAdapter(this, event.getInterests());
-        tabs.setAdapter(tabAdapter);
-
-        host_container = (RelativeLayout) findViewById(R.id.host_container);
-        host_container.setOnClickListener(this);
-
         progress = (ProgressBar) findViewById(R.id.progress);
         progress.setVisibility(View.GONE);
 
         details_cv = (CardView) findViewById(R.id.details_card);
 
-        interested_btn = (ImageButton) findViewById(R.id.interested_btn);
+        interested_btn = (ImageButton) findViewById(R.id.interested_btn1);
         interested_btn.setOnClickListener(this);
-        going_btn = (ImageButton) findViewById(R.id.going_btn);
-        going_btn.setOnClickListener(this);
-        share_btn = (ImageButton) findViewById(R.id.share_btn);
-        share_btn.setOnClickListener(this);
-        invite_btn = (ImageButton) findViewById(R.id.invite_btn);
-        invite_btn.setOnClickListener(this);
 
-        duration = (TextView) findViewById(R.id.duration);
-        duration.setTypeface(fonts.AzoSansRegular);
-        duration.setText(String.format("%s\nto %s", event.getStringTime(event.getStart_time(), true), event.getStringTime(event.getEnd_time(), false)));
+        going_btn = (ImageButton) findViewById(R.id.going_btn1);
+        going_btn.setOnClickListener(this);
+
         title = (TextView) findViewById(R.id.title);
         title.setTypeface(fonts.AzoSansRegular);
-        title.setText(event.getTitle());
-        location_label = (TextView) findViewById(R.id.location_label);
-        location_label.setTypeface(fonts.AzoSansRegular);
-        location = (TextView) findViewById(R.id.location_in);
-        location.setTypeface(fonts.AzoSansMedium);
-        location.setText(event.getLocation_name());
-        show_on_map = (TextView) findViewById(R.id.show_on_map_label);
-        show_on_map.setTypeface(fonts.AzoSansRegular);
-        show_on_map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(map_container.getVisibility() == View.GONE){
-                    map_container.setVisibility(View.VISIBLE);
-                    get_directions.setVisibility(View.VISIBLE);
-                    show_on_map.setText("hide map");
-                }else{
-                    map_container.setVisibility(View.GONE);
-                    get_directions.setVisibility(View.GONE);
-                    show_on_map.setText("show on map");
-                }
-            }
-        });
-        interested = (TextView) findViewById(R.id.interested_in);
-        interested.setTypeface(fonts.AzoSansRegular);
-        going = (TextView) findViewById(R.id.going_in);
-        going.setTypeface(fonts.AzoSansRegular);
-        invitee_in = (TextView) findViewById(R.id.invitees_in);
-        invitee_in.setTypeface(fonts.AzoSansRegular);
-        invitees_label = (TextView) findViewById(R.id.invitees_label);
-        invitees_label.setTypeface(fonts.AzoSansRegular);
-        host_name = (TextView) findViewById(R.id.host_name);
-        host_name.setTypeface(fonts.AzoSansRegular);
-        host_info = (TextView) findViewById(R.id.host_info);
-        host_info.setTypeface(fonts.AzoSansRegular);
-        details_in = (TextView) findViewById(R.id.details_in);
-        details_in.setTypeface(fonts.AzoSansRegular);
-        details_in.setText(event.getDetails());
-        host_info = (TextView) findViewById(R.id.host_info);
-        host_info.setTypeface(fonts.AzoSansRegular);
+        String msg = String.format("%s %s", event.getTitle(), isFreeFoodActivity(event) ? "Free food!" : "");
+        title.setText(msg);
+
         get_directions = (TextView) findViewById(R.id.get_directions);
         get_directions.setTypeface(fonts.AzoSansRegular);
         get_directions.setOnClickListener(this);
 
-        interested_count = (TextView) findViewById(R.id.interested_count);
+        interested_count = (TextView) findViewById(R.id.interested_count1);
         interested_count.setTypeface(fonts.AzoSansRegular);
         interested_count.setText("" + event.getInterested_list().size());
-        going_count = (TextView) findViewById(R.id.going_count);
+
+        going_count = (TextView) findViewById(R.id.going_count1);
         going_count.setTypeface(fonts.AzoSansRegular);
         going_count.setText("" + event.getGoing_list().size());
+
         interested_in = (TextView) findViewById(R.id.interested_in);
         interested_in.setTypeface(fonts.AzoSansRegular);
         interested_in.setText(getInterestedString());
+
         going_in = (TextView) findViewById(R.id.going_in);
         going_in.setTypeface(fonts.AzoSansRegular);
         going_in.setText(getGoingString());
+
+        details = (TextView) findViewById(R.id.details);
+        details.setTypeface(fonts.AzoSansRegular);
+        String info = String.format("%s at %s at %s", event.getStringDate(event.getStart_time()), event.getStringTime(event.getStart_time(), true), event.getLocation_name());
+        details.setText(info);
+
         comment_in = (EditText) findViewById(R.id.comment_input);
         comment_in.setTypeface(fonts.AzoSansRegular);
         comment_in.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -287,7 +227,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                                     @Override
                                     public void onDataReceived(Object data, int call) {
                                         Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
-                                        loadComments();
+                                        MessageInfo info = new MessageInfo(auth.getCurrentUser().getUid(), comment_in.getText().toString());
+                                        discussion_area.addView(getComment(info));
                                     }
                                 }, auth.getCurrentUser().getUid(), message, event.getAuid());
 
@@ -316,12 +257,6 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         }
 
 
-        if(event.getDetails() == null || event.getDetails().equals(""))
-            details_cv.setVisibility(View.GONE);
-
-        details_label = (TextView) findViewById(R.id.details_label);
-        details_label.setTypeface(fonts.AzoSansRegular);
-
         if(event.getInterested_list().contains(auth.getCurrentUser().getUid())){
             interested_btn.setImageResource(R.mipmap.interestedbuttonpressed);
             isInterested = true;
@@ -332,45 +267,41 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
             isGoing = true;
         }
 
-        host_image = (CircleImageView) findViewById(R.id.host_image);
+        host_image1 = (CircleImageView) findViewById(R.id.host_image1);
+        host_image2 = (CircleImageView) findViewById(R.id.host_image2);
+
+        host_name1 = (TextView) findViewById(R.id.host_name1);
+        host_name1.setTypeface(fonts.AzoSansRegular);
+        host_name2 = (TextView) findViewById(R.id.host_name2);
+        host_name2.setTypeface(fonts.AzoSansRegular);
+
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
                 UserInfo user = (UserInfo) data;
-                host_name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
-                host_info.setText(String.format("%s · %s", user.getYear(), user.getMajor()));
 
-                if(user.getProfile_url() != null && !user.getProfile_url().equals("")) {
-                    if(!user.getProfile_url().startsWith("gs://walla-launch.appspot.com")) {
-                        Picasso.with(Details.this) //Context
-                                .load(user.getProfile_url()) //URL/FILE
-                                .into(host_image);//an ImageView Object to show the loaded image;
-                    }else{
-                        FirebaseStorage storage = FirebaseStorage.getInstance();
-                        storage.getReferenceFromUrl(user.getProfile_url()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Uri> task) {
-                                if(task.isSuccessful()){
-                                    Picasso.with(Details.this) //Context
-                                            .load(task.getResult().toString()) //URL/FILE
-                                            .into(host_image);//an ImageView Object to show the loaded image;
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
+                host_name1.setText(user.getFirst_name());
+                host_name2.setText(user.getFirst_name());
 
-                            }
-                        });
-                    }
-                }
-
+                setImage(host_image1, user.getProfile_url());
+                setImage(host_image2, user.getProfile_url());
             }
         }, event.getHost());
 
         discussion_area = (LinearLayout) findViewById(R.id.comment_section);
         loadComments();
 
+    }
+
+    private boolean isFreeFoodActivity(EventInfo event){
+        boolean freeFood = false;
+        for(String interest : event.getInterests()){
+            if(interest.toLowerCase().contains("food")){
+                freeFood = true;
+            }
+        }
+
+        return freeFood;
     }
 
     private void changeBackGroundColor(View view, int color) {
@@ -385,8 +316,6 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     }
 
     private void loadComments(){
-        discussion_area.removeAllViews();
-
         api.getComments(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
@@ -497,6 +426,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         mMap.addMarker(new MarkerOptions().position(place).title("EventInfo location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
         mMap.animateCamera(cameraUpdate);
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
     }
 
     private void hostAction(){
@@ -519,8 +449,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
             api.interested(auth.getCurrentUser().getUid(), event.getAuid());
 
-            interested_btn.setImageResource(R.mipmap.interestedbuttonpressed);
-            going_btn.setImageResource(R.mipmap.goingbtn);
+            interested_btn.setBackgroundResource(R.mipmap.interested_btn_active);
+            going_btn.setBackgroundResource(R.mipmap.going_btn1);
 
             going_in.setText(getGoingString());
             interested_in.setText(getInterestedString());
@@ -542,8 +472,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
             api.going(auth.getCurrentUser().getUid(), event.getAuid());
 
-            going_btn.setImageResource(R.mipmap.goingbuttonpressed);
-            interested_btn.setImageResource(R.mipmap.interestedbtn);
+            going_btn.setBackgroundResource(R.mipmap.going_btn_active);
+            interested_btn.setBackgroundResource(R.mipmap.interested_btn1);
 
             going_in.setText(getGoingString());
             interested_in.setText(getInterestedString());
@@ -631,18 +561,11 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 Intent directions = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 startActivity(directions);
                 break;
-            case R.id.interested_btn:
+            case R.id.interested_btn1:
                 interested();
                 break;
-            case R.id.going_btn:
+            case R.id.going_btn1:
                 going();
-                break;
-            case R.id.invite_btn:
-                Intent intent = new Intent(this, Friends.class);
-                startActivityForResult(intent, INVITEFRIENDS);
-                break;
-            case R.id.share_btn:
-                shareEvent();
                 break;
             case R.id.delete_btn:
                 deleteActivity();

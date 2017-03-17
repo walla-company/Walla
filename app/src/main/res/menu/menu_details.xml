@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:visible="false"
         android:icon="@drawable/ic_flag2"
         android:id="@+id/action_flag"
         android:orderInCategory="100"
@@ -11,6 +12,7 @@
         app:showAsAction="never" />
 
     <item
+        android:visible="false"
         android:icon="@drawable/ic_star"
         android:id="@+id/action_interested"
         android:orderInCategory="100"
@@ -18,6 +20,7 @@
         app:showAsAction="always" />
 
     <item
+        android:visible="false"
         android:icon="@drawable/ic_check_single"
         android:id="@+id/action_going"
         android:orderInCategory="100"
