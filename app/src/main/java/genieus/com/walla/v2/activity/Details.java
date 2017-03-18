@@ -94,6 +94,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     private TextView title, host_name1, host_name2, details,
             get_directions, interested_count, going_count, interested_in, going_in;
 
+    private MenuItem delete;
+
     private EventInfo event;
     private RelativeLayout map_container;
 
@@ -142,6 +144,10 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         fonts = new Fonts(this);
 
         main_container.setVisibility(View.VISIBLE);
+
+        if(event.getHost().equals(auth.getCurrentUser().getUid())){
+            delete.setVisible(true);
+        }
 
         if(event.isDeleted()){
             main_container.setVisibility(View.GONE);
@@ -207,6 +213,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         String info = String.format("%s at %s at %s", event.getStringDate(event.getStart_time()), event.getStringTime(event.getStart_time(), true), event.getLocation_name());
         details.setText(info);
 
+        discussion_area = (LinearLayout) findViewById(R.id.comment_section);
+
         comment_in = (EditText) findViewById(R.id.comment_input);
         comment_in.setTypeface(fonts.AzoSansRegular);
         comment_in.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -226,11 +234,13 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                                 api.postComment(new WallaApi.OnDataReceived() {
                                     @Override
                                     public void onDataReceived(Object data, int call) {
-                                        Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
-                                        MessageInfo info = new MessageInfo(auth.getCurrentUser().getUid(), comment_in.getText().toString());
-                                        discussion_area.addView(getComment(info));
+
                                     }
                                 }, auth.getCurrentUser().getUid(), message, event.getAuid());
+
+                                Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_LONG).show();
+                                MessageInfo info = new MessageInfo(auth.getCurrentUser().getUid(), message);
+                                discussion_area.addView(getComment(info));
 
                             }else{
                                 Toast.makeText(getApplicationContext(), "You cannot post comment because your account is suspended", Toast.LENGTH_LONG).show();
@@ -288,7 +298,6 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
             }
         }, event.getHost());
 
-        discussion_area = (LinearLayout) findViewById(R.id.comment_section);
         loadComments();
 
     }
@@ -579,7 +588,12 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        setMarker(new LatLng(event.getLocation_lat(), event.getLocation_long()));
+        if(event.getLocation_lat() == 0 && event.getLocation_long() == 0){
+            map_container.setVisibility(View.GONE);
+            get_directions.setVisibility(View.GONE);
+        }else {
+            setMarker(new LatLng(event.getLocation_lat(), event.getLocation_long()));
+        }
     }
 
     @Override
@@ -591,6 +605,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_details, menu);
+        delete = menu.findItem(R.id.action_delete).setVisible(false);
+
         return true;
     }
 
@@ -609,6 +625,9 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
                 break;
             case R.id.action_flag:
                 flag();
+                break;
+            case R.id.action_delete:
+                deleteActivity();
                 break;
             case android.R.id.home:
                 onBackPressed();

@@ -84,12 +84,11 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private GoogleMap mMap;
     private TextView start_time, end_time, location, visibility_label, title_label, start_time_label,
             end_time_label, location_label, details_label, host_label, group_label, interest_label,
-            friends_label, guests_label, friends_in, guests_in,
-            interest_in, title_in;
-    private RelativeLayout map_container, group_in, host_in, host_container;
+            friends_label, guests_label, friends_in, guests_in, location2_label,
+            interest_in, title_in, free_food_in;
+    private RelativeLayout map_container, group_in, host_in, host_container, location2;
     private Button post;
     private ImageButton chill, lit;
-    private ImageButton food_yes, food_no;
     private RecyclerView groups_rv, host_group_rv;
     private FrameLayout host_click;
     private MiniGroupRVAdapter adapter, hostAdapter;
@@ -105,7 +104,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private UserInfo user;
 
     private JSONObject postObj;
-    private EditText details_in;
+    private EditText details_in, location2_in;
 
     private boolean choosingStartTime;
     private Calendar time;
@@ -174,10 +173,11 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        food_no = (ImageButton) findViewById(R.id.no_btn);
-        food_no.setOnClickListener(this);
-        food_yes = (ImageButton) findViewById(R.id.yes_btn);
-        food_yes.setOnClickListener(this);
+        location2 = (RelativeLayout) findViewById(R.id.location2_container);
+        location2.setVisibility(View.GONE);
+
+        location2_in = (EditText) findViewById(R.id.location2_in);
+        location2_in.setTypeface(fonts.AzoSansRegular);
 
         host_click = (FrameLayout) findViewById(R.id.host_click);
         host_click.setOnClickListener(this);
@@ -244,6 +244,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         guestInviteBuilder.setSingleChoiceItems(guestsInviteOptions, -1, this);
         guestInviteAlert = guestInviteBuilder.create();
 
+        location2_label = (TextView) findViewById(R.id.location2_label);
+        location2_label.setTypeface(fonts.AzoSansRegular);
 
         visibility_label = (TextView) findViewById(R.id.visibility_label);
         visibility_label.setTypeface(fonts.AzoSansRegular);
@@ -274,6 +276,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         host_label = (TextView) findViewById(R.id.host_label);
         host_label.setTypeface(fonts.AzoSansRegular);
 
+        free_food_in = (TextView) findViewById(R.id.free_food_in);
+        free_food_in.setTypeface(fonts.AzoSansRegular);
+        free_food_in.setOnClickListener(this);
         friends_in = (TextView) findViewById(R.id.friends_in);
         friends_in.setTypeface(fonts.AzoSansRegular);
         friends_in.setOnClickListener(this);
@@ -411,7 +416,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 Log.i(TAG, status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
+                showLocationOptional();
             }
         } else if (requestCode == INVITEFRIENDS) {
             if (resultCode == RESULT_OK) {
@@ -429,6 +434,14 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             if(data != null)
                 initGroupHost(data);
         }
+    }
+
+    private void showLocationOptional(){
+        postObj.remove("location_name");
+
+        location2.setVisibility(View.VISIBLE);
+        location_label.append(" (optional)");
+        location2_in.requestFocus();
     }
 
     private void initGroupHost(Intent data) {
@@ -540,6 +553,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     }
 
     private void initLocation(Place place) {
+        location2.setVisibility(View.GONE);
         map_container.setVisibility(View.VISIBLE);
         LatLng loc = place.getLatLng();
         setMarker(loc);
@@ -738,8 +752,19 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
 
         if (!postObj.has("location_name")) {
-            location.setError("required");
-            valid = false;
+            if(location2_in.getText().toString().isEmpty()){
+                location2_in.setError("required");
+                valid = false;
+            }else {
+                try {
+                    postObj.put("location_name", location2_in.getText().toString());
+                    postObj.put("location_lat", 0);
+                    postObj.put("location_long", 0);
+                    postObj.put("location_address", location2_in.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         if (!postObj.has("start_time")) {
@@ -767,10 +792,39 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         }
     }
 
+    private void showFreeFoodOptions(){
+        AlertDialog.Builder foodAlert = new AlertDialog.Builder(this);
+        foodAlert.setTitle("Confirm");
+
+        foodAlert.setTitle("Will there be free food at the activity?");
+        foodAlert.setItems(new String[]{"Yes!", "No"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:
+                        //yes
+                        foodYesClicked();
+                        dialog.cancel();
+                        break;
+                    case 1:
+                        //no
+                        foodNoClicked();
+                        dialog.cancel();
+                        break;
+                    default:
+                        dialog.cancel();
+                        break;
+                }
+            }
+        });
+
+        foodAlert.setCancelable(false);
+        foodAlert.show();
+    }
+
     private void foodYesClicked(){
-        food_yes.setBackgroundResource(R.mipmap.yes_btn_active);
-        food_no.setBackgroundResource(R.mipmap.no_btn);
         JSONArray ar = new JSONArray();
+        free_food_in.setText("Yes!");
 
         try {
             ar.put("Free Food");
@@ -781,9 +835,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     }
 
     private void foodNoClicked(){
-        food_yes.setBackgroundResource(R.mipmap.yes_btn);
-        food_no.setBackgroundResource(R.mipmap.no_btn_active);
         JSONArray ar = new JSONArray();
+        free_food_in.setText("No");
 
         try {
             ar.put("-");
@@ -844,6 +897,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             case R.id.post_btn:
                 postActivity();
                 break;
+            case R.id.free_food_in:
+                showFreeFoodOptions();
+                break;
             case R.id.chill_btn:
                 chill.setImageResource(R.mipmap.chillbtn);
                 lit.setImageResource(R.mipmap.public_pressed);
@@ -862,11 +918,6 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                     e.printStackTrace();
                 }
                 break;
-            case R.id.yes_btn:
-                foodYesClicked();
-                break;
-            case R.id.no_btn:
-                foodNoClicked();
             default:
                 break;
 

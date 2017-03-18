@@ -18,9 +18,9 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -168,7 +168,7 @@
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
                             android:gravity="start"
-                            android:minHeight="80dp"
+                            android:minHeight="100dp"
                             android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
@@ -289,10 +289,47 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/location_pin_container"
+                        android:id="@+id/location2_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/location_container"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:id="@+id/location2_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@id/title_in"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="Can't find the location? Type it out"
+                            android:textSize="17sp" />
+
+                        <EditText
+                            android:id="@+id/location2_in"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/location2_label"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/rounded_corners"
+                            android:gravity="center_vertical"
+                            android:minHeight="42dp"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/location_pin_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/location2_container"
                         android:layout_marginTop="8dp">
 
                         <RelativeLayout
@@ -418,34 +455,23 @@
                             android:text="Is there free food?"
                             android:textSize="17sp" />
 
-                        <RelativeLayout
+                        <TextView
+                            android:id="@+id/free_food_in"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_below="@id/food_label"
-                            android:layout_marginBottom="4dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/food_label"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
-                            android:padding="3dp">
+                            android:background="@drawable/rounded_corners"
+                            android:gravity="center_vertical"
+                            android:minHeight="42dp"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
 
-                            <ImageButton
-                                android:id="@+id/yes_btn"
-                                android:layout_width="60dp"
-                                android:layout_height="match_parent"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="4dp"
-                                android:background="@mipmap/yes_btn"/>
-
-                            <ImageButton
-                                android:id="@+id/no_btn"
-                                android:layout_width="60dp"
-                                android:layout_height="match_parent"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@id/yes_btn"
-                                android:background="@mipmap/no_btn_active" />
-
-
-                        </RelativeLayout>
 
 
                     </RelativeLayout>

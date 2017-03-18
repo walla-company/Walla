@@ -1005,6 +1005,13 @@ public class WallaApi {
                                 notif.setNuid(notifObj.getString("notification_id"));
                                 notif.setSenderUId(notifObj.getString("sender"));
                                 notif.setType(notifObj.getString("type"));
+
+                                if(notifObj.has("profile_image_url")) {
+                                    notif.setImage_url(notifObj.getString("profile_image_url"));
+                                }else{
+                                    notif.setImage_url(notifObj.getString(""));
+                                }
+
                                 if(notifObj.has("text")){
                                     notif.setMessage(notifObj.getString("text"));
                                 }

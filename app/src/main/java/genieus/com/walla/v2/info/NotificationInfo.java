@@ -4,7 +4,7 @@ package genieus.com.walla.v2.info;
  * Created by anesu on 12/20/16.
  */
 public class NotificationInfo {
-    private String type, message;
+    private String type, message, image_url;
     private int icon;
     private String senderUId, nuid, activityUid;
     private double time_created;
@@ -72,5 +72,13 @@ public class NotificationInfo {
 
     public void setTime_created(double time_created) {
         this.time_created = time_created;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }

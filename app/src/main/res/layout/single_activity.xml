@@ -29,9 +29,9 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
 
         <LinearLayout
@@ -91,13 +91,13 @@
                             android:textSize="16sp" />
 
                         <ImageView
-                            android:id="@+id/free_food"
-                            android:layout_marginRight="16dp"
+                            android:id="@+id/more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_alignBottom="@+id/name"
-                            android:src="@mipmap/pizza_icon"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp" />
+                            android:layout_marginRight="12dp"
+                            android:layout_marginTop="16dp"
+                            android:src="@drawable/ic_more_vert" />
 
                         <TextView
                             android:id="@+id/title"
@@ -177,21 +177,21 @@
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <View
-                        android:layout_weight="17"
                         android:layout_width="0dp"
-                        android:layout_height="1dp"/>
+                        android:layout_height="1dp"
+                        android:layout_weight="17" />
 
                     <RelativeLayout
-                        android:layout_weight="90"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:layout_toRightOf="@id/going_container">
+                        android:layout_toRightOf="@id/going_container"
+                        android:layout_weight="90">
 
                         <TextView
                             android:id="@+id/duration"
@@ -212,6 +212,24 @@
                             android:layout_toRightOf="@id/duration"
                             android:gravity="center_vertical"
                             android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/user_action"
+                            android:layout_centerVertical="true"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_toRightOf="@id/date"
+                            android:src="@mipmap/check"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/free_food"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@mipmap/pizza_icon" />
 
 
                     </RelativeLayout>

@@ -56,4 +56,6 @@
     <string name="title_activity_account_suspension">AccountSuspension</string>
     <string name="title_activity_login_screen_password">LoginScreenPassword</string>
     <string name="title_activity_onboarding">Onboarding</string>
+
+    <string name="vertical_ellipsis">&#8942;</string>
 </resources>

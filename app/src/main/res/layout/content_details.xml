@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EDEDED"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="genieus.com.walla.v2.activity.Details"
     tools:showIn="@layout/activity_details">
@@ -433,7 +434,7 @@
                         android:textSize="17sp" />
 
                     <RelativeLayout
-                        android:id="@+id/map_container"
+                        android:id="@+id/map_container0"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_below="@id/location_in"
@@ -454,7 +455,7 @@
                         android:id="@+id/get_directions0"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/map_container"
+                        android:layout_below="@id/map_container0"
                         android:drawableLeft="@drawable/ic_location"
                         android:gravity="center_vertical"
                         android:paddingLeft="16dp"
@@ -534,7 +535,7 @@
                     </RelativeLayout>
 
                     <Button
-                        android:id="@+id/delete_btn0"
+                        android:id="@+id/delete_btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/info_container"
@@ -683,7 +684,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="10"
+                android:layout_weight="11"
                 android:background="#F8F8F8">
 
 
@@ -805,18 +806,6 @@
                             android:text="Come to CS 201 Study Session! Free Food!"
                             android:textSize="19sp" />
 
-                        <Button
-                            android:layout_alignLeft="@id/host_name1"
-                            android:layout_below="@+id/title"
-                            android:id="@+id/delete_btn"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_marginTop="8dp"
-                            android:background="@drawable/rounded"
-                            android:text="Delete Activity"
-                            android:textColor="@color/white"
-                            android:visibility="visible" />
 
 
                     </RelativeLayout>
@@ -831,7 +820,7 @@
                             android:id="@+id/profile_image2"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@color/LightGrey" />
+                            android:src="@mipmap/judy_static" />
 
                         <TextView
                             android:id="@+id/name2"
@@ -910,7 +899,7 @@
                                 android:textSize="19sp" />
 
                             <RelativeLayout
-                                android:id="@+id/map_container1"
+                                android:id="@+id/map_container"
                                 android:layout_width="match_parent"
                                 android:layout_height="200dp"
                                 android:layout_below="@id/details"
@@ -932,7 +921,7 @@
                                 android:id="@+id/get_directions"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@id/map_container1"
+                                android:layout_below="@id/map_container"
                                 android:layout_marginBottom="16dp"
                                 android:drawableLeft="@drawable/ic_location"
                                 android:gravity="center_vertical"
@@ -954,6 +943,7 @@
             </android.support.v4.widget.NestedScrollView>
 
             <RelativeLayout
+                android:background="@color/white"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:layout_width="match_parent"

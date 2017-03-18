@@ -2,6 +2,7 @@ package genieus.com.walla.v2.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -267,8 +269,8 @@ public class Home extends Fragment {
     private void filterEvents(String query) {
         if (query.equals("")) filter_tv.setVisibility(View.GONE);
         else {
-            filter_tv.setVisibility(View.VISIBLE);
-            filter_tv.setText(String.format("Showing %s events", query.toLowerCase()));
+            //filter_tv.setVisibility(View.VISIBLE);
+            //filter_tv.setText(String.format("Showing %s events", query.toLowerCase()));
         }
 
         adapterEvents.getFilter().filter(query);
@@ -283,6 +285,28 @@ public class Home extends Fragment {
         }
         */
 
+    }
+
+    private void changeBackgroundColor(View view, int color){
+        Drawable background = view.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable)background).getPaint().setColor(color);
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable)background).setColor(color);
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable)background).setColor(color);
+        }
+    }
+
+    private void changeBackgroundColor(View view, String color) {
+        Drawable background = view.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable) background).getPaint().setColor(Color.parseColor(color));
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(Color.parseColor(color));
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable) background).setColor(Color.parseColor(color));
+        }
     }
 
 
@@ -326,6 +350,33 @@ public class Home extends Fragment {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.filter_popup, null);
         interest_rv = (RecyclerView) view.findViewById(R.id.interests_rv);
+
+        final Button all = (Button) view.findViewById(R.id.all);
+        final Button today = (Button) view.findViewById(R.id.today);
+
+        all.setTypeface(fonts.AzoSansRegular);
+        all.setTransformationMethod(null);
+        today.setTypeface(fonts.AzoSansRegular);
+        today.setTransformationMethod(null);
+
+        all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentFilter = "";
+                changeBackgroundColor(all, getResources().getColor(R.color.colorPrimary));
+                changeBackgroundColor(today, "#f1f1f1");
+            }
+        });
+
+        today.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentFilter = "Today";
+                changeBackgroundColor(today, getResources().getColor(R.color.colorPrimary));
+                changeBackgroundColor(all, "#f1f1f1");
+            }
+        });
+
         builder.setView(view);
         alert = builder.create();
     }
