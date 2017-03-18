@@ -56,7 +56,7 @@ public class Main extends AppCompatActivity implements Home.OnFragmentInteractio
     }
 
     private void setupFab() {
-        fab = (com.github.clans.fab.FloatingActionMenu) findViewById(R.id.fab);
+        fab = (com.github.clans.fab.FloatingActionMenu) findViewById(R.id.fab_add);
 
         FloatingActionButton createGroup = new FloatingActionButton(this);
         createGroup.setLabelText("Create a group");

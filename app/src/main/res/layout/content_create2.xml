@@ -168,7 +168,7 @@
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
                             android:gravity="start"
-                            android:minHeight="140dp"
+                            android:minHeight="80dp"
                             android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
@@ -420,7 +420,7 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="50dp"
                             android:layout_below="@id/food_label"
                             android:layout_marginBottom="4dp"
                             android:layout_marginLeft="16dp"
@@ -428,28 +428,21 @@
                             android:layout_marginTop="4dp"
                             android:padding="3dp">
 
-                            <Button
+                            <ImageButton
                                 android:id="@+id/yes_btn"
                                 android:layout_width="60dp"
                                 android:layout_height="match_parent"
                                 android:layout_centerVertical="true"
                                 android:layout_marginRight="4dp"
-                                android:background="@drawable/rounded_corners"
-                                android:src="@mipmap/yes_btn"
-                                android:text="YES"
-                                android:textColor="@color/black" />
+                                android:background="@mipmap/yes_btn"/>
 
-                            <Button
+                            <ImageButton
                                 android:id="@+id/no_btn"
                                 android:layout_width="60dp"
                                 android:layout_height="match_parent"
                                 android:layout_centerVertical="true"
-                                android:layout_marginLeft="4dp"
                                 android:layout_toRightOf="@id/yes_btn"
-                                android:background="@drawable/rounded_corners"
-                                android:src="@mipmap/yes_btn"
-                                android:text="NO"
-                                android:textColor="@color/black" />
+                                android:background="@mipmap/no_btn_active" />
 
 
                         </RelativeLayout>

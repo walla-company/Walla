@@ -534,7 +534,7 @@
                     </RelativeLayout>
 
                     <Button
-                        android:id="@+id/delete_btn"
+                        android:id="@+id/delete_btn0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/info_container"
@@ -683,18 +683,19 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="12"
-                android:background="@color/white">
+                android:layout_weight="10"
+                android:background="#F8F8F8">
 
 
                 <RelativeLayout
+                    android:id="@+id/actions_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true">
 
                     <ImageView
                         android:id="@+id/interested_icon1"
-                        android:layout_width="28dp"
+                        android:layout_width="25dp"
                         android:layout_height="match_parent"
                         android:src="@mipmap/star" />
 
@@ -710,8 +711,8 @@
 
                     <ImageButton
                         android:id="@+id/interested_btn1"
-                        android:layout_width="130dp"
-                        android:layout_height="39dp"
+                        android:layout_width="120dp"
+                        android:layout_height="35dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="8dp"
                         android:layout_toRightOf="@id/interested_count1"
@@ -719,7 +720,7 @@
 
                     <ImageView
                         android:id="@+id/going_icon1"
-                        android:layout_width="28dp"
+                        android:layout_width="25dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="16dp"
                         android:layout_toRightOf="@id/interested_btn1"
@@ -737,8 +738,8 @@
 
                     <ImageButton
                         android:id="@+id/going_btn1"
-                        android:layout_width="130dp"
-                        android:layout_height="39dp"
+                        android:layout_width="120dp"
+                        android:layout_height="35dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="8dp"
                         android:layout_toRightOf="@id/going_count1"
@@ -803,6 +804,19 @@
                             android:paddingTop="8dp"
                             android:text="Come to CS 201 Study Session! Free Food!"
                             android:textSize="19sp" />
+
+                        <Button
+                            android:layout_alignLeft="@id/host_name1"
+                            android:layout_below="@+id/title"
+                            android:id="@+id/delete_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/rounded"
+                            android:text="Delete Activity"
+                            android:textColor="@color/white"
+                            android:visibility="visible" />
 
 
                     </RelativeLayout>
@@ -925,7 +939,7 @@
                                 android:paddingLeft="16dp"
                                 android:paddingTop="4dp"
                                 android:text="Get directions"
-                                android:textSize="16sp"
+                                android:textSize="19sp"
                                 android:visibility="visible" />
 
 
@@ -940,15 +954,18 @@
             </android.support.v4.widget.NestedScrollView>
 
             <RelativeLayout
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="48dp">
+                android:layout_height="60dp">
 
                 <EditText
+                    android:layout_centerInParent="true"
                     android:id="@+id/comment_input"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="45dp"
                     android:layout_centerVertical="true"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/rounded_corners"
                     android:gravity="center_vertical"
                     android:hint="Type a message"
                     android:imeOptions="actionSend"

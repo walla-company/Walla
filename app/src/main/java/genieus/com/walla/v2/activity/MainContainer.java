@@ -51,7 +51,7 @@ public class MainContainer extends AppCompatActivity
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private com.github.clans.fab.FloatingActionMenu fab;
+    private com.github.clans.fab.FloatingActionButton fab;
     private static CircleImageView profile_pic;
     private static TextView name;
     private NavigationView navigationView;
@@ -202,40 +202,40 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void showWelcomeMessage() {
-        Snackbar snack = Snackbar.make(navigationView, String.format("Welcome %s %s", user.getFirst_name(), user.getLast_name()), Snackbar.LENGTH_LONG);
+        Snackbar snack = Snackbar.make(navigationView, String.format("Welcome %s", user.getFirst_name()), Snackbar.LENGTH_LONG);
         View view = snack.getView();
         TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTypeface(fonts.AzoSansRegular);
         tv.setTextColor(getResources().getColor(R.color.colorPrimary));
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
+        snack.setCallback(new Snackbar.Callback() {
+
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                   fab.show(true);
+            }
+
+        });
+
         snack.show();
 
     }
 
     private void setupFab() {
-        fab = (com.github.clans.fab.FloatingActionMenu) findViewById(R.id.fab);
-        fab.setMenuButtonColorNormal(getResources().getColor(R.color.lightblue));
-        fab.setMenuButtonColorPressed(getResources().getColor(R.color.lightblue));
-        fab.setClosedOnTouchOutside(true);
+        fab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_add);
+        fab.setColorNormal(getResources().getColor(R.color.lightblue));
+        fab.setColorPressed(getResources().getColor(R.color.lightblue));
+        fab.setImageResource(R.drawable.ic_create);
 
-        com.github.clans.fab.FloatingActionButton createPost = new com.github.clans.fab.FloatingActionButton(this);
-        createPost.setLabelText("Create an event");
-        createPost.setImageResource(R.drawable.ic_create);
-
-        createPost.setColorNormal(getResources().getColor(R.color.lightblue));
-        createPost.setColorPressed(getResources().getColor(R.color.lightblue));
-
-        createPost.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fab.close(true);
                 startActivity(new Intent(MainContainer.this, Create.class));
             }
         });
 
-        fab.addMenuButton(createPost);
-        fab.setClosedOnTouchOutside(true);
-
+        fab.hide(false);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -316,16 +316,19 @@ public class MainContainer extends AppCompatActivity
     private void switchTabIcons(int position) {
         switch (position) {
             case 0:
+                fab.show(true);
                 tabLayout.getTabAt(0).setIcon(tabIconsColored[0]);
                 tabLayout.getTabAt(1).setIcon(tabIcons[1]);
                 tabLayout.getTabAt(2).setIcon(tabIcons[2]);
                 break;
             case 1:
+                fab.hide(true);
                 tabLayout.getTabAt(0).setIcon(tabIcons[0]);
                 tabLayout.getTabAt(1).setIcon(tabIconsColored[1]);
                 tabLayout.getTabAt(2).setIcon(tabIcons[2]);
                 break;
             case 2:
+                fab.hide(true);
                 tabLayout.getTabAt(0).setIcon(tabIcons[0]);
                 tabLayout.getTabAt(1).setIcon(tabIcons[1]);
                 tabLayout.getTabAt(2).setIcon(tabIconsColored[2]);
@@ -336,7 +339,6 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void setupTabIcons() {
-
         tabLayout.getTabAt(0).setIcon(tabIconsColored[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);

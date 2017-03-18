@@ -87,7 +87,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:text="Judy"
+                            android:text=""
                             android:textSize="16sp" />
 
                         <ImageView
@@ -107,7 +107,6 @@
                             android:paddingBottom="16dp"
                             android:paddingRight="8dp"
                             android:paddingTop="8dp"
-                            android:text="Movie Night at Bryan Center Free Popcorn and drinks"
                             android:textSize="23sp" />
 
 
@@ -201,7 +200,6 @@
                             android:layout_centerVertical="true"
                             android:paddingBottom="8dp"
                             android:paddingTop="8dp"
-                            android:text="6:30 PM"
                             android:textSize="17sp" />
 
 
@@ -213,7 +211,6 @@
                             android:layout_marginLeft="16dp"
                             android:layout_toRightOf="@id/duration"
                             android:gravity="center_vertical"
-                            android:text="Tommorrow (2/28)"
                             android:textSize="16sp" />
 
 

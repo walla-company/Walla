@@ -64,6 +64,7 @@ public class UserProfile extends Fragment implements View.OnClickListener{
     private TextView edit, contact, logout, name, major, year, hometown, desc;
     private LinearLayout groupsContainer;
     private CircleImageView image;
+    private static GroupInfo lastGroup;
 
     private OnFragmentInteractionListener mListener;
 
@@ -115,7 +116,11 @@ public class UserProfile extends Fragment implements View.OnClickListener{
                 @Override
                 public void onDataReceived(Object data, int call) {
                     GroupInfo group = (GroupInfo) data;
-                    initAndAttachGroup(getGroupView(), group);
+                    if(lastGroup != null && !group.equals(lastGroup)){
+                        initAndAttachGroup(getGroupView(), group);
+                    }
+
+                    lastGroup = group;
                 }
             }, key);
         }

@@ -258,11 +258,11 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
 
         if(event.getInterested_list().contains(auth.getCurrentUser().getUid())){
-            interested_btn.setImageResource(R.mipmap.interestedbuttonpressed);
+            interested_btn.setBackgroundResource(R.mipmap.interested_btn_active);
             isInterested = true;
             isGoing = false;
         }else if(event.getGoing_list().contains(auth.getCurrentUser().getUid())){
-            going_btn.setImageResource(R.mipmap.goingbuttonpressed);
+            going_btn.setBackgroundResource(R.mipmap.going_btn_active);
             isInterested = false;
             isGoing = true;
         }
@@ -334,7 +334,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         final CircleImageView image = (CircleImageView) view.findViewById(R.id.profile_image);
         final TextView name = (TextView) view.findViewById(R.id.name);
         final TextView message = (TextView) view.findViewById(R.id.message);
-        name.setTypeface(fonts.AzoSansMedium);
+        name.setTypeface(fonts.AzoSansRegular);
         message.setTypeface(fonts.AzoSansRegular);
         message.setText(info.getMessage());
 
@@ -354,7 +354,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
             @Override
             public void onDataReceived(Object data, int call) {
                 UserInfo user = (UserInfo) data;
-                name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
+                name.setText(user.getFirst_name());
                 setImage(image, user.getProfile_url());
             }
         }, info.getUid());

@@ -70,6 +70,7 @@ import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.recyclerview.InterestsViewRVAdapter;
 import genieus.com.walla.v2.adapter.recyclerview.MiniGroupRVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
+import genieus.com.walla.v2.fragment.Home;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.InterestInfo;
@@ -88,7 +89,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private RelativeLayout map_container, group_in, host_in, host_container;
     private Button post;
     private ImageButton chill, lit;
-    private Button food_yes, food_no;
+    private ImageButton food_yes, food_no;
     private RecyclerView groups_rv, host_group_rv;
     private FrameLayout host_click;
     private MiniGroupRVAdapter adapter, hostAdapter;
@@ -173,12 +174,10 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        food_no = (Button) findViewById(R.id.no_btn);
+        food_no = (ImageButton) findViewById(R.id.no_btn);
         food_no.setOnClickListener(this);
-        food_no.setTypeface(fonts.AzoSansRegular);
-        food_yes = (Button) findViewById(R.id.yes_btn);
+        food_yes = (ImageButton) findViewById(R.id.yes_btn);
         food_yes.setOnClickListener(this);
-        food_yes.setTypeface(fonts.AzoSansRegular);
 
         host_click = (FrameLayout) findViewById(R.id.host_click);
         host_click.setOnClickListener(this);
@@ -672,26 +671,14 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                             //yes
                             if(user.isVerified()){
                                 Log.d("postdata", postObj.toString());
-                                api.postActivity(postObj);
-                                Snackbar snack = Snackbar.make(map_container, "Activity created successfully", Snackbar.LENGTH_LONG);
-                                View view = snack.getView();
-                                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-                                tv.setTypeface(fonts.AzoSansRegular);
-                                tv.setTextColor(getResources().getColor(R.color.colorPrimary));
-                                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                                snack.show();
-
-                                new CountDownTimer(2000, 1000){
+                                api.postActivity(new WallaApi.OnDataReceived() {
                                     @Override
-                                    public void onTick(long millisUntilFinished) {}
-
-                                    @Override
-                                    public void onFinish() {
-                                        finish();
+                                    public void onDataReceived(Object data, int call) {
+                                        Home.refreshPage(false);
                                     }
-                                }.start();
+                                }, postObj);
+                                finish();
                             }else{
-                                Toast.makeText(Create.this, "You must verify your email adress before you can post", Toast.LENGTH_LONG).show();
                                 Snackbar.make(map_container, "Email not verified", Snackbar.LENGTH_INDEFINITE).setAction("VERIFY", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -781,8 +768,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     }
 
     private void foodYesClicked(){
-        food_no.setBackgroundResource(R.drawable.rounded_corners);
-        food_yes.setBackgroundResource(R.drawable.rounded_red);
+        food_yes.setBackgroundResource(R.mipmap.yes_btn_active);
+        food_no.setBackgroundResource(R.mipmap.no_btn);
         JSONArray ar = new JSONArray();
 
         try {
@@ -794,8 +781,8 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     }
 
     private void foodNoClicked(){
-        food_no.setBackgroundResource(R.drawable.rounded_red);
-        food_yes.setBackgroundResource(R.drawable.rounded_corners);
+        food_yes.setBackgroundResource(R.mipmap.yes_btn);
+        food_no.setBackgroundResource(R.mipmap.no_btn_active);
         JSONArray ar = new JSONArray();
 
         try {

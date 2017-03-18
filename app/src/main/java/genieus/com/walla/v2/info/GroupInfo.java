@@ -72,4 +72,23 @@ public class GroupInfo {
     public void setMembers(List<String> members) {
         this.members = members;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null){
+            return false;
+        }
+
+        if(!(o instanceof GroupInfo)){
+            return false;
+        }
+
+        GroupInfo other =(GroupInfo) o;
+        return (other.getGuid().equals(this.getGuid()));
+    }
+
+    @Override
+    public int hashCode() {
+        return getGuid().hashCode();
+    }
 }

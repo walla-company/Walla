@@ -214,14 +214,16 @@ public class Home extends Fragment {
 
     }
 
-    public static void refreshPage() {
+    public static void refreshPage(final boolean force) {
         swipeRefreshLayout.setRefreshing(false);
         api.getActivities(auth.getCurrentUser().getUid(), new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>) data);
-                events_lv.setAdapter(adapterEvents);
-                adapterEvents.getFilter().filter("");
+                if(force || ((List<EventInfo>) data).size() != adapterEvents.getCount()) {
+                    adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>) data);
+                    events_lv.setAdapter(adapterEvents);
+                    adapterEvents.getFilter().filter("");
+                }
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -298,7 +300,7 @@ public class Home extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshPage();
+                refreshPage(true);
             }
         });
 
@@ -349,7 +351,7 @@ public class Home extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        refreshPage();
+        refreshPage(false);
     }
 
     @Override

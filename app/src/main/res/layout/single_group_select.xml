@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/title_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="10dp">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="16dp">
-
-        <CheckBox
-            android:id="@+id/check"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:paddingLeft="40dp">
 
         <TextView
+            android:paddingRight="40dp"
             android:id="@+id/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/group_container_1"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
-            android:text=""
-            android:textSize="15sp" />
+            android:text="deta"
+            android:textSize="17sp" />
 
         <RelativeLayout
             android:id="@+id/group_container_1"
@@ -63,12 +56,20 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:layout_toRightOf="@+id/group_icon_container"
-                android:text="CompSci 201 2016 fall"
+                android:text="CompSci 201 2016 fall rfgsfsgbg  "
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
 
+        <CheckBox
+            android:layout_marginRight="16dp"
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</RelativeLayout>

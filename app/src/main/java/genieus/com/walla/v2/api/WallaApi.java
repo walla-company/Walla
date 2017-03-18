@@ -524,7 +524,7 @@ public class WallaApi {
 
     }
 
-    public static void postActivity(JSONObject params) {
+    public static void postActivity(final OnDataReceived listener, JSONObject params) {
         final String url = site + add_activity + "token=" + token;
 
         try {
@@ -541,6 +541,7 @@ public class WallaApi {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("apidata", url + response.toString());
+                        listener.onDataReceived(true, -1);
                     }
                 },
                 new Response.ErrorListener() {

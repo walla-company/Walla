@@ -32,17 +32,17 @@
 
         <include layout="@layout/content_main" />
 
-        <com.github.clans.fab.FloatingActionMenu
-            android:id="@+id/fab"
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="8dp"
             android:src="@drawable/ic_create"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/colorPrimaryDark"
-            fab:fab_colorRipple="@color/colorPrimaryDark" />
+            fab:fab_colorNormal="@color/lightblue"
+            fab:fab_colorPressed="@color/lightblue"
+            fab:fab_colorRipple="@color/lightblue" />
 
     </android.support.design.widget.CoordinatorLayout>
 
