@@ -174,7 +174,6 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         mapFragment.getMapAsync(this);
 
         location2 = (RelativeLayout) findViewById(R.id.location2_container);
-        location2.setVisibility(View.GONE);
 
         location2_in = (EditText) findViewById(R.id.location2_in);
         location2_in.setTypeface(fonts.AzoSansRegular);
@@ -416,7 +415,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 Log.i(TAG, status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
-                showLocationOptional();
+                location2.setVisibility(View.VISIBLE);
             }
         } else if (requestCode == INVITEFRIENDS) {
             if (resultCode == RESULT_OK) {
@@ -434,14 +433,6 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             if(data != null)
                 initGroupHost(data);
         }
-    }
-
-    private void showLocationOptional(){
-        postObj.remove("location_name");
-
-        location2.setVisibility(View.VISIBLE);
-        location_label.append(" (optional)");
-        location2_in.requestFocus();
     }
 
     private void initGroupHost(Intent data) {

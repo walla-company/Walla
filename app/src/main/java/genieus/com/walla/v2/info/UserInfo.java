@@ -12,7 +12,7 @@ public class UserInfo {
     private String name, year, profile_url, major, hometown, description, uid, first_name, last_name, email;
     private List<String> interests, friends, groups, sent_requests, received_requests, calendar;
     private List<String> activities;
-    private boolean verified;
+    private boolean verified, intro_complete;
 
     public UserInfo(){};
 
@@ -166,4 +166,11 @@ public class UserInfo {
         return name;
     }
 
+    public boolean isIntro_complete() {
+        return intro_complete;
+    }
+
+    public void setIntro_complete(boolean intro_complete) {
+        this.intro_complete = intro_complete;
+    }
 }

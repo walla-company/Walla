@@ -78,6 +78,10 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
 
         setImage(pic, notification.getImage_url());
 
+        if(!notification.isRead()){
+            changeBackGroundColor(container, getContext().getResources().getColor(R.color.notifblue));
+        }
+
         switch(notification.getType()){
             case Notifications.FRIEND_REQUEST:
                 changeBackGroundColor(accept, getContext().getResources().getColor(R.color.lightblue));

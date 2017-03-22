@@ -8,6 +8,7 @@ public class NotificationInfo {
     private int icon;
     private String senderUId, nuid, activityUid;
     private double time_created;
+    private boolean read;
 
     public NotificationInfo(String type, String message){
         this.type = type;
@@ -80,5 +81,13 @@ public class NotificationInfo {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

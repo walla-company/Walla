@@ -28,7 +28,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:fillViewport="true"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:id="@+id/nestedScrollView">
 
 
         <RelativeLayout
@@ -671,9 +672,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/nestedScrollView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:id="@+id/comment_area"

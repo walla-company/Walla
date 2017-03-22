@@ -252,10 +252,48 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/location_container"
+                        android:id="@+id/location2_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/end_time_container"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:id="@+id/location2_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@id/title_in"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="4dp"
+                            android:text="Where should we meet?"
+                            android:textSize="17sp" />
+
+                        <EditText
+                            android:id="@+id/location2_in"
+                            android:hint="Brodie gym"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/location2_label"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/rounded_corners"
+                            android:gravity="center_vertical"
+                            android:minHeight="42dp"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:textSize="16sp" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/location_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/location2_container"
                         android:layout_marginTop="8dp">
 
                         <TextView
@@ -265,7 +303,7 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="Where should we meet?"
+                            android:text="Want to pin on the map? (optional)"
                             android:textSize="17sp" />
 
                         <TextView
@@ -289,47 +327,10 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/location2_container"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/location_container"
-                        android:layout_marginTop="8dp">
-
-                        <TextView
-                            android:id="@+id/location2_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:labelFor="@id/title_in"
-                            android:paddingLeft="16dp"
-                            android:paddingTop="4dp"
-                            android:text="Can't find the location? Type it out"
-                            android:textSize="17sp" />
-
-                        <EditText
-                            android:id="@+id/location2_in"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/location2_label"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginTop="4dp"
-                            android:background="@drawable/rounded_corners"
-                            android:gravity="center_vertical"
-                            android:minHeight="42dp"
-                            android:paddingBottom="4dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="4dp"
-                            android:textSize="16sp" />
-
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
                         android:id="@+id/location_pin_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/location2_container"
+                        android:layout_below="@id/location_container"
                         android:layout_marginTop="8dp">
 
                         <RelativeLayout
@@ -411,7 +412,7 @@
                             android:labelFor="@id/title_in"
                             android:paddingLeft="16dp"
                             android:paddingTop="4dp"
-                            android:text="If this is a club activity, what club is hosting? (optional)"
+                            android:text="What club is hosting? (optional)"
                             android:textSize="17sp" />
 
                         <RelativeLayout
@@ -471,7 +472,6 @@
                             android:paddingRight="8dp"
                             android:paddingTop="4dp"
                             android:textSize="16sp" />
-
 
 
                     </RelativeLayout>
@@ -659,6 +659,8 @@
                 android:layout_height="50dp"
                 android:layout_below="@id/body_3"
                 android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/rounded"
                 android:text="Post"

@@ -52,7 +52,7 @@ public class WallaApi {
     public static final int POST_COMMENT = 15;
     public static final int GET_USERS = 16;
     public static final int GET_GROUPS = 17;
-    public static final int IS_SUSPENDED = 17;
+    public static final int IS_SUSPENDED = 18;
 
 
     public interface OnDataReceived {
@@ -105,6 +105,8 @@ public class WallaApi {
     private static String get_groups = "/api/get_groups?";
     private static String is_suspended = "/api/is_user_suspended?";
     private static String delete_activity = "/api/delete_activity?";
+    private static String update_notif_read = "/api/update_notification_read?";
+    private static String update_intro_complete = "/api/user_intro_complete?";
 
 
     public static String domain = "";
@@ -227,6 +229,12 @@ public class WallaApi {
                 UserInfo info = new UserInfo();
 
                 try {
+                    if(response.has("intro_complete")){
+                        info.setIntro_complete(response.getBoolean("intro_complete"));
+                    }else{
+                        info.setIntro_complete(false);
+                    }
+
                     List<String> list = new ArrayList<>();
                     if (response.has("interests")) {
                         JSONArray interests = response.getJSONArray("interests");
@@ -1020,6 +1028,12 @@ public class WallaApi {
                                     notif.setActivityUid(notifObj.getString("activity_id"));
                                 }
 
+                                if(notifObj.has("read")){
+                                    notif.setRead(notifObj.getBoolean("read"));
+                                }else{
+                                    notif.setRead(false);
+                                }
+
                                 list.add(notif);
 
                             } catch (JSONException e) {
@@ -1707,6 +1721,59 @@ public class WallaApi {
         queue.add(request);
     }
 
+    public static void updateNotifRead(String uid, String nuid){
+        final String url = site + update_notif_read + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("notification_id", nuid);
+            params.put("uid", uid);
+            params.put("read", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //empty
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void updateIntroComplete(String uid){
+        final String url = site + update_intro_complete + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //empty
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
 
     private static List<String> interestsJsontoList(JSONArray array) {
         List<String> data = new ArrayList<>();

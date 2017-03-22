@@ -69,6 +69,10 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
     }
 
     private EventInfo getEvent(List<EventInfo> events, String query){
+        if(events == null){
+            return null;
+        }
+
         for(EventInfo event : events){
             if((event.getInterests().toString() + event.getTitle() + event.getStart_time() + event.getStringDate(event.getStart_time())).equals(query)){
                 return event;

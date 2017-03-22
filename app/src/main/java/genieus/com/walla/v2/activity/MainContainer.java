@@ -131,6 +131,10 @@ public class MainContainer extends AppCompatActivity
                     user = (UserInfo) data;
                     name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
 
+                    if(!user.isIntro_complete()){
+                        startActivity(new Intent(MainContainer.this, Onboarding.class));
+                    }
+
                     if (user.getProfile_url() != null && !user.getProfile_url().equals("")) {
                         showWelcomeMessage();
                         Picasso.with(MainContainer.this) //Context
