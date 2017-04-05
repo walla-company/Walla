@@ -152,7 +152,6 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         details_in.setText(user.getDescription());
         details_label = (TextView) events_lv.findViewById(R.id.details_label);
         details_label.setTypeface(fonts.AzoSansMedium);
-        details_container = (CardView) events_lv.findViewById(R.id.details_container);
         if(user.getDescription() == null || user.getDescription().isEmpty())
             details_container.setVisibility(View.GONE);
         add = (Button) findViewById(R.id.add_btn);

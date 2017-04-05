@@ -145,7 +145,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
         main_container.setVisibility(View.VISIBLE);
 
-        if(event.getHost().equals(auth.getCurrentUser().getUid())){
+        if(event.getHost() != null && event.getHost().equals(auth.getCurrentUser().getUid())){
             delete.setVisible(true);
         }
 
@@ -261,7 +261,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         delete_btn.setTypeface(fonts.AzoSansRegular);
         delete_btn.setOnClickListener(this);
 
-        if(event.getHost().equals(auth.getCurrentUser().getUid())){
+        if(event.getHost() != null && event.getHost().equals(auth.getCurrentUser().getUid())){
             delete_btn.setVisibility(View.VISIBLE);
             changeBackGroundColor(delete_btn, getResources().getColor(R.color.lightred));
         }
@@ -304,9 +304,11 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
     private boolean isFreeFoodActivity(EventInfo event){
         boolean freeFood = false;
-        for(String interest : event.getInterests()){
-            if(interest.toLowerCase().contains("food")){
-                freeFood = true;
+        if(event.getInterests() != null && !event.getInterests().isEmpty()) {
+            for (String interest : event.getInterests()) {
+                if (interest.toLowerCase().contains("food")) {
+                    freeFood = true;
+                }
             }
         }
 

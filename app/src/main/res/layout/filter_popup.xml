@@ -34,6 +34,7 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
         android:layout_marginTop="8dp"
         android:layout_below="@+id/container"
         android:id="@+id/interests_rv"

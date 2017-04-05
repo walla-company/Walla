@@ -58,7 +58,7 @@ public class MainContainer extends AppCompatActivity
     private View navHeader;
     private static UserInfo user;
 
-    private MenuItem filter_icon;
+    public static MenuItem filter_icon;
     private Fonts fonts;
     private static WallaApi api;
     private static FirebaseAuth auth;
@@ -369,13 +369,18 @@ public class MainContainer extends AppCompatActivity
                 switchToSearchActivity();
                 break;
             case R.id.action_filter:
-                Home.showFilter();
                 break;
             case R.id.name:
                 startActivity(new Intent(this, EditProfile.class));
                 break;
             case R.id.profile_image:
                 startActivity(new Intent(this, EditProfile.class));
+                break;
+            case R.id.all:
+                Home.showFilter("");
+                break;
+            case R.id.today:
+                Home.showFilter("Today");
                 break;
             default:
                 break;

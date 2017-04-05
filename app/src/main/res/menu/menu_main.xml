@@ -6,17 +6,27 @@
 
     <item
         android:id="@+id/action_filter"
-        android:title="filter"
         android:icon="@drawable/ic_filter"
+        android:title="filter"
         app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/all"
+                android:title="Show me today's activities" />
+            <item
+                android:id="@+id/today"
+                android:title="Show me all activities" />
+
+        </menu>
     </item>
 
     <item
         android:id="@+id/action_search"
-        app:showAsAction="always"
         android:icon="@drawable/ic_search"
         android:orderInCategory="100"
-        android:title="search" />
+        android:title="search"
+        app:showAsAction="always" />
 
 
 </menu>

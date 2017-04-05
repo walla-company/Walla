@@ -13,15 +13,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.v1.Interests;
+import genieus.com.walla.v2.activity.MainContainer;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.viewholder.FilterViewHolder;
 import genieus.com.walla.v2.adapter.recyclerview.InterestsRVAdapter;
@@ -59,6 +63,7 @@ public class Home extends Fragment {
     private List<EventInfo> events;
     private static TextView filter_tv;
     private static SwipeRefreshLayout swipeRefreshLayout;
+    private static PopupMenu filterPopup;
 
     private static AlertDialog alert;
     private Fonts fonts;
@@ -111,49 +116,10 @@ public class Home extends Fragment {
         api = WallaApi.getInstance(getContext());
         fonts = new Fonts(getContext());
         events = new ArrayList<>();
-        initFilter();
         initEvents();
     }
 
     private void initEvents() {
-
-        /*
-        List<EventInfo> list = new ArrayList<>();
-
-        EventInfo event1 = new EventInfo();
-        event1.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-        event1.setInterests(Arrays.asList("Movies", "Academics"));
-        event1.setInterested(7);
-        event1.setGoing(5);
-        event1.setStart_time(new Long("1451829458000"));
-        event1.setEnd_time(new Long("1451833058000"));
-        event1.setIs_public(true);
-
-        EventInfo event2 = new EventInfo();
-        event2.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-        event2.setInterests(Arrays.asList("Movies", "Academics"));
-        event2.setInterested(7);
-        event2.setGoing(5);
-        event2.setStart_time(new Long("1483196258000"));
-        event2.setEnd_time(new Long("1483199858000"));
-        event2.setIs_public(true);
-
-        EventInfo event3 = new EventInfo();
-        event3.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-        event3.setInterests(Arrays.asList("Movies", "Academics"));
-        event3.setInterested(7);
-        event3.setGoing(5);
-        event3.setStart_time(new Long("1451628000000"));
-        event3.setEnd_time(new Long("1451800800000"));
-        event3.setIs_public(false);
-
-        List<EventInfo> data = new ArrayList<>();
-        data.add(event1);
-        data.add(event2);
-        data.add(event3);
-
-        */
-
         final Context context = getContext();
 
         api.getActivities(auth.getCurrentUser().getUid(), new WallaApi.OnDataReceived() {
@@ -168,51 +134,6 @@ public class Home extends Fragment {
                 }
             }
         });
-
-    }
-
-    private void initFilter() {
-        filter_tv.setTypeface(fonts.AzoSansRegular);
-        interests = new ArrayList<>();
-        interests.add(new Interests("Movies", R.drawable.ic_movieicon));
-        interests.add(new Interests("Food", R.drawable.ic_foodicon));
-        interests.add(new Interests("Academics", R.drawable.ic_academicsicon));
-        interests.add(new Interests("Study", R.drawable.ic_studyicon));
-        interests.add(new Interests("Sports", R.drawable.ic_sportsicon));
-        interests.add(new Interests("Rides", R.drawable.ic_ridesicon));
-        interests.add(new Interests("Exhibition", R.drawable.ic_exhibitionicon));
-        interests.add(new Interests("Music", R.drawable.ic_musicicon));
-        interests.add(new Interests("Games", R.drawable.ic_gamesicon));
-        interests.add(new Interests("Dance", R.drawable.ic_danceicon));
-        interests.add(new Interests("Socialize", R.drawable.ic_socialize));
-        interests.add(new Interests("Volunteer", R.drawable.ic_volunteericon));
-
-        //LinearLayoutManager horizontal
-        // = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-
-        GridLayoutManager grid
-                = new GridLayoutManager(getContext(), 4);
-
-        adapter = new InterestsRVAdapter(interests, new InterestsRVAdapter.ItemClickListener() {
-            @Override
-            public void onItemClicked(Interests event, View view, List<FilterViewHolder> all, int pos) {
-                String query = event.getName().equals("All") ? "" : event.getName();
-                currentFilter = query;
-                changeColorOfFilters(view, all, pos);
-            }
-        }, getContext());
-
-        interest_rv.setLayoutManager(grid);
-        interest_rv.setAdapter(adapter);
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(alert.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.gravity = Gravity.CENTER;
-
-        alert.getWindow().setAttributes(lp);
-        alert.setCanceledOnTouchOutside(true);
 
     }
 
@@ -262,11 +183,11 @@ public class Home extends Fragment {
         }
     }
 
-    public static void showFilter() {
-        alert.show();
+    public static void showFilter(String query) {
+        filterEvents(query);
     }
 
-    private void filterEvents(String query) {
+    private static void filterEvents(String query) {
         if (query.equals("")) filter_tv.setVisibility(View.GONE);
         else {
             //filter_tv.setVisibility(View.VISIBLE);

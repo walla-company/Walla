@@ -603,7 +603,12 @@ public class WallaApi {
                         event.setHost_group("");
 
 
-                    event.setGroup_name(response.getString("host_group_name"));
+                    if(response.has("host_group_name")) {
+                        event.setGroup_name(response.getString("host_group_name"));
+                    }else{
+                        event.setGroup_name("");
+                    }
+
                     event.setGroup_abbr(response.getString("host_group_short_name"));
                     event.setTitle(response.getString("title"));
                     event.setAuid(response.getString("activity_id"));
@@ -626,6 +631,7 @@ public class WallaApi {
                     event.setDeleted(isDeleted);
 
                 } catch (JSONException e) {
+                    Log.d("activities", e.toString());
                     e.printStackTrace();
                 }
 
@@ -648,6 +654,7 @@ public class WallaApi {
             @Override
             public void onResponse(JSONArray array) {
 
+                Log.d("activities", array.toString());
                 List<EventInfo> events = new ArrayList<>();
 
                 for (int i = 0; i < array.length(); i++) {
@@ -687,15 +694,22 @@ public class WallaApi {
                         event.setGroup_abbr(response.getString("host_group_short_name"));
                         event.setTitle(response.getString("title"));
                         event.setAuid(response.getString("activity_id"));
-                        event.setCan_guests_invite(response.getBoolean("can_others_invite"));
+                        if(response.has("can_others_invite")) {
+                            event.setCan_guests_invite(response.getBoolean("can_others_invite"));
+                        }else{
+                            event.setCan_guests_invite(false);
+                        }
                         event.setIs_public(response.getBoolean("public"));
                         event.setStart_time(response.getLong("start_time"));
                         event.setEnd_time(response.getLong("end_time"));
-                        Log.d("apidata", response.getJSONObject("location").toString());
                         event.setLocation_name(response.getJSONObject("location").getString("name"));
                         event.setLocation_long(response.getJSONObject("location").getDouble("long"));
                         event.setLocation_lat(response.getJSONObject("location").getDouble("lat"));
-                        event.setInterests(interestsJsontoList(response.getJSONArray("interests")));
+                        if(response.has("interests")) {
+                            event.setInterests(interestsJsontoList(response.getJSONArray("interests")));
+                        }else{
+                            event.setInterests(new ArrayList<String>());
+                        }
                         event.setDetails(response.getString("details"));
                         event.setHost(response.getString("host"));
 

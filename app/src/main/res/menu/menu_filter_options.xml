@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/today"
+        android:title="Only today's activities"/>
+
+    <item
+        android:id="@+id/all"
+        android:title="All activities"/>
+
+</menu>
