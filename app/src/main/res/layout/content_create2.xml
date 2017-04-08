@@ -424,15 +424,18 @@
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/rounded_corners"
-                            android:clickable="true"
                             android:minHeight="32dp">
 
+                            <RelativeLayout
+                                android:id="@+id/host_click_area"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"></RelativeLayout>
 
                             <android.support.v7.widget.RecyclerView
+                                android:clickable="false"
                                 android:id="@+id/group_host_rv"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
+                                android:layout_height="match_parent"
                                 android:paddingLeft="8dp" />
                         </RelativeLayout>
 

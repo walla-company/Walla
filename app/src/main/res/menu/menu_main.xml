@@ -13,15 +13,16 @@
         <menu>
             <item
                 android:id="@+id/all"
-                android:title="Show me today's activities" />
+                android:title="Show me all activities" />
             <item
                 android:id="@+id/today"
-                android:title="Show me all activities" />
+                android:title="Show me today's activities" />
 
         </menu>
     </item>
 
     <item
+        android:visible="false"
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search"
         android:orderInCategory="100"

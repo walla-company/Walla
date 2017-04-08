@@ -86,7 +86,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
             end_time_label, location_label, details_label, host_label, group_label, interest_label,
             friends_label, guests_label, friends_in, guests_in, location2_label,
             interest_in, title_in, free_food_in;
-    private RelativeLayout map_container, group_in, host_in, host_container, location2;
+    private RelativeLayout map_container, group_in, host_in, host, location2;
     private Button post;
     private ImageButton chill, lit;
     private RecyclerView groups_rv, host_group_rv;
@@ -180,6 +180,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
         host_click = (FrameLayout) findViewById(R.id.host_click);
         host_click.setOnClickListener(this);
+
+        host = (RelativeLayout) findViewById(R.id.host_click_area);
+        host.setOnClickListener(this);
 
         lit = (ImageButton) findViewById(R.id.fire_btn);
         lit.setOnClickListener(this);
@@ -908,6 +911,9 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                break;
+            case R.id.host_click_area:
+                setGroupHost();
                 break;
             default:
                 break;

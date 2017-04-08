@@ -179,8 +179,9 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         }, event.getHost());
 
         for(String interest : event.getInterests()){
-            if(interest.toLowerCase().contains("Food")){
+            if(interest.toLowerCase().contains("food")){
                 food.setVisibility(View.VISIBLE);
+                break;
             }
         }
         title.setText(event.getTitle());

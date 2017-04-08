@@ -91,6 +91,7 @@
                             android:textSize="16sp" />
 
                         <ImageView
+                            android:visibility="gone"
                             android:id="@+id/more"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -98,6 +99,15 @@
                             android:layout_marginRight="12dp"
                             android:layout_marginTop="16dp"
                             android:src="@drawable/ic_more_vert" />
+
+                        <ImageView
+                            android:id="@+id/free_food"
+                            android:layout_marginTop="16dp"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@mipmap/pizza_icon" />
 
                         <TextView
                             android:id="@+id/title"
@@ -222,14 +232,6 @@
                             android:src="@mipmap/check"
                             android:visibility="gone"/>
 
-                        <ImageView
-                            android:id="@+id/free_food"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="16dp"
-                            android:src="@mipmap/pizza_icon" />
 
 
                     </RelativeLayout>

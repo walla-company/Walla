@@ -10,7 +10,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -60,6 +62,19 @@ public class LoginScreenEmail extends AppCompatActivity implements View.OnClickL
         auth = FirebaseAuth.getInstance();;
         email = (EditText) findViewById(R.id.email);
         email.setTypeface(fonts.AzoSansRegular);
+        email.setFocusableInTouchMode(true);
+        email.requestFocus();
+        email.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    handleConfirmClick();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
         confirm = (ImageButton) findViewById(R.id.confirm);
         confirm.setOnClickListener(this);

@@ -9,7 +9,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -56,6 +58,19 @@ public class LoginScreenPassword extends AppCompatActivity implements View.OnCli
         ;
         password = (EditText) findViewById(R.id.password);
         password.setTypeface(fonts.AzoSansRegular);
+        password.setFocusableInTouchMode(true);
+        password.requestFocus();
+        password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    handleConfirmClick();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
         confirm = (ImageButton) findViewById(R.id.confirm);
         confirm.setOnClickListener(this);
