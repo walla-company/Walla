@@ -62,6 +62,8 @@ public class ImageUtils {
                             }
                         });
             }
+        } else {
+           icon.setImageDrawable(context.getResources().getDrawable(R.mipmap.default_profile));
         }
     }
 }
