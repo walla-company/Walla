@@ -269,11 +269,11 @@ public class EditProfile extends AppCompatActivity {
                 Optional.<String>absent(),
                 true,
                 Optional.<String>of("ex. Become involved in student politics"),                new EditProfileSection.Action() {
-                    @Override
-                    public void onFinishAction(String data) {
-                        // TODO(anesu) make server call
-                    }
-                }
+            @Override
+            public void onFinishAction(String data) {
+                // TODO(anesu) make server call
+            }
+        }
         );
     }
 

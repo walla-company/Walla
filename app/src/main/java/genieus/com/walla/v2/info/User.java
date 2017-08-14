@@ -8,13 +8,13 @@ import java.util.List;
  * Created by anesu on 12/28/16.
  */
 
-public class UserInfo {
+public class User {
     private String name, year, profile_url, major, hometown, description, uid, first_name, last_name, email;
     private List<String> interests, friends, groups, sent_requests, received_requests, calendar;
     private List<String> activities;
     private boolean verified, intro_complete;
 
-    public UserInfo(){};
+    public User(){};
 
     public String getName() {
         return name;

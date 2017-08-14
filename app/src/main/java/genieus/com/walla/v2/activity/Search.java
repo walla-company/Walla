@@ -2,16 +2,13 @@ package genieus.com.walla.v2.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
@@ -20,8 +17,7 @@ import genieus.com.walla.v2.adapter.recyclerview.SuggestFriendsRVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
-import genieus.com.walla.v2.info.MutualFriendInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 public class Search extends AppCompatActivity {
     private Fonts fonts;
@@ -35,7 +31,7 @@ public class Search extends AppCompatActivity {
     private TextView friends_label, group_label;
     private WallaApi api;
 
-    private List<UserInfo> users;
+    private List<User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +79,7 @@ public class Search extends AppCompatActivity {
         api.getUsers(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                users = (List<UserInfo>) data;
+                users = (List<User>) data;
                 suggested_friends_rv = (RecyclerView) findViewById(R.id.suggested_friends_rv);
                 suggestFriendsAdapter = new SuggestFriendsRVAdapter(Search.this, users);
 

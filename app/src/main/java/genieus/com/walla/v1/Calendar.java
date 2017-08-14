@@ -92,7 +92,7 @@ public class Calendar extends AppCompatActivity implements View.OnClickListener{
                         Map<String, Object> userInfo = (Map<String, Object>) dataSnapshot.getValue();
                         String name = (String) userInfo.get("name");
 
-                        events.add(new EventInfo(
+                        events.add(new Event(
                                 (String) act.get("description"),
                                 (String) act.get("interest"),
                                 "" + act.get("activityTime"),
@@ -103,9 +103,9 @@ public class Calendar extends AppCompatActivity implements View.OnClickListener{
                                 (String) act.get("key"),
                                 1));
 
-                        Collections.sort(events, new Comparator<EventInfo>() {
+                        Collections.sort(events, new Comparator<Event>() {
                             @Override
-                            public int compare(EventInfo lhs, EventInfo rhs) {
+                            public int compare(Event lhs, Event rhs) {
                                 return Double.compare(rhs.getRawTime(), lhs.getRawTime());
                             }
                         });

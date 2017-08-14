@@ -27,11 +27,8 @@ import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.ViewProfile;
-import genieus.com.walla.v2.adapter.listview.SuggestedGroupsLVAdapter;
 import genieus.com.walla.v2.info.Fonts;
-import genieus.com.walla.v2.info.GroupInfo;
-import genieus.com.walla.v2.info.MutualFriendInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 import genieus.com.walla.v2.viewholder.SuggestFriendsHolder;
 
 /**
@@ -40,7 +37,7 @@ import genieus.com.walla.v2.viewholder.SuggestFriendsHolder;
 
 public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriendsHolder> implements Filterable{
     private Context context;
-    private List<UserInfo> data;
+    private List<User> data;
     private String BUTTONBLUE = "#63CAF9";
     private Fonts fonts;
 
@@ -48,7 +45,7 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
     private Filter filter;
 
 
-    public SuggestFriendsRVAdapter(Context context, List<UserInfo> data){
+    public SuggestFriendsRVAdapter(Context context, List<User> data){
         this.context = context;
         this.data = data;
 
@@ -65,7 +62,7 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
 
     @Override
     public void onBindViewHolder(final SuggestFriendsHolder holder, int position) {
-        final UserInfo info = getUser(data, filtered.get(position));
+        final User info = getUser(data, filtered.get(position));
 
         holder.icon.setImageDrawable(null);
         holder.name.setTypeface(fonts.AzoSansRegular);
@@ -118,8 +115,8 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
         changeBackgroundColor(holder.addBtn, BUTTONBLUE);
     }
 
-    private UserInfo getUser(List<UserInfo> list, String query){
-        for(UserInfo group : list){
+    private User getUser(List<User> list, String query){
+        for(User group : list){
             if((group.getFirst_name() + " " + group.getLast_name()).equals(query)){
                 return group;
             }
@@ -157,7 +154,7 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
 
             FilterResults results = new FilterResults();
 
-            final List<UserInfo> list = data;
+            final List<User> list = data;
 
             int count = list.size();
             final ArrayList<String> nlist = new ArrayList<>(count);

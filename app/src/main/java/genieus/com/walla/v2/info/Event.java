@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Anesu on 12/17/2016.
  */
-public class EventInfo {
+public class Event {
 
     private String auid, title, location_name, location_address, host, host_group, details, group_name, group_abbr;
     private double location_lat, location_long;
@@ -17,7 +17,7 @@ public class EventInfo {
     private List<String> interests, going_list, interested_list;
     private int going, interested;
 
-    public EventInfo(){};
+    public Event(){};
 
     public String getDetails() {
         return details;

@@ -26,8 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.EditProfile;
@@ -35,7 +33,7 @@ import genieus.com.walla.v2.activity.LoginScreenEmail;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +56,7 @@ public class UserProfile extends Fragment implements View.OnClickListener{
     private WallaApi api;
     private Fonts fonts;
     private FirebaseAuth auth;
-    private UserInfo user;
+    private User user;
 
     private View view;
     private TextView edit, contact, logout, name, major, year, hometown, desc;
@@ -235,7 +233,7 @@ public class UserProfile extends Fragment implements View.OnClickListener{
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                user = (UserInfo) data;
+                user = (User) data;
                 initUi();
             }
         }, auth.getCurrentUser().getUid());

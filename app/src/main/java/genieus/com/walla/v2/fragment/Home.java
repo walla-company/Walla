@@ -12,19 +12,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -32,13 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.v1.Interests;
-import genieus.com.walla.v2.activity.MainContainer;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.viewholder.FilterViewHolder;
 import genieus.com.walla.v2.adapter.recyclerview.InterestsRVAdapter;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.EventsLVAdapter;
-import genieus.com.walla.v2.info.EventInfo;
+import genieus.com.walla.v2.info.Event;
 import genieus.com.walla.v2.info.Fonts;
 
 /**
@@ -60,7 +54,7 @@ public class Home extends Fragment {
     private InterestsRVAdapter adapter;
     private static EventsLVAdapter adapterEvents;
     private List<Interests> interests;
-    private List<EventInfo> events;
+    private List<Event> events;
     private static TextView filter_tv;
     private static SwipeRefreshLayout swipeRefreshLayout;
     private static PopupMenu filterPopup;
@@ -125,7 +119,7 @@ public class Home extends Fragment {
         api.getActivities(auth.getCurrentUser().getUid(), new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                List<EventInfo> temp = (List<EventInfo>) data;
+                List<Event> temp = (List<Event>) data;
                 if(!temp.equals(events)) {
                     events = temp;
                     adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, events);
@@ -142,8 +136,8 @@ public class Home extends Fragment {
         api.getActivities(auth.getCurrentUser().getUid(), new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                if(force || ((List<EventInfo>) data).size() != adapterEvents.getCount()) {
-                    adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<EventInfo>) data);
+                if(force || ((List<Event>) data).size() != adapterEvents.getCount()) {
+                    adapterEvents = new EventsLVAdapter(context, R.layout.single_activity, (List<Event>) data);
                     events_lv.setAdapter(adapterEvents);
                     adapterEvents.getFilter().filter("");
                 }

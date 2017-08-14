@@ -5,15 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -25,12 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import genieus.com.walla.R;
-import genieus.com.walla.v1.Interests;
 import genieus.com.walla.v2.adapter.listview.FriendsLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.FriendInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFriendStateListener, MenuItem.OnMenuItemClickListener {
     private ListView friends_lv;
@@ -40,7 +36,7 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
     private List<Integer> selected;
     private MenuItem done;
     private boolean doneIconVisible;
-    private UserInfo user;
+    private User user;
     private WallaApi api;
     private Fonts fonts;
     private FirebaseAuth auth;
@@ -67,7 +63,7 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                user = (UserInfo) data;
+                user = (User) data;
 
                 initUi();
             }
@@ -96,7 +92,7 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
             api.getUserInfo(new WallaApi.OnDataReceived() {
                 @Override
                 public void onDataReceived(Object data, int call) {
-                    UserInfo friend = (UserInfo) data;
+                    User friend = (User) data;
                     list.add(new FriendInfo(String.format("%s %s", friend.getFirst_name(), friend.getLast_name()),
                             friend.getYear(), friend.getMajor(), friend.getProfile_url(), nuid));
 

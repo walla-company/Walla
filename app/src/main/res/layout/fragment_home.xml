@@ -8,20 +8,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/filter_icon"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/ic_filter"
+            android:tint="@color/gray" />
+
         <TextView
-            android:visibility="gone"
+            android:layout_alignBottom="@id/filter_icon"
             android:id="@+id/filter_label"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="Activities"
-            android:textSize="15sp" />
+            android:layout_height="28dp"
+            android:layout_toRightOf="@id/filter_icon"
+            android:gravity="center_vertical"
+            android:text="ALL EVENTS"
+            android:textSize="10sp" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/filter_label">
+            android:layout_below="@id/filter_label"
+            android:layout_marginTop="4dp">
 
             <ListView
                 android:id="@+id/events"

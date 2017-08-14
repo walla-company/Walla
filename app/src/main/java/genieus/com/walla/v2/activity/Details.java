@@ -2,7 +2,6 @@ package genieus.com.walla.v2.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -13,10 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,7 +43,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.text.Line;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
@@ -55,24 +50,17 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
-import genieus.com.walla.v2.adapter.recyclerview.GroupTabRVAdapter;
-import genieus.com.walla.v2.adapter.recyclerview.TabRVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
-import genieus.com.walla.v2.fragment.Home;
-import genieus.com.walla.v2.info.EventInfo;
+import genieus.com.walla.v2.info.Event;
 import genieus.com.walla.v2.info.Fonts;
-import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.MessageInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 public class Details extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
     private Fonts fonts;
@@ -96,11 +84,11 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
     private MenuItem delete;
 
-    private EventInfo event;
+    private Event event;
     private RelativeLayout map_container;
 
     private boolean isGoing, isInterested;
-    private UserInfo user;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +112,12 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         api.getActivity(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                event = (EventInfo) data;
+                event = (Event) data;
                 try {
                     api.getUserInfo(new WallaApi.OnDataReceived() {
                         @Override
                         public void onDataReceived(Object data, int call) {
-                            user = (UserInfo) data;
+                            user = (User) data;
                             initUi();
                         }
                     }, auth.getCurrentUser().getUid());
@@ -288,7 +276,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                UserInfo user = (UserInfo) data;
+                User user = (User) data;
 
                 host_name1.setText(user.getFirst_name());
                 host_name2.setText(user.getFirst_name());
@@ -302,7 +290,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
     }
 
-    private boolean isFreeFoodActivity(EventInfo event){
+    private boolean isFreeFoodActivity(Event event){
         boolean freeFood = false;
         if(event.getInterests() != null && !event.getInterests().isEmpty()) {
             for (String interest : event.getInterests()) {
@@ -364,7 +352,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                UserInfo user = (UserInfo) data;
+                User user = (User) data;
                 name.setText(user.getFirst_name());
                 setImage(image, user.getProfile_url());
             }
@@ -434,7 +422,7 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
 
     private void setMarker(LatLng place){
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(place , 17);
-        mMap.addMarker(new MarkerOptions().position(place).title("EventInfo location"));
+        mMap.addMarker(new MarkerOptions().position(place).title("Event location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
         mMap.animateCamera(cameraUpdate);
         mMap.getUiSettings().setScrollGesturesEnabled(false);

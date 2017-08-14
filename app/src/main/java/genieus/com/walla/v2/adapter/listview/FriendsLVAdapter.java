@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,11 +23,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
-import genieus.com.walla.v2.activity.Friends;
 import genieus.com.walla.v2.activity.ViewProfile;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.FriendInfo;
-import genieus.com.walla.v2.info.UserInfo;
 
 /**
  * Created by anesu on 12/20/16.

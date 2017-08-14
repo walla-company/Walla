@@ -1,6 +1,5 @@
 package genieus.com.walla.v2.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -23,13 +22,12 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.EventsLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
-import genieus.com.walla.v2.info.EventInfo;
+import genieus.com.walla.v2.info.Event;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 
@@ -50,7 +48,7 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
     private WallaApi api;
     private String guid;
 
-    private List<EventInfo> list;
+    private List<Event> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +90,7 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         list = new ArrayList<>();
 
         /*
-        EventInfo event1 = new EventInfo();
+        Event event1 = new Event();
         event1.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
         event1.setInterests(Arrays.asList("Movies", "Academics"));
         event1.setInterested(7);
@@ -101,7 +99,7 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         event1.setEnd_time((long) 749999);
         event1.setIs_public(true);
 
-        EventInfo event2 = new EventInfo();
+        Event event2 = new Event();
         event2.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
         event2.setInterests(Arrays.asList("Movies", "Academics"));
         event2.setInterested(7);
@@ -110,7 +108,7 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         event2.setEnd_time((long) 749999);
         event2.setIs_public(true);
 
-        EventInfo event3 = new EventInfo();
+        Event event3 = new Event();
         event3.setTitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
         event3.setInterests(Arrays.asList("Movies", "Academics"));
         event3.setInterested(7);
@@ -119,7 +117,7 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
         event3.setEnd_time((long) 749999);
         event3.setIs_public(true);
 
-        List<EventInfo> data = new ArrayList<>();
+        List<Event> data = new ArrayList<>();
         data.add(event1);
         data.add(event2);
         data.add(event3);
@@ -182,7 +180,7 @@ public class Group extends AppCompatActivity implements View.OnClickListener {
             api.getActivity(new WallaApi.OnDataReceived() {
                 @Override
                 public void onDataReceived(Object data, int call) {
-                    list.add((EventInfo) data);
+                    list.add((Event) data);
                     adapter.notifyDataSetChanged();
                     adapter.getFilter().filter("");
                     Log.d("actdata", list.toString());

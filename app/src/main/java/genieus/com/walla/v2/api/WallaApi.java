@@ -22,11 +22,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import genieus.com.walla.v2.info.DomainInfo;
-import genieus.com.walla.v2.info.EventInfo;
+import genieus.com.walla.v2.info.Event;
 import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.MessageInfo;
 import genieus.com.walla.v2.info.NotificationInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 /**
  * Created by anesu on 12/25/16.
@@ -227,7 +227,7 @@ public class WallaApi {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                UserInfo info = new UserInfo();
+                User info = new User();
 
                 try {
                     if(response.has("intro_complete")){
@@ -341,13 +341,13 @@ public class WallaApi {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                List<EventInfo> events = new ArrayList<>();
+                List<Event> events = new ArrayList<>();
 
                 int len = response.length();
                 for (int i = 0; i < len; i++) {
                     try {
                         JSONObject event = response.getJSONObject(i);
-                        EventInfo info = new EventInfo();
+                        Event info = new Event();
 
                         info.setTitle(event.getString("description"));
                         info.setLocation_name(event.getString("location"));
@@ -450,13 +450,13 @@ public class WallaApi {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                List<UserInfo> attendees = new ArrayList<>();
+                List<User> attendees = new ArrayList<>();
 
                 int len = response.length();
                 for (int i = 0; i < len; i++) {
                     try {
                         JSONObject data = response.getJSONObject(i);
-                        UserInfo user = new UserInfo();
+                        User user = new User();
                         user.setName(data.getString("name"));
                         //TODO add more fields
 
@@ -527,7 +527,7 @@ public class WallaApi {
         getUserInfo(new OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                listener.onDataReceived(((UserInfo) data).isVerified(), IS_VERIFIED);
+                listener.onDataReceived(((User) data).isVerified(), IS_VERIFIED);
             }
         }, uid);
 
@@ -572,7 +572,7 @@ public class WallaApi {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                EventInfo event = new EventInfo();
+                Event event = new Event();
 
                 try {
                     List<String> going, interested;
@@ -656,12 +656,12 @@ public class WallaApi {
             public void onResponse(JSONArray array) {
 
                 Log.d("activities", array.toString());
-                List<EventInfo> events = new ArrayList<>();
+                List<Event> events = new ArrayList<>();
 
                 for (int i = 0; i < array.length(); i++) {
                     try {
                         JSONObject response = array.getJSONObject(i);
-                        EventInfo event = new EventInfo();
+                        Event event = new Event();
 
                         List<String> going, interested;
                         going = new ArrayList<>();
@@ -1279,12 +1279,12 @@ public class WallaApi {
         final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                List<UserInfo> users = new ArrayList<>();
+                List<User> users = new ArrayList<>();
                 for(int k = 0; k < response.length(); k++){
                     try {
                         JSONObject userObj = response.getJSONObject(k);
 
-                        UserInfo info = new UserInfo();
+                        User info = new User();
 
                         try {
                             List<String> list = new ArrayList<>();
@@ -1584,7 +1584,7 @@ public class WallaApi {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                List<UserInfo> list = new ArrayList<>();
+                List<User> list = new ArrayList<>();
 
                 JSONObject message;
                 Iterator<String> keys = response.keys();
@@ -1592,7 +1592,7 @@ public class WallaApi {
                     try {
                         String key = keys.next();
                         message = response.getJSONObject(key);
-                        UserInfo info = new UserInfo();
+                        User info = new User();
                         info.setUid(key);
                         info.setFirst_name(message.getString("first_name"));
                         info.setLast_name(message.getString("last_name"));

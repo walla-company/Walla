@@ -1,21 +1,16 @@
 package genieus.com.walla.v2.activity;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,9 +27,8 @@ import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.recyclerview.InterestsViewRVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.InterestInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 import genieus.com.walla.v2.info.Utility;
-import genieus.com.walla.v2.viewholder.InterestsViewHolder;
 
 public class InterestsView extends AppCompatActivity implements InterestsViewRVAdapter.OnInterestStateChangedCListener, MenuItem.OnMenuItemClickListener {
     private RecyclerView interests_rv;
@@ -48,7 +42,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
     private int MAX_INTERESTS = 2;
     private double width;
     private WallaApi api;
-    private UserInfo user;
+    private User user;
     private FirebaseAuth auth;
 
     @Override
@@ -68,7 +62,7 @@ public class InterestsView extends AppCompatActivity implements InterestsViewRVA
             api.getUserInfo(new WallaApi.OnDataReceived() {
                 @Override
                 public void onDataReceived(Object result, int call) {
-                    user = (UserInfo) result;
+                    user = (User) result;
                     if(user.getInterests() == null){
                         Toast.makeText(InterestsView.this, "list is null 2", Toast.LENGTH_LONG).show();
                     }

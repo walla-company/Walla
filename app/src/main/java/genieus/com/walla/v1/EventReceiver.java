@@ -59,7 +59,7 @@ public class EventReceiver extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_notif_logo)
                 .setContentTitle("Walla")
-                .setContentText(String.format("EventInfo starting in 15 minutes: %s", description))
+                .setContentText(String.format("Event starting in 15 minutes: %s", description))
                 .setAutoCancel(true);
 
         nm.notify(100, builder.build());

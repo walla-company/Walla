@@ -3,10 +3,7 @@ package genieus.com.walla.v2.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +28,7 @@ import genieus.com.walla.v2.adapter.listview.MyGroupsLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnGroupStateChangeListener, MenuItem.OnMenuItemClickListener {
     private ListView group_lv;
@@ -45,7 +42,7 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
     private List<GroupInfo> data;
     private int max;
     private WallaApi api;
-    private UserInfo user;
+    private User user;
     private Fonts fonts;
     private FirebaseAuth auth;
 
@@ -67,7 +64,7 @@ public class MyGroups extends AppCompatActivity implements MyGroupsLVAdapter.OnG
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                user = (UserInfo) data;
+                user = (User) data;
                 initUi();
             }
         }, auth.getCurrentUser().getUid());

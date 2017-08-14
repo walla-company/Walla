@@ -1,6 +1,5 @@
 package genieus.com.walla.v2.activity;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -10,14 +9,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,8 +18,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +30,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -60,21 +50,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.SimpleFormatter;
 
 import genieus.com.walla.R;
-import genieus.com.walla.v2.adapter.recyclerview.InterestsViewRVAdapter;
 import genieus.com.walla.v2.adapter.recyclerview.MiniGroupRVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.fragment.Home;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
-import genieus.com.walla.v2.info.InterestInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 public class Create extends AppCompatActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, DialogInterface.OnClickListener {
     private static final int INVITEFRIENDS = 2;
@@ -101,7 +87,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
     private CharSequence[] guestsInviteOptions = {"Yes", "No"};
     private CharSequence[] createOptions = {"Yes", "No"};
     private FirebaseAuth auth;
-    private UserInfo user;
+    private User user;
 
     private JSONObject postObj;
     private EditText details_in, location2_in;
@@ -144,7 +130,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                user = (UserInfo) data;
+                user = (User) data;
                 if(!user.isVerified()){
                     AlertDialog.Builder unverifiedBuilder = new AlertDialog.Builder(Create.this);
                     unverifiedBuilder.setTitle("Verify email");
@@ -377,7 +363,7 @@ public class Create extends AppCompatActivity implements OnMapReadyCallback, Dat
 
     private void setMarker(LatLng place) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(place, 17);
-        mMap.addMarker(new MarkerOptions().position(place).title("EventInfo location"));
+        mMap.addMarker(new MarkerOptions().position(place).title("Event location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
         mMap.animateCamera(cameraUpdate);
     }

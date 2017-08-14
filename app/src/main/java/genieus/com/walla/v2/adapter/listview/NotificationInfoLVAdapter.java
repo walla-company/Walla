@@ -2,15 +2,12 @@ package genieus.com.walla.v2.adapter.listview;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +33,7 @@ import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.fragment.Notifications;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.NotificationInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 /**
  * Created by anesu on 12/20/16.
@@ -108,7 +105,7 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                 api.getUserInfo(new WallaApi.OnDataReceived() {
                     @Override
                     public void onDataReceived(Object data, int call) {
-                        UserInfo user = (UserInfo) data;
+                        User user = (User) data;
                         info.setText(String.format("%s %s sent you a friend request", user.getFirst_name(), user.getLast_name()));
 
                         setImage(pic, user.getProfile_url());

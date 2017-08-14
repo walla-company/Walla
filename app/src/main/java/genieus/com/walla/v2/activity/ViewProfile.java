@@ -8,15 +8,12 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,10 +39,10 @@ import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.EventsLVAdapter;
 import genieus.com.walla.v2.adapter.listview.GroupProfileLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
-import genieus.com.walla.v2.info.EventInfo;
+import genieus.com.walla.v2.info.Event;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 public class ViewProfile extends AppCompatActivity implements View.OnClickListener, WallaApi.OnDataReceived {
     private String BUTTONBLUE = "#63CAF9";
@@ -62,11 +59,11 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
     private RelativeLayout container;
     private Fonts fonts;
     private WallaApi api;
-    private UserInfo user;
+    private User user;
     private FirebaseAuth auth;
     private AlertDialog.Builder confirm;
     private String[] options = {"Yes", "No"};
-    private List<EventInfo> events;
+    private List<Event> events;
 
 
     @Override
@@ -92,7 +89,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
             api.getUserInfo(new WallaApi.OnDataReceived() {
                 @Override
                 public void onDataReceived(Object data, int call) {
-                    user = (UserInfo) data;
+                    user = (User) data;
                     container.setVisibility(View.VISIBLE);
                     progress.setVisibility(View.GONE);
                     initUi();
@@ -273,7 +270,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onDataReceived(Object data, int call) {
-        events.add((EventInfo) data);
+        events.add((Event) data);
         events_lv.setAdapter(adapterEvents);
         adapterEvents.getFilter().filter("");
     }

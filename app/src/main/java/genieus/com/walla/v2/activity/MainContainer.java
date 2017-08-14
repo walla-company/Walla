@@ -44,7 +44,7 @@ import genieus.com.walla.v2.fragment.UserProfile;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.MyFirebaseInstanceidService;
 import genieus.com.walla.v2.info.MyFirebaseMessagingService;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.User;
 
 public class MainContainer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, UserProfile.OnFragmentInteractionListener, View.OnClickListener {
@@ -56,7 +56,7 @@ public class MainContainer extends AppCompatActivity
     private static TextView name;
     private NavigationView navigationView;
     private View navHeader;
-    private static UserInfo user;
+    private static User user;
 
     public static MenuItem filter_icon;
     private Fonts fonts;
@@ -128,7 +128,7 @@ public class MainContainer extends AppCompatActivity
             api.getUserInfo(new WallaApi.OnDataReceived() {
                 @Override
                 public void onDataReceived(Object data, int call) {
-                    user = (UserInfo) data;
+                    user = (User) data;
                     name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
 
 
@@ -184,7 +184,7 @@ public class MainContainer extends AppCompatActivity
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                user = (UserInfo) data;
+                user = (User) data;
                 name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
 
                 if (user.getProfile_url() != null && !user.getProfile_url().equals("")) {

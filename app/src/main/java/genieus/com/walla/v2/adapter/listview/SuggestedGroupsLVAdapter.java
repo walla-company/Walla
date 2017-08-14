@@ -21,7 +21,6 @@ import java.util.List;
 
 import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.Group;
-import genieus.com.walla.v2.info.EventInfo;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
 

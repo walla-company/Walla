@@ -18,8 +18,8 @@ import java.util.List;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.adapter.listview.EventsLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
-import genieus.com.walla.v2.info.EventInfo;
-import genieus.com.walla.v2.info.UserInfo;
+import genieus.com.walla.v2.info.Event;
+import genieus.com.walla.v2.info.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,9 +42,9 @@ public class Calendar extends Fragment {
     private ListView events_lv;
     private WallaApi api;
     private FirebaseAuth auth;
-    private UserInfo user;
+    private User user;
     private EventsLVAdapter adapter;
-    List<EventInfo> events;
+    List<Event> events;
 
     private OnFragmentInteractionListener mListener;
 
@@ -91,7 +91,7 @@ public class Calendar extends Fragment {
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
-                user = (UserInfo) data;
+                user = (User) data;
                 initUi();
             }
         }, auth.getCurrentUser().getUid());
@@ -107,7 +107,7 @@ public class Calendar extends Fragment {
             api.getActivity(new WallaApi.OnDataReceived() {
                 @Override
                 public void onDataReceived(Object data, int call) {
-                    events.add((EventInfo) data);
+                    events.add((Event) data);
                     adapter.notifyDataSetChanged();
                     adapter.getFilter().filter("");
                 }
