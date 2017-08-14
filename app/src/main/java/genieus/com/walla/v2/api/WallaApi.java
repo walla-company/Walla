@@ -65,6 +65,7 @@ public class WallaApi {
     private static String token = "3eaf7dFmNF447d";
     private static String platform = "android";
     private static String site = "https://walla-server.herokuapp.com";
+    // private static String site = "http://10.0.2.2:8080";
     private static String min_version = "/api/min_version?";
     private static String domains = "/api/domains?";
     private static String activities = "/api/activities?";

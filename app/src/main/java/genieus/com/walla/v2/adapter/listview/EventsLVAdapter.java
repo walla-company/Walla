@@ -105,8 +105,8 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         final TextView name = (TextView) view.findViewById(R.id.name);
         TextView duration = (TextView) view.findViewById(R.id.duration);
         TextView date = (TextView) view.findViewById(R.id.date);
-        final ImageView more = (ImageView) view.findViewById(R.id.more);
-        final ImageView action = (ImageView) view.findViewById(R.id.user_action);
+        //final ImageView more = (ImageView) view.findViewById(R.id.more);
+        //final ImageView action = (ImageView) view.findViewById(R.id.user_action);
 
         final CircleImageView icon = (CircleImageView) view.findViewById(R.id.icon);
         final ImageView food = (ImageView) view.findViewById(R.id.free_food);
@@ -115,15 +115,6 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
         final EventInfo event = getEvent(events, filtered.get(position));
 
         /*
-        if(event.getInterested_list().contains(auth.getCurrentUser().getUid())){
-            action.setVisibility(View.VISIBLE);
-            action.setImageResource(R.drawable.ic_star2);
-        }else if(event.getGoing_list().contains(auth.getCurrentUser().getUid())){
-            action.setVisibility(View.VISIBLE);
-            action.setImageResource(R.drawable.ic_check);
-        }
-        */
-
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,13 +159,15 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
             }
         });
 
+        */
+
         api.getUserInfo(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
                 UserInfo user = (UserInfo) data;
                 name.setText(user.getFirst_name());
 
-                setImage(icon, user.getProfile_url());
+                //setImage(icon, user.getProfile_url());
             }
         }, event.getHost());
 
@@ -210,6 +203,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
                         .load(url) //URL/FILE
                         .into(imageView);//an ImageView Object to show the loaded image;
             }else{
+                /*
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 storage.getReferenceFromUrl(url).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
@@ -226,6 +220,7 @@ public class EventsLVAdapter extends ArrayAdapter implements Filterable{
 
                     }
                 });
+                */
             }
         }
     }

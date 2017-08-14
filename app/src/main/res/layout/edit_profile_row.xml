@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/year_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:paddingBottom="16dp">
+
+    <TextView
+        android:textColor="@color/black"
+        android:id="@+id/field_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="6dp"
+        android:text="@string/sample_text"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/field_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/field_title"
+        android:paddingLeft="16dp"
+        android:paddingBottom="6dp"
+        android:text="@string/sample_text"
+        android:textColor="@color/gray"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/char_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/field_description"
+        android:layout_marginRight="16dp"
+        android:text="@string/sample_text"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/field_action"
+        android:gravity="start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="42dp"
+        android:layout_below="@+id/char_counter"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/rounded_corners"
+        android:padding="8dp"
+        android:text="" />
+
+
+</RelativeLayout>

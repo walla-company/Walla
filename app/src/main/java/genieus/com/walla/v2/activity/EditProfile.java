@@ -1,76 +1,32 @@
 package genieus.com.walla.v2.activity;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.base.Optional;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
-import genieus.com.walla.v2.adapter.listview.MyGroupsLVAdapter;
 import genieus.com.walla.v2.api.WallaApi;
-import genieus.com.walla.v2.fragment.Home;
+import genieus.com.walla.v2.info.EditProfileSection;
 import genieus.com.walla.v2.info.Fonts;
-import genieus.com.walla.v2.info.GroupInfo;
-import genieus.com.walla.v2.info.RoundedTransformation;
-import genieus.com.walla.v2.info.UserInfo;
-import genieus.com.walla.v2.info.Utility;
 
-public class EditProfile extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener {
-
-    private static final int CAMERA_INTENT_RESULT = 1;
-    private static final int GALLERY_INTENT_RESULT = 2;
-
-
-    private UserInfo info;
-    private FirebaseAuth auth;
+public class EditProfile extends AppCompatActivity {
     private WallaApi api;
-    private Fonts fonts;
-    private CircleImageView profile_pic;
-    private NestedScrollView parent;
-    private RelativeLayout add;
-    private LinearLayout group_container;
-    private EditText hometown_in, description_in, fname_in, year_in, major_in, lname_in;
-    private TextView profile_pic_label, year_label, major_label, hometown_label, description_label,
-            fname_label, lname_label, group_label;
-
-    private String[] sourceOptions = {"Take Photo", "Choose from Library", "Cancel"};
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,223 +40,271 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
         auth = FirebaseAuth.getInstance();
         api = WallaApi.getInstance(this);
+
+        initUi();
     }
 
     private void initUi() {
-        fonts = new Fonts(this);
+        final List<EditProfileSection> sections = new ArrayList<>();
 
-        add = (RelativeLayout) findViewById(R.id.add_container);
-        add.setOnClickListener(this);
+        sections.add(getFirstName());
+        sections.add(getLastName());
+        sections.add(getGraduationYear());
+        sections.add(getMajor());
+        sections.add(getLastHometown());
+        sections.add(getPersonalDescription());
+        sections.add(getSchoolChoiceReason());
+        sections.add(getGoalHeader());
+        sections.add(getGoal1());
+        sections.add(getGoal2());
+        sections.add(getGoal3());
+        sections.add(getEmoji());
 
-        group_container = (LinearLayout) findViewById(R.id.groups);
-        group_container.removeAllViews();
-
-        parent = (NestedScrollView) findViewById(R.id.content_edit_profile);
-        profile_pic_label = (TextView) findViewById(R.id.profile_picture_label);
-        profile_pic_label.setTypeface(fonts.AzoSansRegular);
-        year_label = (TextView) findViewById(R.id.year_label);
-        year_label.setTypeface(fonts.AzoSansRegular);
-        major_label = (TextView) findViewById(R.id.major_label);
-        major_label.setTypeface(fonts.AzoSansRegular);
-        hometown_label = (TextView) findViewById(R.id.hometown_label);
-        hometown_label.setTypeface(fonts.AzoSansRegular);
-        description_label = (TextView) findViewById(R.id.description_label);
-        description_label.setTypeface(fonts.AzoSansRegular);
-        fname_label = (TextView) findViewById(R.id.fname_label);
-        fname_label.setTypeface(fonts.AzoSansRegular);
-        lname_label = (TextView) findViewById(R.id.lname_label);
-        lname_label.setTypeface(fonts.AzoSansRegular);
-        group_label = (TextView) findViewById(R.id.groups_label);
-        group_label.setTypeface(fonts.AzoSansRegular);
-        year_in = (EditText) findViewById(R.id.year_in);
-        year_in.setTypeface(fonts.AzoSansRegular);
-        year_in.setText(info.getYear());
-        year_in.setTextColor(fname_label.getTextColors());
-        major_in = (EditText) findViewById(R.id.major_in);
-        major_in.setTypeface(fonts.AzoSansRegular);
-        major_in.setText(info.getMajor());
-        major_in.setTextColor(fname_label.getTextColors());
-        hometown_in = (EditText) findViewById(R.id.hometown_in);
-        hometown_in.setTypeface(fonts.AzoSansRegular);
-        hometown_in.setText(info.getHometown());
-        hometown_in.setTextColor(fname_label.getTextColors());
-        description_in = (EditText) findViewById(R.id.description_in);
-        description_in.setTypeface(fonts.AzoSansRegular);
-        description_in.setText(info.getDescription());
-        description_in.setTextColor(fname_label.getTextColors());
-        fname_in = (EditText) findViewById(R.id.fname_in);
-        fname_in.setTypeface(fonts.AzoSansRegular);
-        fname_in.setText(info.getFirst_name());
-        fname_in.setTextColor(fname_label.getTextColors());
-        lname_in = (EditText) findViewById(R.id.lname_in);
-        lname_in.setTypeface(fonts.AzoSansRegular);
-        lname_in.setText(info.getLast_name());
-        lname_in.setTextColor(fname_label.getTextColors());
-        profile_pic = (CircleImageView) findViewById(R.id.profile_image_in);
-
-        Log.d("picdata", "url: " + info.getProfile_url());
-        if(info.getProfile_url() != null && !info.getProfile_url().equals("")) {
-            Picasso.with(this) //Context
-                    .load(info.getProfile_url()) //URL/FILE
-                    .into(profile_pic);//an ImageView Object to show the loaded image;
-        }
-
-        profile_pic.setOnClickListener(this);
-
-       showUserGroups();
+        render(sections);
     }
 
-    private void showUserGroups(){
-        for(String key : info.getGroups()){
-            api.getGroup(new WallaApi.OnDataReceived() {
+    private void render(final List<EditProfileSection> sections) {
+        final Fonts fonts = new Fonts(this);
+        final LinearLayout mSectionContainer = (LinearLayout) findViewById(R.id.section_container);
+
+
+        for (final EditProfileSection section : sections) {
+            final RelativeLayout row = (RelativeLayout) getLayoutInflater()
+                    .inflate(R.layout.edit_profile_row, null, false);
+
+            final TextView title = (TextView) row.findViewById(R.id.field_title);
+            final TextView description = (TextView) row.findViewById(R.id.field_description);
+            final TextView charCount = (TextView) row.findViewById(R.id.char_counter);
+            final EditText action = (EditText) row.findViewById(R.id.field_action);
+
+            applyFont(fonts.AzoSansRegular, title, description, action);
+            title.setText(section.getTitle());
+            if (section.getDescription().isPresent()) {
+                description.setText(section.getDescription().get());
+            } else {
+                description.setVisibility(View.GONE);
+            }
+
+            if (section.getOnFinishAction() == null) {
+                action.setVisibility(View.GONE);
+            } else {
+                action.setVisibility(View.VISIBLE);
+            }
+
+            if (section.isShowCharCount()) {
+                charCount.setText("0/100 chars");
+                action.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        charCount.setText(String.format("%d/100 chars",
+                                action.getText().toString().length()));
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                });
+            } else {
+                charCount.setVisibility(View.GONE);
+            }
+
+            if (section.getHintText().isPresent()) {
+                action.setHint(section.getHintText().get());
+            }
+
+            action.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void onDataReceived(Object data, int call) {
-                    GroupInfo group = (GroupInfo) data;
-                    addGroupToList(group);
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        section.getOnFinishAction().onFinishAction(action.getText().toString());
+                    }
                 }
-            }, key);
+            });
+
+            mSectionContainer.addView(row);
         }
     }
 
-    private void addGroupToList(final GroupInfo group) {
-        final View view = LayoutInflater.from(this).inflate(R.layout.single_group_v3, null);
-        TextView groupName = (TextView) view.findViewById(R.id.group_name);
-        groupName.setTypeface(fonts.AzoSansRegular);
-        groupName.setText(group.getName());
-
-        ImageButton removeGroup = (ImageButton) view.findViewById(R.id.remove_group);
-        removeGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                api.leaveGroup(auth.getCurrentUser().getUid(), group.getGuid());
-                view.setVisibility(View.GONE);
-            }
-        });
-
-        group_container.addView(view);
+    private void applyFont(final Typeface font, final TextView...textViews) {
+        for (TextView textView : textViews) {
+            textView.setTypeface(font);
+        }
     }
 
-    private void chooseProfilePicture() {
-        showImageSourceOptions();
-    }
-
-    private void showImageSourceOptions() {
-        new AlertDialog.Builder(this)
-                .setTitle("Profile Picture")
-                .setItems(sourceOptions, this)
-                .setCancelable(true)
-                .create()
-                .show();
-    }
-
-    private void takePhoto() {
-        Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(camIntent, CAMERA_INTENT_RESULT);
-    }
-
-    private void openGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_INTENT_RESULT);
-    }
-
-    private void setProfilePic(Bitmap bmp){
-        profile_pic.setImageBitmap(bmp);
-        Utility.initApi(this);
-        Utility.saveProfilePic(bmp, auth.getCurrentUser().getUid());
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == CAMERA_INTENT_RESULT) {
-                try {
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    setProfilePic(bitmap);
-                } catch (Exception e) {
-                    Toast.makeText(this, "Error retrieving picture", Toast.LENGTH_LONG).show();
+    private EditProfileSection getFirstName() {
+        return new EditProfileSection(
+                "First name",
+                Optional.<String>absent(),
+                false,
+                Optional.of("Judy"),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        WallaApi.saveUserFirstName(auth.getCurrentUser().getUid(), data);
+                    }
                 }
-            } else if (requestCode == GALLERY_INTENT_RESULT) {
-                Uri uri = data.getData();
+        );
+    }
 
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                    setProfilePic(bitmap);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(this, "Error retrieving picture", Toast.LENGTH_LONG).show();
+    private EditProfileSection getLastName() {
+        return new EditProfileSection(
+                "Last name",
+                Optional.<String>absent(),
+                false,
+                Optional.of("Zhang"),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        WallaApi.saveUserLastName(auth.getCurrentUser().getUid(), data);
+                    }
                 }
-            }
-        } else {
-            Toast.makeText(this, "Error retrieving picture", Toast.LENGTH_LONG).show();
-        }
+        );
     }
 
-    private void saveData(){
-        api.saveUserFirstName(info.getUid(), fname_in.getText().toString());
-        api.saveUserLastName(info.getUid(), lname_in.getText().toString());
-        api.saveUserAcademicLevel(info.getUid(), year_in.getText().toString());
-        api.saveUserMajor(info.getUid(), major_in.getText().toString());
-        api.saveUserHometown(info.getUid(), hometown_in.getText().toString());
-        api.saveUserDescription(info.getUid(), description_in.getText().toString());
-        //api.saveUserProfileImageUrl(info.getUid(), "");
+    private EditProfileSection getGraduationYear() {
+        return new EditProfileSection(
+                "Graduation year",
+                Optional.<String>absent(),
+                false,
+                Optional.of("2021"),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        WallaApi.saveUserAcademicLevel(auth.getCurrentUser().getUid(), data);
+                    }
+                }
+        );
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        api.getUserInfo(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                info = (UserInfo) data;
-                initUi();
-            }
-        }, auth.getCurrentUser().getUid());
+    private EditProfileSection getMajor() {
+        return new EditProfileSection(
+                "Major",
+                Optional.<String>absent(),
+                false,
+                Optional.of("Mechanical Engineering"),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        WallaApi.saveUserMajor(auth.getCurrentUser().getUid(), data);
+                    }
+                }
+        );
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.profile_image_in:
-                chooseProfilePicture();
-                break;
-            case R.id.add_container:
-                startActivity(new Intent(this, Search.class));
-                break;
-            default:
-                break;
-        }
+    private EditProfileSection getLastHometown() {
+        return new EditProfileSection(
+                "Where are you from?",
+                Optional.<String>absent(),
+                false,
+                Optional.of("Calgary, Canada"),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        WallaApi.saveUserHometown(auth.getCurrentUser().getUid(), data);
+                    }
+                }
+        );
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        switch (which) {
-            case 0:
-                //take photo
-                takePhoto();
-                break;
-            case 1:
-                //choose from gallery
-                openGallery();
-                break;
-            case 2:
-                //cancel
-                dialog.cancel();
-                break;
-            default:
-                break;
-        }
+    private EditProfileSection getPersonalDescription() {
+        return new EditProfileSection(
+                "Describe yourself in a few sentences.",
+                Optional.<String>absent(),
+                true,
+                Optional.of("I like to play piano and sing with friends. I enjoy reading under trees. I also like to spend my time volunteering to help people who are in need."),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        WallaApi.saveUserDescription(auth.getCurrentUser().getUid(), data);
+                    }
+                }
+        );
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
-        return true;
+    private EditProfileSection getSchoolChoiceReason() {
+        return new EditProfileSection(
+                "Why did you pick Duke?",
+                Optional.<String>absent(),
+                true,
+                Optional.<String>absent(),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        // TODO(anesu): add server call
+                    }
+                }
+        );
+    }
+
+    private EditProfileSection getGoalHeader() {
+        return new EditProfileSection(
+                "What are your goals this year? ",
+                Optional.<String>of("These can be academic, social or personal goals."),
+                false,
+                Optional.<String>absent(),
+                null
+        );
+    }
+
+    private EditProfileSection getGoal1() {
+        return new EditProfileSection(
+                "Goal 1",
+                Optional.<String>absent(),
+                true,
+                Optional.<String>of("ex. Learn a martial art"),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        // TODO(anesu) make server call
+                    }
+                }
+        );
+    }
+
+    private EditProfileSection getGoal2() {
+        return new EditProfileSection(
+                "Goal 2",
+                Optional.<String>absent(),
+                true,
+                Optional.<String>of("ex. Become involved in student politics"),                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        // TODO(anesu) make server call
+                    }
+                }
+        );
+    }
+
+    private EditProfileSection getGoal3() {
+        return new EditProfileSection(
+                "Goal 3",
+                Optional.<String>absent(),
+                true,
+                Optional.<String>of("ex. Volunteer locally"),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        // TODO(anesu) make server call
+                    }
+                }
+        );
+    }
+
+    private EditProfileSection getEmoji() {
+        return new EditProfileSection(
+                "Pick your signature emoji!",
+                Optional.<String>of("Your emoji will be displayed after your  name when you post or comment."),
+                false,
+                Optional.<String>absent(),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        // TODO(anesu) make server call
+                    }
+                }
+        );
     }
 
     @Override
@@ -309,10 +313,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch(id){
-            case R.id.action_save:
-                saveData();
-                break;
+        switch (id) {
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -321,12 +322,5 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         }
 
         return true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        saveData();
-        MainContainer.refresh();
     }
 }
