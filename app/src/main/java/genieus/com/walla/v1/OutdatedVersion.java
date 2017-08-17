@@ -2,14 +2,11 @@ package genieus.com.walla.v1;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import genieus.com.walla.R;
-import genieus.com.walla.v2.activity.LoginScreenEmail;
+import genieus.com.walla.v2.activity.LoginActivity;
 
 public class OutdatedVersion extends AppCompatActivity {
 
@@ -24,6 +21,6 @@ public class OutdatedVersion extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, LoginScreenEmail.class));
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }

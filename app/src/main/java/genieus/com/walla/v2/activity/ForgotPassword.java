@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -94,7 +93,7 @@ public class ForgotPassword extends AppCompatActivity implements View.OnClickLis
     }
 
     private void handleBackClick(){
-        startActivity(new Intent(this, LoginScreenEmail.class));
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     @Override

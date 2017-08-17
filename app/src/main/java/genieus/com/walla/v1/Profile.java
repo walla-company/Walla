@@ -275,7 +275,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener, 
         int id = v.getId();
         if(id == R.id.activities_btn){
             Intent intent = new Intent(this, Activities.class);
-            intent.putExtra("login", false);
+            intent.putExtra("Login", false);
             startActivity(intent);
         }else if(id == R.id.profile_pic){
             showProfilePicDialog();

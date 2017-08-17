@@ -29,7 +29,7 @@ import com.squareup.picasso.Picasso;
 import de.hdodenhof.circleimageview.CircleImageView;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.activity.EditProfile;
-import genieus.com.walla.v2.activity.LoginScreenEmail;
+import genieus.com.walla.v2.activity.LoginActivity;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
 import genieus.com.walla.v2.info.GroupInfo;
@@ -277,7 +277,7 @@ public class UserProfile extends Fragment implements View.OnClickListener{
                 break;
             case R.id.logout:
                 auth.signOut();
-                getActivity().startActivity(new Intent(getActivity(), LoginScreenEmail.class));
+                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                 break;
             default:
                 break;

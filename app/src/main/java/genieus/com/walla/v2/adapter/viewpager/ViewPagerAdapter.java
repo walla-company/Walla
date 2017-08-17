@@ -36,7 +36,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return null; //icons only
-        //return mFragmentTitleList.get(position);
+        return null;
     }
 }

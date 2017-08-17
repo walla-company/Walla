@@ -53,11 +53,9 @@ public class Home extends Fragment {
     private static ListView events_lv;
     private InterestsRVAdapter adapter;
     private static EventsLVAdapter adapterEvents;
-    private List<Interests> interests;
     private List<Event> events;
     private static TextView filter_tv;
     private static SwipeRefreshLayout swipeRefreshLayout;
-    private static PopupMenu filterPopup;
 
     private static AlertDialog alert;
     private Fonts fonts;

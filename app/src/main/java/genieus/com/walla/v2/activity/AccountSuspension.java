@@ -45,7 +45,7 @@ public class AccountSuspension extends AppCompatActivity implements View.OnClick
 
     private void logout(){
         auth.signOut();
-        Intent intent = new Intent(this, LoginScreenEmail.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 

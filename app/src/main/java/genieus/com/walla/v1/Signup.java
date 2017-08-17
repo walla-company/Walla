@@ -76,7 +76,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
 
     private void showFeed(boolean first, boolean login){
         Intent intent = new Intent(this, Activities.class);
-        intent.putExtra("login", login);
+        intent.putExtra("Login", login);
         intent.putExtra("first", first);
 
 

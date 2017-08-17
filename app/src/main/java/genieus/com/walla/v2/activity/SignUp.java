@@ -28,11 +28,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import genieus.com.walla.R;
-import genieus.com.walla.v1.OutdatedVersion;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.DomainInfo;
 import genieus.com.walla.v2.info.Fonts;
-import genieus.com.walla.v2.info.Utility;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener, OnCompleteListener<AuthResult>, OnFailureListener {
     private EditText password, fname, lname;
@@ -234,7 +232,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, O
     }
 
     private void loginScreen(){
-        startActivity(new Intent(this, LoginScreenEmail.class));
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     @Override

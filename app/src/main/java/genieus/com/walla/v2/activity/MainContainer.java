@@ -80,7 +80,7 @@ public class MainContainer extends AppCompatActivity
 
         auth = FirebaseAuth.getInstance();
         if (!isLoggedIn()) {
-            startActivity(new Intent(this, LoginScreenEmail.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
 
@@ -110,7 +110,7 @@ public class MainContainer extends AppCompatActivity
             initUi();
         }catch(Exception e){
             Log.e("error handled", e.toString());
-            startActivity(new Intent(this, LoginScreenEmail.class));
+            startActivity(new Intent(this, LoginActivity.class));
         }
     }
 
@@ -121,7 +121,7 @@ public class MainContainer extends AppCompatActivity
     private void initUi() {
         fonts = new Fonts(this);
         if (auth == null || auth.getCurrentUser() == null) {
-            startActivity(new Intent(this, LoginScreenEmail.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
 
@@ -431,7 +431,7 @@ public class MainContainer extends AppCompatActivity
 
     private void logout() {
         auth.signOut();
-        startActivity(new Intent(this, LoginScreenEmail.class));
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     private void contactWalla() {

@@ -182,7 +182,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".v2.activity.LoginScreenEmail"
+            android:name=".v2.activity.LoginActivity"
             android:label="@string/title_activity_login_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -87,7 +87,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
     private void showFeed(){
         Intent intent = new Intent(this, Activities.class);
-        intent.putExtra("login", true);
+        intent.putExtra("Login", true);
         startActivity(intent);
     }
 
@@ -201,6 +201,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     public void onBackPressed() {
-        //nothing happens if back pressed on login screen
+        //nothing happens if back pressed on Login screen
     }
 }
