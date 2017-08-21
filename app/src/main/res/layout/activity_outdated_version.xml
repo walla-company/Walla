@@ -16,5 +16,4 @@
 
     <include layout="@layout/content_outdated_version" />
 
-
 </android.support.design.widget.CoordinatorLayout>

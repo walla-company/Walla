@@ -8,7 +8,7 @@
     android:background="@color/white"
     android:padding="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="genieus.com.walla.v2.activity.EditProfile"
+    tools:context="genieus.com.walla.v2.ui.EditProfile"
     tools:showIn="@layout/activity_edit_profile">
 
     <LinearLayout

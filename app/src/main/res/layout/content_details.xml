@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#EDEDED"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="genieus.com.walla.v2.activity.Details"
+    tools:context="genieus.com.walla.v2.ui.ActivityThread"
     tools:showIn="@layout/activity_details">
 
     <FrameLayout
@@ -405,7 +405,6 @@
                         android:id="@+id/show_on_map_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@id/location_label"
                         android:layout_alignParentRight="true"
                         android:paddingRight="8dp"
                         android:text="show on map"
@@ -507,7 +506,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_centerVertical="true"
-                            android:src="@color/LightGrey" />
+                            android:src="@color/lightGray" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -779,7 +778,7 @@
                             android:id="@+id/host_image1"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@color/LightGrey" />
+                            android:src="@color/lightGray" />
 
                         <TextView
                             android:id="@+id/host_name1"
@@ -862,7 +861,7 @@
                             android:id="@+id/host_image2"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@color/LightGrey" />
+                            android:src="@color/lightGray" />
 
 
                         <TextView

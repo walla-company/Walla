@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="genieus.com.walla.v2.fragment.UserProfile">
+    tools:context="genieus.com.walla.v2.fragments.UserProfile">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:layout_margin="4dp"
-                    android:src="@color/LightGrey" />
+                    android:src="@color/lightGray" />
 
                 <ImageButton
                     android:id="@+id/edit"

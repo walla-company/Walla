@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import genieus.com.walla.v2.info.DomainInfo;
-import genieus.com.walla.v2.info.Event;
-import genieus.com.walla.v2.info.GroupInfo;
-import genieus.com.walla.v2.info.MessageInfo;
-import genieus.com.walla.v2.info.NotificationInfo;
-import genieus.com.walla.v2.info.User;
+import genieus.com.walla.v2.datatypes.Domain;
+import genieus.com.walla.v2.datatypes.Event;
+import genieus.com.walla.v2.datatypes.Group;
+import genieus.com.walla.v2.datatypes.Message;
+import genieus.com.walla.v2.datatypes.NotificationInfo;
+import genieus.com.walla.v2.datatypes.User;
 
 /**
  * Created by anesu on 12/25/16.
@@ -198,13 +198,13 @@ public class WallaApi {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                List<DomainInfo> domains = new ArrayList<>();
+                List<Domain> domains = new ArrayList<>();
                 Iterator<String> keys = response.keys();
                 while (keys.hasNext()) {
                     String key = keys.next();
                     try {
                         JSONObject data = response.getJSONObject(key);
-                        domains.add(new DomainInfo(key, data.getString("domain"), data.getString("full_name")));
+                        domains.add(new Domain(key, data.getString("domain"), data.getString("full_name")));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -377,7 +377,7 @@ public class WallaApi {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                GroupInfo group = new GroupInfo();
+                Group group = new Group();
 
                 try {
                     group.setName(response.getString("name"));
@@ -1241,13 +1241,13 @@ public class WallaApi {
         final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                List<GroupInfo> groups = new ArrayList<>();
+                List<Group> groups = new ArrayList<>();
                 Log.d("groupdata", response.toString());
                 for(int i = 0; i < response.length(); i++){
                     try {
                         JSONObject groupObj = response.getJSONObject(i);
 
-                        GroupInfo group = new GroupInfo();
+                        Group group = new Group();
                         group.setName(groupObj.getString("name"));
                         group.setAbbr((groupObj.getString("short_name")));
                         group.setColor(groupObj.getString("color"));
@@ -1545,14 +1545,14 @@ public class WallaApi {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("commentdata", response.toString());
-                List<MessageInfo> list = new ArrayList<>();
+                List<Message> list = new ArrayList<>();
 
                 JSONObject message;
                 Iterator<String> keys = response.keys();
                 while(keys.hasNext()){
                     try {
                         message = response.getJSONObject(keys.next());
-                        MessageInfo info = new MessageInfo(message.getString("user_id"), message.getString("text"));
+                        Message info = new Message(message.getString("user_id"), message.getString("text"));
                         list.add(info);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1627,7 +1627,7 @@ public class WallaApi {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                List<GroupInfo> list = new ArrayList<>();
+                List<Group> list = new ArrayList<>();
 
                 JSONObject grp;
                 Iterator<String> k = response.keys();
@@ -1635,7 +1635,7 @@ public class WallaApi {
                     try {
                         String key = k.next();
                         grp = response.getJSONObject(key);
-                        GroupInfo group = new GroupInfo();
+                        Group group = new Group();
 
                         try {
                             group.setName(grp.getString("name"));

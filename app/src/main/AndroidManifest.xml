@@ -87,12 +87,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service android:name=".v2.info.MyFirebaseMessagingService">
+        <service android:name=".v2.datatypes.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".v2.info.MyFirebaseInstanceidService">
+        <service android:name=".v2.datatypes.MyFirebaseInstanceidService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -108,12 +108,12 @@
         <receiver android:name=".v1.EventReceiver" />
 
         <activity
-            android:name=".v2.activity.Main"
+            android:name=".v2.ui.Main"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".v2.activity.MainContainer"
+            android:name=".v2.ui.MainContainer"
             android:label="@string/title_activity_main_container"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -123,16 +123,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".v2.activity.Search"
-            android:label="@string/title_activity_search"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".v2.activity.Create"
-            android:label="@string/title_activity_create"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -143,56 +133,37 @@
         -->
 
         <activity
-            android:name=".v2.activity.MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".v2.activity.InterestsView"
-            android:label="@string/title_activity_interests_view"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".v2.activity.Group"
-            android:label="@string/title_activity_group"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".v2.activity.Details"
+            android:name=".v2.ui.CreateActivity"
             android:label="@string/title_activity_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".v2.activity.EditProfile"
+            android:name=".v2.ui.ActivityThread"
+            android:label="@string/title_activity_details"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".v2.ui.EditProfile"
             android:label="@string/title_activity_edit_profile"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".v2.activity.Friends"
-            android:label="@string/title_activity_friends"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".v2.activity.ViewProfile"
+            android:name=".v2.ui.ViewProfile"
             android:label="@string/title_activity_profile"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".v2.activity.MyGroups"
-            android:label="@string/title_activity_my_groups"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".v2.activity.LoginActivity"
+            android:name=".v2.ui.LoginActivity"
             android:label="@string/title_activity_login_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".v2.activity.ForgotPassword"
+            android:name=".v2.ui.ForgotPassword"
             android:label="@string/title_activity_forgot_password"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".v2.activity.SignUp"
+            android:name=".v2.ui.SignUp"
             android:label="@string/title_activity_sign_up"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -202,21 +173,13 @@
             android:value="AIzaSyD-S5bGLJ-g-lJN6GmH7UarsVglXGaxBh4" />
 
         <activity
-            android:name=".v2.activity.CreateGroup"
-            android:label="@string/title_activity_create_group"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".v2.activity.AccountSuspension"
+            android:name=".v2.ui.AccountSuspensionAlert"
             android:label="@string/title_activity_account_suspension"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".v2.activity.LoginScreenPassword"
+            android:name=".v2.ui.LoginScreenPassword"
             android:label="@string/title_activity_login_screen_password"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".v2.activity.Onboarding"
-            android:label="@string/title_activity_onboarding"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="genieus.com.walla.v2.fragment.Calendar">
+    tools:context="genieus.com.walla.v2.fragments.Calendar">
 
     <RelativeLayout
         android:layout_margin="16dp"

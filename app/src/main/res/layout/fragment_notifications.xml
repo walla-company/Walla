@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f1f1f1"
-    tools:context="genieus.com.walla.v2.fragment.Notifications">
+    tools:context="genieus.com.walla.v2.fragments.Notifications">
 
     <ListView
         android:id="@+id/info_lv"

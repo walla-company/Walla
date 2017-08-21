@@ -1,8 +1,6 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -18,66 +16,4 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- ViewProfile Activity -->
-    <style name="username_style">
-        <item name="android:textSize">23sp</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-
-    <style name="email">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-
-    <style name="setting_option">
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="filter_title">
-        <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/DarkGray</item>
-    </style>
-
-    <style name="event_category">
-        <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/White</item>
-    </style>
-
-    <style name="event_time">
-        <item name="android:textSize">18.5sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="event_title">
-        <item name="android:textSize">19sp</item>
-    </style>
-
-    <style name="login_btn">
-        <item name="android:background">@color/DodgerBlue</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">25sp</item>
-    </style>
-
-    <style name="signup">
-        <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/White</item>
-    </style>
-
-    <style name="char_count">
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="interest">
-        <item name="android:textColorHint">@color/colorPrimary</item>
-        <item name="android:textSize">19sp</item>
-    </style>
-
-    <style name="time">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="create_bottom_msgs">
-        <item name="android:textColor">@color/colorPrimary</item>
-    </style>
-
 </resources>

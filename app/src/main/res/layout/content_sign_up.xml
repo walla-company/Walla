@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@mipmap/orangerect"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="genieus.com.walla.v2.activity.SignUp"
+    tools:context="genieus.com.walla.v2.ui.SignUp"
     tools:showIn="@layout/activity_sign_up">
 
     <RelativeLayout

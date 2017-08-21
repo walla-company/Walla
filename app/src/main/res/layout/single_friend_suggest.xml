@@ -13,7 +13,7 @@
         android:layout_height="70dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
-        android:src="@color/LightGrey" />
+        android:src="@color/lightGray" />
 
     <TextView
         android:id="@+id/name"

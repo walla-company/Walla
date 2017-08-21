@@ -10,7 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="genieus.com.walla.v1.OutdatedVersion"
     tools:showIn="@layout/activity_outdated_version">
 
     <RelativeLayout
@@ -40,8 +39,6 @@
                 android:textSize="27sp" />
 
         </RelativeLayout>
-
-
 
     </RelativeLayout>
 

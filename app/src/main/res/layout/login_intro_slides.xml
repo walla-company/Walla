@@ -57,7 +57,7 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
 
-        <genieus.com.walla.v2.ui.DotIndicatorView
+        <genieus.com.walla.v2.customviews.DotIndicatorView
             android:id="@+id/dot_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
