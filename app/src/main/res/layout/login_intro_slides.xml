@@ -1,54 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:background="@color/white"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="24dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:padding="32dp"
+        app:cardCornerRadius="24dp">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <ImageView
                 android:id="@+id/image"
-                android:padding="32dp"
-                android:src="@mipmap/login_slides_1"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_width="match_parent" />
+                android:layout_weight="1"
+                android:src="@mipmap/login_slides_1" />
 
             <TextView
                 android:id="@+id/text"
-                android:textSize="18sp"
-                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="16dp"
+                android:textSize="18sp" />
 
-            <Button
-                android:gravity="end"
-                android:paddingTop="8dp"
-                android:id="@+id/action"
-                android:paddingRight="16dp"
-                android:layout_margin="8dp"
-                android:layout_gravity="end"
-                android:textSize="18sp"
-                android:textColor="@color/DodgerBlue"
-                android:background="@android:color/transparent"
-                android:text="NEXT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <Button
+            android:id="@+id/action_skip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="left"
+            android:text="SKIP"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <genieus.com.walla.v2.ui.DotIndicatorView
+            android:id="@+id/dot_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            app:totalDots="3" />
+
+        <Button
+            android:id="@+id/action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="right"
+            android:text="NEXT"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

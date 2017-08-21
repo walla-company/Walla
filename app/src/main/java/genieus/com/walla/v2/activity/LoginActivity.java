@@ -17,18 +17,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.ProviderQueryResult;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.ui.DotIndicatorView;
 
 public class LoginActivity extends AppCompatActivity {
     private final Pattern VALID_EMAIL_ADDRESS_REGEX =
@@ -41,6 +39,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.more)
     TextView learnMore;
+
+    @BindView(R.id.action_skip)
+    Button actionSkip;
 
     @BindView(R.id.login_container)
     LinearLayout loginContainer;
@@ -63,6 +64,9 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.email)
     EditText email;
 
+    @BindView(R.id.dot_view)
+    DotIndicatorView dotView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +83,8 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @OnClick(R.id.login)
+
+    @OnClick({R.id.login, R.id.action_skip})
     public void showEmailLogin() {
         loginContainer.setVisibility(View.GONE);
         loginSlides.setVisibility(View.GONE);
@@ -113,18 +118,21 @@ public class LoginActivity extends AppCompatActivity {
 
         switch (currentSlide) {
             case 1:
-                action.setText("NEXT");
                 slideText.setText(getResources().getString(R.string.slide_text_1));
                 slideImage.setImageDrawable(getResources().getDrawable(R.mipmap.login_slides_1));
+                dotView.setActiveDot(1);
+                actionSkip.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 slideText.setText(getResources().getString(R.string.slide_text_2));
                 slideImage.setImageDrawable(getResources().getDrawable(R.mipmap.walla_baketball));
+                dotView.setActiveDot(2);
                 break;
             case 3:
                 slideText.setText(getResources().getString(R.string.slide_text_3));
                 slideImage.setImageDrawable(getResources().getDrawable(R.mipmap.walla_heart));
-                action.setText("GET STARTED");
+                dotView.setActiveDot(3);
+                actionSkip.setVisibility(View.INVISIBLE);
                 break;
             default:
                 break;
