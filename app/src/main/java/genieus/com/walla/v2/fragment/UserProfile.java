@@ -1,301 +1,203 @@
 package genieus.com.walla.v2.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.net.Uri;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.google.common.base.Optional;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.squareup.picasso.Picasso;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import genieus.com.walla.R;
-import genieus.com.walla.v2.activity.EditProfile;
-import genieus.com.walla.v2.activity.LoginActivity;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.Fonts;
-import genieus.com.walla.v2.info.GroupInfo;
 import genieus.com.walla.v2.info.User;
+import genieus.com.walla.v2.info.Utility;
+import genieus.com.walla.v2.utils.ImageUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UserProfile.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UserProfile#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class UserProfile extends Fragment implements View.OnClickListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class UserProfile extends Fragment {
+    @BindView(R.id.basic_info)
+    LinearLayout basicInfoContainer;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @BindView(R.id.more_info)
+    LinearLayout moreInfoContainer;
 
-    private WallaApi api;
-    private Fonts fonts;
-    private FirebaseAuth auth;
-    private User user;
+    @BindView(R.id.profile_picture)
+    ImageView profileIcon;
 
-    private View view;
-    private TextView edit, contact, logout, name, major, year, hometown, desc;
-    private LinearLayout groupsContainer;
-    private CircleImageView image;
-    private static GroupInfo lastGroup;
+    private User mUser;
 
-    private OnFragmentInteractionListener mListener;
+    private void initUi() {
+        WallaApi.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                if (data instanceof User) {
+                    mUser = (User) data;
 
-    private void initUi(){
-        fonts = new Fonts(getContext());
-
-        edit = (TextView) view.findViewById(R.id.edit_profile);
-        edit.setTypeface(fonts.AzoSansRegular);
-        edit.setOnClickListener(this);
-
-        contact = (TextView) view.findViewById(R.id.contact);
-        contact.setTypeface(fonts.AzoSansRegular);
-        contact.setOnClickListener(this);
-
-        logout = (TextView) view.findViewById(R.id.logout);
-        logout.setTypeface(fonts.AzoSansRegular);
-        logout.setOnClickListener(this);
-
-        image = (CircleImageView) view.findViewById(R.id.profile_picture);
-        setImage(image, user.getProfile_url());
-
-        name = (TextView) view.findViewById(R.id.name);
-        name.setTypeface(fonts.AzoSansRegular);
-        name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
-
-        major = (TextView) view.findViewById(R.id.major);
-        major.setTypeface(fonts.AzoSansRegular);
-        major.setText(user.getMajor());
-
-        year = (TextView) view.findViewById(R.id.year);
-        year.setTypeface(fonts.AzoSansRegular);
-        year.setText(user.getYear());
-
-        hometown = (TextView) view.findViewById(R.id.hometowen);
-        hometown.setTypeface(fonts.AzoSansRegular);
-        hometown.setText(user.getHometown());
-
-        desc = (TextView) view.findViewById(R.id.details_in);
-        desc.setTypeface(fonts.AzoSansRegular);
-        desc.setText(user.getDescription());
-
-        groupsContainer = (LinearLayout) view.findViewById(R.id.group_container);
-        showUserGroups();
-    }
-
-    private void showUserGroups(){
-        for(String key : user.getGroups()){
-            api.getGroup(new WallaApi.OnDataReceived() {
-                @Override
-                public void onDataReceived(Object data, int call) {
-                    GroupInfo group = (GroupInfo) data;
-                    if(lastGroup != null && !group.equals(lastGroup)){
-                        initAndAttachGroup(getGroupView(), group);
-                    }
-
-                    lastGroup = group;
+                    loadProfileIcon();
+                    loadUserBasicInfo();
+                    loadUserMoreInfo();
                 }
-            }, key);
-        }
-    }
-
-    private View getGroupView(){
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.single_group_profile, null);
-        return view;
-    }
-
-    private void initAndAttachGroup(View view, GroupInfo group){
-        TextView abbr = (TextView) view.findViewById(R.id.abbr);
-        abbr.setTypeface(fonts.AzoSansRegular);
-        TextView name = (TextView) view.findViewById(R.id.title_group);
-        name.setTypeface(fonts.AzoSansRegular);
-
-        RelativeLayout container = (RelativeLayout) view.findViewById(R.id.group_icon_container);
-        changeBackgroundColor(container, group.getColor());
-
-        abbr.setText(group.getAbbr());
-        name.setText(group.getName());
-
-        groupsContainer.addView(view);
-    }
-
-    private void changeBackgroundColor(View view, String color){
-        Drawable background = view.getBackground();
-        if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable)background).getPaint().setColor(Color.parseColor(color));
-        } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable)background).setColor(Color.parseColor(color));
-        } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable)background).setColor(Color.parseColor(color));
-        }
-    }
-
-    private void setImage(final ImageView imageView, String url){
-        if(url != null && !url.equals("")) {
-            if(!url.startsWith("gs://walla-launch.appspot.com")) {
-                Picasso.with(getContext()) //Context
-                        .load(url) //URL/FILE
-                        .into(imageView);//an ImageView Object to show the loaded image;
-            }else{
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                storage.getReferenceFromUrl(url).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if(task.isSuccessful()){
-                            Picasso.with(getContext()) //Context
-                                    .load(task.getResult().toString()) //URL/FILE
-                                    .into(imageView);//an ImageView Object to show the loaded image;
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
             }
+        }, FirebaseAuth.getInstance().getCurrentUser().getUid());
+    }
+
+    private void loadProfileIcon() {
+        ImageUtils.loadImageFromUrl(
+                getContext(),
+                profileIcon,
+                Optional.of(mUser.getProfileUrl())
+        );
+    }
+
+    private void loadUserMoreInfo() {
+        // TODO(anesu): Add strings to R.strings
+        moreInfoContainer.addView(
+                getMoreInfoView(getString(R.string.about_me), mUser.getDescription())
+        );
+
+        // TODO(anesu): add field
+        moreInfoContainer.addView(
+                getMoreInfoView(getString(R.string.why_school), "")
+        );
+
+        // TODO(anesu): add field
+        moreInfoContainer.addView(
+                getMoreInfoView(getString(R.string.want_to_meet), "")
+        );
+
+        moreInfoContainer.addView(
+                getMoreInfoView("My 3 goals for this year are…", "")
+        );
+    }
+
+    private View getMoreInfoView(final String title, final String content) {
+        final LinearLayout container = new LinearLayout(getContext());
+        container.setOrientation(LinearLayout.VERTICAL);
+        final int padding = Utility.dpToPx(16);
+        container.setPadding(padding, padding, padding, padding);
+
+        final TextView headerView = new TextView(getContext());
+        final TextView contentView = new TextView(getContext());
+
+        headerView.setTextColor(getResources().getColor(R.color.colorPrimary));
+        headerView.setTypeface(Fonts.AzoSansMedium);
+        headerView.setText(title);
+        headerView.setTextSize(16);
+        container.addView(headerView);
+
+        final LinearLayout.LayoutParams contentViewParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        int marginTop = Utility.dpToPx(8);
+        contentViewParams.setMargins(0, marginTop, 0, 0);
+        contentView.setLayoutParams(contentViewParams);
+        contentView.setTextSize(16);
+        container.addView(contentView);
+
+        if (content == null || content.isEmpty()) {
+            contentView.setText(R.string.no_response_entered);
+            contentView.setTypeface(Fonts.AzoSansRegular, Typeface.ITALIC);
+        } else {
+            contentView.setText(content);
+            contentView.setTypeface(Fonts.AzoSansRegular);
+            contentView.setTextColor(Color.BLACK);
         }
+
+        return container;
     }
 
-    private void contactWalla() {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:hollawalladuke@gmail.com"));
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Walla Customer Service");
+    private void loadUserBasicInfo() {
+        basicInfoContainer.addView(
+                getNameTextView(String.format("%s %s", mUser.getFirstName(), mUser.getLastName()))
+        );
 
-        startActivity(Intent.createChooser(intent, "Send Email"));
+        if (mUser.getYear() != null && !mUser.getYear().isEmpty()) {
+            basicInfoContainer.addView(
+                    getBasicInfoTextView(mUser.getYear())
+            );
+        }
+
+        if (mUser.getMajor() != null && !mUser.getMajor().isEmpty()) {
+            basicInfoContainer.addView(
+                    getBasicInfoTextView(mUser.getMajor())
+            );
+        }
+
+        if (mUser.getHometown() != null && !mUser.getHometown().isEmpty()) {
+            basicInfoContainer.addView(
+                    getBasicInfoTextView(String.format("From %s", mUser.getHometown()))
+            );
+        }
+
+        // TODO(anesu): Add brownie points
     }
+
+    private TextView getBasicInfoTextView(final String text) {
+        final TextView textView = new TextView(getContext());
+        textView.setTypeface(Fonts.AzoSansMedium);
+        textView.setText(text);
+
+        return textView;
+    }
+
+    private TextView getNameTextView(final String text) {
+        final TextView textView = new TextView(getContext());
+        textView.setTypeface(Fonts.AzoSansMedium);
+        textView.setTextSize(18);
+        textView.setText(text);
+
+        textView.setPadding(0, 0, 0, 16);
+
+        return textView;
+    }
+
 
     public UserProfile() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserProfile.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UserProfile newInstance(String param1, String param2) {
-        UserProfile fragment = new UserProfile();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static UserProfile newInstance() {
+        return new UserProfile();
+    }
+
+    @OnClick
+    public void OnEditProfileIconClicked() {
+        // TODO(anesu): implement
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
-        this.view = view;
-
-        auth = FirebaseAuth.getInstance();
-        api = WallaApi.getInstance(getContext());
-        api.getUserInfo(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                user = (User) data;
-                initUi();
-            }
-        }, auth.getCurrentUser().getUid());
+        final View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        ButterKnife.bind(this, view);
+        initUi();
 
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id){
-            case R.id.edit_profile:
-                getActivity().startActivity(new Intent(getActivity(), EditProfile.class));
-                break;
-            case R.id.contact:
-                contactWalla();
-                break;
-            case R.id.logout:
-                auth.signOut();
-                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

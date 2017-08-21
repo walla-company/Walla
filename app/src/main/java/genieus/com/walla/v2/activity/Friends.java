@@ -93,8 +93,8 @@ public class Friends extends AppCompatActivity implements FriendsLVAdapter.OnFri
                 @Override
                 public void onDataReceived(Object data, int call) {
                     User friend = (User) data;
-                    list.add(new FriendInfo(String.format("%s %s", friend.getFirst_name(), friend.getLast_name()),
-                            friend.getYear(), friend.getMajor(), friend.getProfile_url(), nuid));
+                    list.add(new FriendInfo(String.format("%s %s", friend.getFirstName(), friend.getLastName()),
+                            friend.getYear(), friend.getMajor(), friend.getProfileUrl(), nuid));
 
                     adapter.notifyDataSetChanged();
                 }

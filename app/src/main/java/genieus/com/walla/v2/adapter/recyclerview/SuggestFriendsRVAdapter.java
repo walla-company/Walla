@@ -86,16 +86,16 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
             }
         });
 
-        holder.name.setText(String.format("%s %s", info.getFirst_name(), info.getLast_name()));
+        holder.name.setText(String.format("%s %s", info.getFirstName(), info.getLastName()));
         holder.mutualFriends.setVisibility(View.GONE);
-        if(info.getProfile_url() != null && !info.getProfile_url().equals("")) {
-            if(!info.getProfile_url().startsWith("gs://walla-launch.appspot.com")) {
+        if(info.getProfileUrl() != null && !info.getProfileUrl().equals("")) {
+            if(!info.getProfileUrl().startsWith("gs://walla-launch.appspot.com")) {
                 Picasso.with(context) //Context
-                        .load(info.getProfile_url()) //URL/FILE
+                        .load(info.getProfileUrl()) //URL/FILE
                         .into(holder.icon);//an ImageView Object to show the loaded image;
             }else{
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                storage.getReferenceFromUrl(info.getProfile_url()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                storage.getReferenceFromUrl(info.getProfileUrl()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if(task.isSuccessful()){
@@ -117,7 +117,7 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
 
     private User getUser(List<User> list, String query){
         for(User group : list){
-            if((group.getFirst_name() + " " + group.getLast_name()).equals(query)){
+            if((group.getFirstName() + " " + group.getLastName()).equals(query)){
                 return group;
             }
         }
@@ -162,7 +162,7 @@ public class SuggestFriendsRVAdapter extends RecyclerView.Adapter<SuggestFriends
             String filterableString;
 
             for (int i = 0; i < count; i++) {
-                filterableString = list.get(i).getFirst_name() + " " + list.get(i).getLast_name();
+                filterableString = list.get(i).getFirstName() + " " + list.get(i).getLastName();
                 if (filterableString.toLowerCase().contains(filterString)) {
                     nlist.add(filterableString);
                 }

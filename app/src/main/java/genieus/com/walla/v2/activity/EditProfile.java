@@ -23,10 +23,11 @@ import genieus.com.walla.R;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.info.EditProfileSection;
 import genieus.com.walla.v2.info.Fonts;
+import genieus.com.walla.v2.info.User;
 
 public class EditProfile extends AppCompatActivity {
-    private WallaApi api;
     private FirebaseAuth auth;
+    private Optional<User> mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,18 @@ public class EditProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         auth = FirebaseAuth.getInstance();
-        api = WallaApi.getInstance(this);
+        WallaApi.getUserInfo(new WallaApi.OnDataReceived() {
+            @Override
+            public void onDataReceived(Object data, int call) {
+                if (data instanceof User) {
+                    mUser = Optional.of((User) data);
+                } else {
+                    mUser = Optional.absent();
+                }
+
+                initUi();
+            }
+        }, auth.getCurrentUser().getUid());
 
         initUi();
     }
@@ -138,7 +150,7 @@ public class EditProfile extends AppCompatActivity {
                 "First name",
                 Optional.<String>absent(),
                 false,
-                Optional.of("Judy"),
+                Optional.of(mUser.isPresent() ? mUser.get().getFirstName() : "Judy"),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
@@ -153,7 +165,7 @@ public class EditProfile extends AppCompatActivity {
                 "Last name",
                 Optional.<String>absent(),
                 false,
-                Optional.of("Zhang"),
+                Optional.of(mUser.isPresent() ? mUser.get().getLastName() : "Zhang"),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
@@ -168,7 +180,7 @@ public class EditProfile extends AppCompatActivity {
                 "Graduation year",
                 Optional.<String>absent(),
                 false,
-                Optional.of("2021"),
+                Optional.of(mUser.isPresent() ? mUser.get().getYear() : "2021"),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
@@ -183,7 +195,7 @@ public class EditProfile extends AppCompatActivity {
                 "Major",
                 Optional.<String>absent(),
                 false,
-                Optional.of("Mechanical Engineering"),
+                Optional.of(mUser.isPresent() ? mUser.get().getMajor() : "Mechanical Engineering"),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
@@ -198,7 +210,7 @@ public class EditProfile extends AppCompatActivity {
                 "Where are you from?",
                 Optional.<String>absent(),
                 false,
-                Optional.of("Calgary, Canada"),
+                Optional.of(mUser.isPresent() ? mUser.get().getHometown() : "Calgary, Canada"),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
@@ -213,7 +225,7 @@ public class EditProfile extends AppCompatActivity {
                 "Describe yourself in a few sentences.",
                 Optional.<String>absent(),
                 true,
-                Optional.of("I like to play piano and sing with friends. I enjoy reading under trees. I also like to spend my time volunteering to help people who are in need."),
+                Optional.of(mUser.isPresent() ? mUser.get().getDescription() : "I like to play piano and sing with friends. I enjoy reading under trees. I also like to spend my time volunteering to help people who are in need."),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
@@ -225,7 +237,7 @@ public class EditProfile extends AppCompatActivity {
 
     private EditProfileSection getSchoolChoiceReason() {
         return new EditProfileSection(
-                "Why did you pick Duke?",
+                "Why did you choose to attend your school?x",
                 Optional.<String>absent(),
                 true,
                 Optional.<String>absent(),

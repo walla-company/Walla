@@ -47,7 +47,7 @@ import genieus.com.walla.v2.info.MyFirebaseMessagingService;
 import genieus.com.walla.v2.info.User;
 
 public class MainContainer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, UserProfile.OnFragmentInteractionListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, View.OnClickListener {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -129,13 +129,13 @@ public class MainContainer extends AppCompatActivity
                 @Override
                 public void onDataReceived(Object data, int call) {
                     user = (User) data;
-                    name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
+                    name.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
 
 
-                    if (user.getProfile_url() != null && !user.getProfile_url().equals("")) {
+                    if (user.getProfileUrl() != null && !user.getProfileUrl().equals("")) {
                         showWelcomeMessage();
                         Picasso.with(MainContainer.this) //Context
-                                .load(user.getProfile_url()) //URL/FILE
+                                .load(user.getProfileUrl()) //URL/FILE
                                 .into(profile_pic);//an ImageView Object to show the loaded image
                     }
 
@@ -185,11 +185,11 @@ public class MainContainer extends AppCompatActivity
             @Override
             public void onDataReceived(Object data, int call) {
                 user = (User) data;
-                name.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
+                name.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
 
-                if (user.getProfile_url() != null && !user.getProfile_url().equals("")) {
+                if (user.getProfileUrl() != null && !user.getProfileUrl().equals("")) {
                     Picasso.with(context) //Context
-                            .load(user.getProfile_url()) //URL/FILE
+                            .load(user.getProfileUrl()) //URL/FILE
                             .into(profile_pic);//an ImageView Object to show the loaded image
                 }
             }
@@ -203,7 +203,7 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void showWelcomeMessage() {
-        Snackbar snack = Snackbar.make(navigationView, String.format("Welcome %s", user.getFirst_name()), Snackbar.LENGTH_LONG);
+        Snackbar snack = Snackbar.make(navigationView, String.format("Welcome %s", user.getFirstName()), Snackbar.LENGTH_LONG);
         View view = snack.getView();
         TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTypeface(fonts.AzoSansRegular);
@@ -243,7 +243,7 @@ public class MainContainer extends AppCompatActivity
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(Home.newInstance("home", ""), "Home");
         adapter.addFragment(Notifications.newInstance("notifications", ""), "Notifications");
-        adapter.addFragment(UserProfile.newInstance("profile", ""), "Profile");
+        adapter.addFragment(UserProfile.newInstance(), "Profile");
 
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

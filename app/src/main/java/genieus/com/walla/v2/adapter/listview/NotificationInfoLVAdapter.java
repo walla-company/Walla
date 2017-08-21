@@ -106,9 +106,9 @@ public class NotificationInfoLVAdapter extends ArrayAdapter<NotificationInfo> {
                     @Override
                     public void onDataReceived(Object data, int call) {
                         User user = (User) data;
-                        info.setText(String.format("%s %s sent you a friend request", user.getFirst_name(), user.getLast_name()));
+                        info.setText(String.format("%s %s sent you a friend request", user.getFirstName(), user.getLastName()));
 
-                        setImage(pic, user.getProfile_url());
+                        setImage(pic, user.getProfileUrl());
                     }
                 }, notification.getSenderUId());
                 break;

@@ -106,7 +106,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
     private void initUi() {
         progress.setVisibility(View.GONE);
         fonts = new Fonts(this);
-        getSupportActionBar().setTitle(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
+        getSupportActionBar().setTitle(String.format("%s %s", user.getFirstName(), user.getLastName()));
         List<GroupInfo> data = new ArrayList<>();
         events = new ArrayList<>();
         data.add(new GroupInfo("Something Blue Something Borrowed", "SBSB", "#008080"));
@@ -134,7 +134,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
 
         name = (TextView) events_lv.findViewById(R.id.name);
         name.setTypeface(fonts.AzoSansMedium);
-        name.setText(user.getFirst_name() + " " +  user.getLast_name());
+        name.setText(user.getFirstName() + " " +  user.getLastName());
         year = (TextView) events_lv.findViewById(R.id.year);
         year.setTypeface(fonts.AzoSansRegular);
         year.setText(user.getYear());
@@ -169,14 +169,14 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
             add.setText("Add friend");
         }
 
-        if(user.getProfile_url() != null && !user.getProfile_url().equals("")) {
-            if(!user.getProfile_url().startsWith("gs://walla-launch.appspot.com")) {
+        if(user.getProfileUrl() != null && !user.getProfileUrl().equals("")) {
+            if(!user.getProfileUrl().startsWith("gs://walla-launch.appspot.com")) {
                 Picasso.with(ViewProfile.this) //Context
-                        .load(user.getProfile_url()) //URL/FILE
+                        .load(user.getProfileUrl()) //URL/FILE
                         .into(profile_pic);//an ImageView Object to show the loaded image;
             }else{
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                storage.getReferenceFromUrl(user.getProfile_url()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                storage.getReferenceFromUrl(user.getProfileUrl()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if(task.isSuccessful()){
@@ -197,7 +197,7 @@ public class ViewProfile extends AppCompatActivity implements View.OnClickListen
         confirm = new AlertDialog.Builder(this);
         confirm.setTitle("Confirm");
 
-        confirm.setTitle("Are you sure you want to friend " + user.getFirst_name());
+        confirm.setTitle("Are you sure you want to friend " + user.getFirstName());
         confirm.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

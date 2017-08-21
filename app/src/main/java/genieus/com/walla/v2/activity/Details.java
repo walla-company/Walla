@@ -278,11 +278,11 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
             public void onDataReceived(Object data, int call) {
                 User user = (User) data;
 
-                host_name1.setText(user.getFirst_name());
-                host_name2.setText(user.getFirst_name());
+                host_name1.setText(user.getFirstName());
+                host_name2.setText(user.getFirstName());
 
-                setImage(host_image1, user.getProfile_url());
-                setImage(host_image2, user.getProfile_url());
+                setImage(host_image1, user.getProfileUrl());
+                setImage(host_image2, user.getProfileUrl());
             }
         }, event.getHost());
 
@@ -353,8 +353,8 @@ public class Details extends AppCompatActivity implements View.OnClickListener, 
             @Override
             public void onDataReceived(Object data, int call) {
                 User user = (User) data;
-                name.setText(user.getFirst_name());
-                setImage(image, user.getProfile_url());
+                name.setText(user.getFirstName());
+                setImage(image, user.getProfileUrl());
             }
         }, info.getUid());
 

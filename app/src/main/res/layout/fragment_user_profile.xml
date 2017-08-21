@@ -2,198 +2,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f1f1f1"
+    android:background="@color/white"
     tools:context="genieus.com.walla.v2.fragment.UserProfile">
 
-    <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <RelativeLayout
-            android:id="@+id/title_cv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <RelativeLayout
-                android:id="@+id/title_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
-
-
-                <RelativeLayout
-                    android:id="@+id/profile_picture_container"
-                    android:layout_width="85dp"
-                    android:layout_height="110dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profile_picture"
-                        android:layout_width="85dp"
-                        android:layout_height="85dp"
-                        android:src="@color/LightGrey"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/user_info_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_toRightOf="@id/profile_picture_container">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true">
-
-
-                        <TextView
-                            android:id="@+id/name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/year"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/name"
-                            android:layout_marginTop="1dp"
-                            android:maxLines="1"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/major"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/year"
-                            android:layout_marginTop="1dp"
-                            android:maxLines="1"
-                            android:textSize="15sp" />
-
-
-                        <TextView
-                            android:id="@+id/hometowen"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/major"
-                            android:layout_marginTop="1dp"
-                            android:maxLines="1"
-                            android:textSize="15sp" />
-
-                    </RelativeLayout>
-
-
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:id="@+id/group_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/user_info_container"
-                    android:layout_marginTop="12dp"
-                    android:orientation="vertical">
-
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/details_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title_cv"
-            android:background="@color/white"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="8dp">
-
-                <TextView
-                    android:id="@+id/details_in"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
-                    android:gravity="center_vertical"
-                    android:paddingRight="8dp"
-                    android:textSize="17sp" />
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/details_container"
-            android:layout_marginTop="35dp"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
-            <TextView
-                android:id="@+id/edit_profile"
+            <RelativeLayout
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/colorPrimary">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="4dp"
+                    android:src="@color/LightGrey" />
+
+                <ImageButton
+                    android:id="@+id/edit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/circle"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:src="@drawable/ic_create" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/basic_info"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginBottom="1dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:text="Edit Profile"
-                android:textSize="24sp" />
-
-
-            <TextView
-                android:id="@+id/contact"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginBottom="1dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:text="Contact / About"
-                android:textSize="24sp" />
-
-
-            <TextView
-                android:id="@+id/logout"
-                android:textColor="@color/lightred"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginBottom="1dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:text="Log out"
-                android:textSize="24sp" />
-
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:orientation="vertical" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/more_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="32dp"
+            android:orientation="vertical" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

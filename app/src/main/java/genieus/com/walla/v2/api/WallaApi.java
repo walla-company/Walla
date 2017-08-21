@@ -309,8 +309,8 @@ public class WallaApi {
                         }
                     }
                     info.setCalendar(calendar);
-                    info.setFirst_name(response.getString("first_name"));
-                    info.setLast_name(response.getString("last_name"));
+                    info.setFirstName(response.getString("first_name"));
+                    info.setLastName(response.getString("last_name"));
                     info.setProfile_url(response.getString("profile_image_url"));
                     info.setMajor(response.getString("major"));
                     info.setYear(response.getString("academic_level"));
@@ -1331,8 +1331,8 @@ public class WallaApi {
 
                             }
 
-                            info.setFirst_name(userObj.getString("first_name"));
-                            info.setLast_name(userObj.getString("last_name"));
+                            info.setFirstName(userObj.getString("first_name"));
+                            info.setLastName(userObj.getString("last_name"));
                             info.setProfile_url(userObj.getString("profile_image_url"));
                             info.setMajor(userObj.getString("major"));
                             info.setYear(userObj.getString("academic_level"));
@@ -1594,8 +1594,8 @@ public class WallaApi {
                         message = response.getJSONObject(key);
                         User info = new User();
                         info.setUid(key);
-                        info.setFirst_name(message.getString("first_name"));
-                        info.setLast_name(message.getString("last_name"));
+                        info.setFirstName(message.getString("first_name"));
+                        info.setLastName(message.getString("last_name"));
                         info.setProfile_url(message.getString("profile_image_url"));
                         list.add(info);
                     } catch (JSONException e) {

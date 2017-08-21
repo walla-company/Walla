@@ -64,4 +64,8 @@
     <string name="slide_text_1">Welcome to Walla!\nMake the most of your college life\nby getting in the habit of seeking\nmeaningful friendships.</string>
     <string name="slide_text_2">Walla is an open platform you can\npost to whenever you have a brilliant\nhangout idea, and someone will\ntake you up on the invite.</string>
     <string name="slide_text_3">No matter who you are or what you\nwant to do, you belong here.</string>
+    <string name="about_me">About Me</string>
+    <string name="why_school">Why did you pick your school</string>
+    <string name="want_to_meet">Who I\'d like to meet</string>
+    <string name="no_response_entered">No response entered</string>
 </resources>

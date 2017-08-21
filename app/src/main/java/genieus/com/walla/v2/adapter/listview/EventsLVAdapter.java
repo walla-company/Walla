@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.common.base.Optional;
 
@@ -109,12 +108,12 @@ public class EventsLVAdapter extends ArrayAdapter<Event> {
                     ImageUtils.loadImageFromUrl(
                             mContext,
                             ((ImageView) view.findViewById(R.id.icon)),
-                            Optional.of(user.getProfile_url())
+                            Optional.of(user.getProfileUrl())
                     );
 
                     final TextView name = (TextView) view.findViewById(R.id.name);
                     name.setTypeface(Fonts.AzoSansRegular);
-                    name.setText(user.getFirst_name());
+                    name.setText(user.getFirstName());
                 }
             }
         }, event.getHost());
