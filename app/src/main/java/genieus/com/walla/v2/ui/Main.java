@@ -148,11 +148,9 @@ public class Main extends AppCompatActivity implements Home.OnFragmentInteractio
     }
 
     private void setupTabIcons() {
-
         tabLayout.getTabAt(0).setIcon(tabIconsColored[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
-
     }
 
     @Override
@@ -164,7 +162,6 @@ public class Main extends AppCompatActivity implements Home.OnFragmentInteractio
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        filter_icon = menu.findItem(R.id.action_filter);
         return true;
     }
 

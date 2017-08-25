@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -43,20 +46,19 @@ import genieus.com.walla.v2.utils.Fonts;
 import genieus.com.walla.v2.datatypes.MyFirebaseInstanceidService;
 import genieus.com.walla.v2.datatypes.MyFirebaseMessagingService;
 import genieus.com.walla.v2.datatypes.User;
+import genieus.com.walla.v2.utils.ImageUtils;
 
 public class MainContainer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Home.OnFragmentInteractionListener, Calendar.OnFragmentInteractionListener, Notifications.OnFragmentInteractionListener, View.OnClickListener {
-
+        implements Home.OnFragmentInteractionListener,
+        Calendar.OnFragmentInteractionListener,
+        Notifications.OnFragmentInteractionListener {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private com.github.clans.fab.FloatingActionButton fab;
     private static CircleImageView profile_pic;
     private static TextView name;
-    private NavigationView navigationView;
-    private View navHeader;
     private static User user;
 
-    public static MenuItem filter_icon;
     private Fonts fonts;
     private static WallaApi api;
     private static FirebaseAuth auth;
@@ -82,15 +84,6 @@ public class MainContainer extends AppCompatActivity
             finish();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         context = getApplicationContext();
         api = WallaApi.getInstance(this);
 
@@ -107,7 +100,7 @@ public class MainContainer extends AppCompatActivity
         try {
             initUi();
         }catch(Exception e){
-            Log.e("error handled", e.toString());
+            e.printStackTrace();
             startActivity(new Intent(this, LoginActivity.class));
         }
     }
@@ -121,27 +114,8 @@ public class MainContainer extends AppCompatActivity
         if (auth == null || auth.getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
-        } else {
-
-            api.getUserInfo(new WallaApi.OnDataReceived() {
-                @Override
-                public void onDataReceived(Object data, int call) {
-                    user = (User) data;
-                    name.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
-
-
-                    if (user.getProfileUrl() != null && !user.getProfileUrl().equals("")) {
-                        showWelcomeMessage();
-                        Picasso.with(MainContainer.this) //Context
-                                .load(user.getProfileUrl()) //URL/FILE
-                                .into(profile_pic);//an ImageView Object to show the loaded image
-                    }
-
-                }
-            }, auth.getCurrentUser().getUid());
         }
 
-        //check to see if the user is suspended
         api.isUserSuspended(new WallaApi.OnDataReceived() {
             @Override
             public void onDataReceived(Object data, int call) {
@@ -152,17 +126,6 @@ public class MainContainer extends AppCompatActivity
 
             }
         }, auth.getCurrentUser().getUid());
-
-        minVersionListener();
-
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navHeader = navigationView.getHeaderView(0);
-        name = (TextView) navHeader.findViewById(R.id.name);
-        name.setOnClickListener(this);
-        profile_pic = (CircleImageView) navHeader.findViewById(R.id.profile_image);
-        profile_pic.setOnClickListener(this);
-        name.setTypeface(fonts.AzoSansRegular);
 
         tabIcons = new int[]{R.mipmap.ic_home, R.mipmap.ic_notifications, R.mipmap.ic_profile,};
         tabIconsColored = new int[]{R.mipmap.ic_home_c, R.mipmap.ic_notifications_c, R.mipmap.ic_profile_c,};
@@ -201,9 +164,10 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void showWelcomeMessage() {
-        Snackbar snack = Snackbar.make(navigationView, String.format("Welcome %s", user.getFirstName()), Snackbar.LENGTH_LONG);
-        View view = snack.getView();
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        Snackbar snack = Snackbar.make(findViewById(R.id.coordinator_layout),
+                String.format("Welcome back %s", user.getFirstName()), Snackbar.LENGTH_LONG);
+        final View view = snack.getView();
+        final TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTypeface(fonts.AzoSansRegular);
         tv.setTextColor(getResources().getColor(R.color.colorPrimary));
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
@@ -253,7 +217,6 @@ public class MainContainer extends AppCompatActivity
             public void onPageSelected(int position) {
                 switchTabIcons(position);
                 changeActionBarTitle(position);
-                changeTabMenuItems(position);
             }
 
             @Override
@@ -262,40 +225,6 @@ public class MainContainer extends AppCompatActivity
         });
 
         viewPager.setAdapter(adapter);
-    }
-
-    private void minVersionListener() {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("app_settings/min_version/android").addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String minVersion = (String) dataSnapshot.getValue();
-                        if (getVersion().compareTo(minVersion) < 0) {
-                            startActivity(new Intent(MainContainer.this, OutdatedVersion.class));
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w("Cancelled", "getUser:onCancelled", databaseError.toException());
-                        // ...
-                    }
-                });
-    }
-
-    private void changeTabMenuItems(int position) {
-        switch (position) {
-            case 0:
-                filter_icon.setVisible(true);
-                break;
-            case 1:
-                filter_icon.setVisible(false);
-                break;
-            case 2:
-                filter_icon.setVisible(false);
-                break;
-        }
     }
 
     private void changeActionBarTitle(int position) {
@@ -347,32 +276,19 @@ public class MainContainer extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        filter_icon = menu.findItem(R.id.action_filter);
+        menu.findItem(R.id.action_settings)
+                .getIcon()
+                .setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id = item.getItemId();
         switch (id) {
-            case R.id.action_filter:
-                break;
-            case R.id.name:
-                startActivity(new Intent(this, EditProfile.class));
-                break;
-            case R.id.profile_image:
-                startActivity(new Intent(this, EditProfile.class));
-                break;
-            case R.id.all:
-                Home.showFilter("");
-                break;
-            case R.id.today:
-                Home.showFilter("Today");
+            case R.id.action_settings:
+               startActivity(new Intent(this, Settings.class));
                 break;
             default:
                 break;
@@ -383,91 +299,11 @@ public class MainContainer extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.nav_share:
-                shareWalla();
-                break;
-            case R.id.nav_contact:
-                contactWalla();
-                break;
-            case R.id.nav_logout:
-                logout();
-                break;
-            case R.id.nav_terms:
-                showTerms();
-                break;
-            default:
-                break;
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void logout() {
-        auth.signOut();
-        startActivity(new Intent(this, LoginActivity.class));
-    }
-
-    private void contactWalla() {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:hollawalladuke@gmail.com"));
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Walla v" + getVersion() + " Android, Report a Problem");
-
-        startActivity(Intent.createChooser(intent, "Send Email"));
-    }
-
-    private void showTerms() {
-        String url = "https://www.wallasquad.com/terms-and-conditions/";
-        Intent in = new Intent(Intent.ACTION_VIEW);
-        in.setData(Uri.parse(url));
-        startActivity(in);
-    }
-
-    private void shareWalla() {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT,
-                "Hey check out the Walla app at: https://play.google.com/store/apps/details?id=genieus.com.walla");
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
-    }
-
-    private String getVersion() {
-        PackageInfo pInfo = null;
-        try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return "";
-        }
-        String version = pInfo.versionName;
-        return version;
+        super.onBackPressed();
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
 
     }
 }

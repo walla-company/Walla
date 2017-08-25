@@ -5,29 +5,10 @@
     tools:context=".v2.ui.Main">
 
     <item
-        android:id="@+id/action_filter"
-        android:icon="@drawable/ic_filter"
-        android:title="filter"
-        app:showAsAction="always">
-
-        <menu>
-            <item
-                android:id="@+id/all"
-                android:title="Show me all activities" />
-            <item
-                android:id="@+id/today"
-                android:title="Show me today's activities" />
-
-        </menu>
-    </item>
-
-    <item
-        android:visible="false"
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings"
         android:orderInCategory="100"
         android:title="search"
         app:showAsAction="always" />
-
 
 </menu>

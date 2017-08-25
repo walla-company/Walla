@@ -99,15 +99,6 @@
         </service>
 
         <activity
-            android:name=".v1.OutdatedVersion"
-            android:label="@string/title_activity_outdated_version"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <receiver android:name=".v1.NotificationReciever" />
-        <receiver android:name=".v1.EventReceiver" />
-
-        <activity
             android:name=".v2.ui.Main"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
@@ -179,6 +170,11 @@
         <activity
             android:name=".v2.ui.LoginScreenPassword"
             android:label="@string/title_activity_login_screen_password"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".v2.ui.Settings"
+            android:label="@string/settings"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

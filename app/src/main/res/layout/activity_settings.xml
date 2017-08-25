@@ -2,11 +2,11 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="genieus.com.walla.v2.ui.MainContainer">
+    android:id="@+id/coordinator_layout"
+    tools:context="genieus.com.walla.v2.ui.Settings">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,8 +22,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        layout="@layout/app_bar_main_container"
+    <LinearLayout
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/coolGray"
+        android:orientation="vertical"
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

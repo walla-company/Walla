@@ -44,4 +44,5 @@
     <string name="account_suspended">Your account has been suspended</string>
     <string name="invalid_email">Invalid email</string>
     <string name="check_reset">Check for a reset email in your inbox!</string>
+    <string name="settings">Settings</string>
 </resources>
