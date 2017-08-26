@@ -10,169 +10,137 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.base.Optional;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.utils.Fonts;
 
-public class LoginScreenPassword extends AppCompatActivity implements View.OnClickListener {
-    private FirebaseAuth auth;
-    private ImageButton confirm;
-    private TextView explanation;
-    private Fonts fonts;
-    private EditText password;
-    private ProgressDialog loadingDialog;
+public class LoginScreenPassword extends AppCompatActivity {
+    @BindView(R.id.explanation_msg)
+    TextView explanation;
 
-    private static final int LOGIN_SUCCESS = 0;
-    private static final int LOGIN_FAIL = 1;
+    @BindView(R.id.password)
+    EditText passwordView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen_password);
+        ButterKnife.bind(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         initUi();
-
     }
 
     private void initUi() {
-        fonts = new Fonts(this);
-        auth = FirebaseAuth.getInstance();
-        ;
-        password = (EditText) findViewById(R.id.password);
-        password.setTypeface(fonts.AzoSansRegular);
-        password.setFocusableInTouchMode(true);
-        password.requestFocus();
-        password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        Fonts.applyFont(Fonts.AzoSansRegular, passwordView, explanation);
+        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    handleConfirmClick();
-                    handled = true;
+                    onConfirmClick();
                 }
-                return handled;
+                return true;
             }
         });
-
-        confirm = (ImageButton) findViewById(R.id.confirm);
-        confirm.setOnClickListener(this);
-
-        explanation = (TextView) findViewById(R.id.explation_msg);
-        explanation.setTypeface(fonts.AzoSansRegular);
-        explanation.setOnClickListener(this);
-
-        loadingDialog = ProgressDialog.show(this, "", "Authenticating...", true);
-        loadingDialog.cancel();
-
     }
 
-    private boolean isValidPassword(String pass) {
-        if (pass == null || pass.isEmpty()) return false;
-        return true;
+    private boolean isValidPassword(final String password) {
+        return !(password == null || password.isEmpty());
     }
 
-    private void handleConfirmClick() {
-        String emailStr = getEmail();
-        String passStr = password.getText().toString();
-        attemptLogin(emailStr, passStr);
-    }
-
-    private String getEmail(){
-        Bundle extras = getIntent().getExtras();
-
-        String emailStr = "";
-        if (extras != null && extras.containsKey("email")) {
-            emailStr = extras.getString("email");
-        } else {
-            Log.d("email bug", "email not passed in intent");
-        }
-
-        return emailStr;
-    }
-
-    private void handleLoginResult(int state) {
-        switch (state){
-            case LOGIN_SUCCESS:
-                loginSuccess();
-                break;
-            case LOGIN_FAIL:
-                loginFail();
-                break;
-        }
-    }
-
-    private void loginSuccess(){
-        loadingDialog.cancel();
-
-        String emailStr = getEmail();
-        WallaApi api = WallaApi.getInstance(LoginScreenPassword.this);
-        api.resetDomain(emailStr);
-        startActivity(new Intent(LoginScreenPassword.this, MainContainer.class));
-    }
-    private void loginFail(){
-        loadingDialog.cancel();
-        Toast.makeText(LoginScreenPassword.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-    }
-
-    //return true is user exists, false otherwise
-    private void attemptLogin(final String emailStr, final String passStr) {
-        if (!isValidPassword(passStr)) {
-            handleLoginResult(LOGIN_FAIL);
+    @OnClick(R.id.confirm)
+    void onConfirmClick() {
+        final Optional<String> emailOptional = getEmail();
+        if (!emailOptional.isPresent()) {
+            finish();
             return;
         }
 
-        //email was already verified
+        final String password = passwordView.getText().toString();
+        attemptLogin(emailOptional.get(), password);
+    }
 
-        loadingDialog.show();
-        auth.signInWithEmailAndPassword(emailStr, passStr)
+    private Optional<String> getEmail() {
+        final Bundle extras = getIntent().getExtras();
+
+        if (extras != null && extras.containsKey("email")) {
+            return Optional.of(extras.getString("email"));
+        } else {
+            Log.e("email error", "email is required, but not passed in intent");
+            return Optional.absent();
+        }
+    }
+
+    private void onLoginSuccess() {
+        final Optional<String> emailOptional = getEmail();
+        if (emailOptional.isPresent()) {
+            WallaApi.resetDomain(emailOptional.get());
+            startActivity(new Intent(LoginScreenPassword.this, MainContainer.class));
+        } else {
+            finish();
+        }
+    }
+
+    private void onLoginFail() {
+        Toast.makeText(this, "Authentication failed", Toast.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.confirm)
+    void onConfirmClicked() {
+        if (getEmail().isPresent()) {
+            attemptLogin(getEmail().get(), passwordView.getText().toString());
+        } else {
+            finish();
+        }
+    }
+    void attemptLogin(final String email, final String password) {
+        if (!isValidPassword(password)) {
+            onLoginFail();
+            return;
+        }
+
+        final ProgressDialog loadingDialog = ProgressDialog.show(this, "Loging in...", "", true);
+        FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        loadingDialog.cancel();
                         if (task.isSuccessful()) {
-                            handleLoginResult(LOGIN_SUCCESS);
+                            onLoginSuccess();
                         } else {
-                            handleLoginResult(LOGIN_FAIL);
+                            onLoginFail();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        handleLoginResult(LOGIN_FAIL);
-                    }
-                });
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                onLoginFail();
+                loadingDialog.cancel();
+            }
+        });
 
     }
 
-    private void forgotPassword() {
+    @OnClick(R.id.explanation_msg)
+    void onForgotPasswordClicked() {
         startActivity(new Intent(this, ForgotPassword.class));
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.confirm:
-                handleConfirmClick();
-                break;
-            case R.id.explation_msg:
-                forgotPassword();
-                break;
-            default:
-                break;
-        }
     }
 }

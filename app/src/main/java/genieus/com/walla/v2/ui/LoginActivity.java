@@ -67,6 +67,9 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.dot_view)
     DotIndicatorView dotView;
 
+    @BindView(R.id.email_label)
+    TextView emailLabel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initUi() {
         slideText.setTypeface(Fonts.AzoSansRegular);
+        emailLabel.setTypeface(Fonts.AzoSansRegular);
     }
 
     private boolean isValidEmail(String email){

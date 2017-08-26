@@ -148,7 +148,7 @@ public class WallaApi {
         return instance;
     }
 
-    public void resetDomain(String email){
+    public static void resetDomain(String email){
         String domainExt = getDomainFromEmail(email);
         int dot = domainExt.indexOf('.');
         if(dot >= 0)

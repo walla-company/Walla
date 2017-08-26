@@ -92,11 +92,11 @@ public class Settings extends AppCompatActivity {
 
                     }
                 }));
-        mRootView.addView(getMenuRow("Change my password", Optional.<String>absent(), new Action() {
+        mRootView.addView(getMenuRow("Change my passwordView", Optional.<String>absent(), new Action() {
             @Override
             public void call() {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(Settings.this);
-                alert.setTitle("Change my password");
+                alert.setTitle("Change my passwordView");
                 final View passwordModal = getResetPasswordModal();
                 alert.setView(passwordModal);
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -147,7 +147,7 @@ public class Settings extends AppCompatActivity {
         final EditText input = new EditText(Settings.this);
         input.setTag("password_input");
         input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        input.setHint("New password");
+        input.setHint("New passwordView");
         input.setMinimumHeight(Conversions.dpToPx(42));
         input.setPadding(16, 16, 0, 0);
         input.setBackground(getResources().getDrawable(R.drawable.rounded_corners));
@@ -155,7 +155,7 @@ public class Settings extends AppCompatActivity {
         final EditText confirmInput = new EditText(Settings.this);
         confirmInput.setTag("password_confirm");
         confirmInput.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        confirmInput.setHint("Confirm new password");
+        confirmInput.setHint("Confirm new passwordView");
         confirmInput.setMinimumHeight(Conversions.dpToPx(42));
         confirmInput.setPadding(16, 16, 0, 0);
         confirmInput.setBackground(getResources().getDrawable(R.drawable.rounded_corners));
