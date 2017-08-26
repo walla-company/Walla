@@ -30,7 +30,6 @@ import genieus.com.walla.v2.adapters.EventsAdapter;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.datatypes.Event;
 import genieus.com.walla.v2.utils.Fonts;
-import genieus.com.walla.v2.viewholder.FilterViewHolder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -140,91 +139,10 @@ public class Home extends Fragment {
         });
     }
 
-    private void changeColorOfFilters(View view, List<FilterViewHolder> all, int pos) {
-        Drawable background = view.getBackground();
-        if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable) background).getPaint().setColor(getResources().getColor(R.color.colorPrimary));
-        } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable) background).setColor(getResources().getColor(R.color.colorPrimary));
-        } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable) background).setColor(getResources().getColor(R.color.colorPrimary));
-        }
-
-        all.get(pos).label.setTextColor(getResources().getColor(R.color.colorPrimary));
-
-        //String search = event.getName().equals("All") ? "" : event.getName();
-        //filterEvents(search);
-
-        for (int i = 0; i < all.size(); i++) {
-            if (i != pos) {
-                Drawable bg = all.get(i).container1.getBackground();
-                if (bg instanceof ShapeDrawable) {
-                    ((ShapeDrawable) bg).getPaint().setColor(getResources().getColor(R.color.lightGray));
-                } else if (bg instanceof GradientDrawable) {
-                    ((GradientDrawable) bg).setColor(getResources().getColor(R.color.lightGray));
-                } else if (bg instanceof ColorDrawable) {
-                    ((ColorDrawable) bg).setColor(getResources().getColor(R.color.lightGray));
-                }
-
-                all.get(i).label.setTextColor(getResources().getColor(R.color.black));
-            }
-        }
-    }
-
-    public static void showFilter(String query) {
-        filterEvents(query);
-    }
-
-    private static void filterEvents(String query) {
-        if (query.equals("")) filter_tv.setVisibility(View.GONE);
-        else {
-            //filter_tv.setVisibility(View.VISIBLE);
-            //filter_tv.setText(String.format("Showing %s events", query.toLowerCase()));
-        }
-
-        adapterEvents.getFilter().filter(query);
-
-        /*
-        if(adapterEvents.getCount() == 0){
-            filter_tv.setVisibility(View.VISIBLE);
-            if (query.equals(""))
-                filter_tv.setText("There are currently no events");
-            else
-                filter_tv.setText("There are currently no " + query + " events");
-        }
-        */
-
-    }
-
-    private void changeBackgroundColor(View view, int color){
-        Drawable background = view.getBackground();
-        if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable)background).getPaint().setColor(color);
-        } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable)background).setColor(color);
-        } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable)background).setColor(color);
-        }
-    }
-
-    private void changeBackgroundColor(View view, String color) {
-        Drawable background = view.getBackground();
-        if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable) background).getPaint().setColor(Color.parseColor(color));
-        } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable) background).setColor(Color.parseColor(color));
-        } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable) background).setColor(Color.parseColor(color));
-        }
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        createDialogFilter();
 
         events_lv = (ListView) view.findViewById(R.id.events);
         filter_tv = (TextView) view.findViewById(R.id.filter_label);
@@ -241,53 +159,6 @@ public class Home extends Fragment {
 
         initUi();
         return view;
-    }
-
-    private void createDialogFilter() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setCancelable(false)
-                .setPositiveButton("Select Filter", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        filterEvents(currentFilter);
-                    }
-                }).setNeutralButton("No filter", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                filterEvents("");
-            }
-        });
-
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.filter_popup, null);
-        interest_rv = (RecyclerView) view.findViewById(R.id.interests_rv);
-
-        final Button all = (Button) view.findViewById(R.id.all);
-        final Button today = (Button) view.findViewById(R.id.today);
-
-        all.setTypeface(fonts.AzoSansRegular);
-        all.setTransformationMethod(null);
-        today.setTypeface(fonts.AzoSansRegular);
-        today.setTransformationMethod(null);
-
-        all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentFilter = "";
-                changeBackgroundColor(all, getResources().getColor(R.color.colorPrimary));
-                changeBackgroundColor(today, "#f1f1f1");
-            }
-        });
-
-        today.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentFilter = "Today";
-                changeBackgroundColor(today, getResources().getColor(R.color.colorPrimary));
-                changeBackgroundColor(all, "#f1f1f1");
-            }
-        });
-
-        builder.setView(view);
-        alert = builder.create();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

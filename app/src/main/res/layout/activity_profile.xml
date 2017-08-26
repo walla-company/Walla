@@ -21,7 +21,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_profile" />
+   <RelativeLayout
+       android:paddingTop="16dp"
+       android:paddingBottom="16dp"
+       android:layout_marginTop="?attr/actionBarSize"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
 
+       <include layout="@layout/fragment_user_profile" />
+
+   </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

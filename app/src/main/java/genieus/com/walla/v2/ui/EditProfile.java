@@ -105,7 +105,8 @@ public class EditProfile extends AppCompatActivity {
                 charCount.setText("0/100 chars");
                 action.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -114,7 +115,8 @@ public class EditProfile extends AppCompatActivity {
                     }
 
                     @Override
-                    public void afterTextChanged(Editable s) {}
+                    public void afterTextChanged(Editable s) {
+                    }
                 });
             } else {
                 charCount.setVisibility(View.GONE);
@@ -229,7 +231,7 @@ public class EditProfile extends AppCompatActivity {
 
     private EditProfileSection getSchoolChoiceReason() {
         return new EditProfileSection(
-                "Why did you choose to attend your school?x",
+                "Why did you choose to attend your school?",
                 Optional.<String>absent(),
                 true,
                 Optional.<String>absent(),
@@ -261,7 +263,7 @@ public class EditProfile extends AppCompatActivity {
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
-                        // TODO(anesu) make server call
+                        WallaApi.updateUserGoal1(auth.getCurrentUser().getUid(), data);
                     }
                 }
         );
@@ -272,12 +274,13 @@ public class EditProfile extends AppCompatActivity {
                 "Goal 2",
                 Optional.<String>absent(),
                 true,
-                Optional.<String>of("ex. Become involved in student politics"),                new EditProfileSection.Action() {
-            @Override
-            public void onFinishAction(String data) {
-                // TODO(anesu) make server call
-            }
-        }
+                Optional.<String>of("ex. Become involved in student politics"),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        WallaApi.updateUserGoal2(auth.getCurrentUser().getUid(), data);
+                    }
+                }
         );
     }
 
@@ -290,7 +293,7 @@ public class EditProfile extends AppCompatActivity {
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
-                        // TODO(anesu) make server call
+                        WallaApi.updateUserGoal3(auth.getCurrentUser().getUid(), data);
                     }
                 }
         );

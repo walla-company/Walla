@@ -1,6 +1,7 @@
 package genieus.com.walla.v2.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import genieus.com.walla.R;
 import genieus.com.walla.v2.api.WallaApi;
+import genieus.com.walla.v2.ui.EditProfile;
 import genieus.com.walla.v2.utils.Fonts;
 import genieus.com.walla.v2.datatypes.User;
 import genieus.com.walla.v2.utils.Conversions;
@@ -171,9 +173,9 @@ public class UserProfile extends Fragment {
         return new UserProfile();
     }
 
-    @OnClick
+    @OnClick(R.id.edit)
     public void OnEditProfileIconClicked() {
-        // TODO(anesu): implement
+        startActivity(new Intent(getContext(), EditProfile.class));
     }
 
     @Override

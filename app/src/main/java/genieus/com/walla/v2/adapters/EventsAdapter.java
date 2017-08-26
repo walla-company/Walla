@@ -18,6 +18,7 @@ import genieus.com.walla.R;
 import genieus.com.walla.v2.ui.ActivityThread;
 import genieus.com.walla.v2.api.WallaApi;
 import genieus.com.walla.v2.datatypes.Event;
+import genieus.com.walla.v2.ui.ViewProfile;
 import genieus.com.walla.v2.utils.Fonts;
 import genieus.com.walla.v2.datatypes.User;
 import genieus.com.walla.v2.customviews.StateImageView;
@@ -52,16 +53,15 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         final Event event = getItem(position);
 
         final TextView title = (TextView) view.findViewById(R.id.title);
-        title.setTypeface(Fonts.AzoSansMedium);
         title.setText(event.getTitle());
 
         final TextView date = (TextView) view.findViewById(R.id.date);
-        date.setTypeface(Fonts.AzoSansRegular);
         date.setText(event.getStringDate(event.getStart_time()));
 
         final TextView time = (TextView) view.findViewById(R.id.time);
-        time.setTypeface(Fonts.AzoSansRegular);
         time.setText(event.getStringTime(event.getStart_time(), true));
+
+        Fonts.applyFont(Fonts.AzoSansRegular, title, date, time);
 
         final ImageView freeFoodIcon = (ImageView) view.findViewById(R.id.free_food);
         freeFoodIcon.setVisibility(
@@ -105,9 +105,19 @@ public class EventsAdapter extends ArrayAdapter<Event> {
             public void onDataReceived(Object data, int call) {
                 if (data instanceof User) {
                     final User user = (User) data;
+                    final ImageView icon = (ImageView) view.findViewById(R.id.icon);
+                    icon.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Intent intent = new Intent(getContext(), ViewProfile.class);
+                            intent.putExtra("uid", user.getUid());
+                            getContext().startActivity(intent);
+                        }
+                    });
+
                     ImageUtils.loadImageFromUrl(
                             mContext,
-                            ((ImageView) view.findViewById(R.id.icon)),
+                            icon,
                             Optional.of(user.getProfileUrl())
                     );
 

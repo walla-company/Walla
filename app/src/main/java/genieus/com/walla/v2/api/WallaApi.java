@@ -108,7 +108,9 @@ public class WallaApi {
     private static String delete_activity = "/api/delete_activity?";
     private static String update_notif_read = "/api/update_notification_read?";
     private static String update_intro_complete = "/api/user_intro_complete?";
-
+    private static String update_user_goal1 = "/api/update_user_goal1";
+    private static String update_user_goal2 = "/api/update_user_goal2";
+    private static String update_user_goal3 = "/api/update_user_goal3";
 
     public static String domain = "";
     private static RequestQueue queue;
@@ -1709,6 +1711,7 @@ public class WallaApi {
         queue.add(request);
     }
 
+
     public static void deleteActivity(String uid, String auid){
         final String url = site + delete_activity + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
 
@@ -1725,6 +1728,87 @@ public class WallaApi {
             @Override
             public void onResponse(JSONObject response) {
                //empty
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void updateUserGoal1(String uid, String goal){
+        final String url = site + update_user_goal1 + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("goal1", goal);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //empty
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void updateUserGoal2(String uid, String goal){
+        final String url = site + update_user_goal2 + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("goal2", goal);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //empty
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void updateUserGoal3(String uid, String goal){
+        final String url = site + update_user_goal3 + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("goal3", goal);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //empty
             }
         }, new Response.ErrorListener() {
             @Override

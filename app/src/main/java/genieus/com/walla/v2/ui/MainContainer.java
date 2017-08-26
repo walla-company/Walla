@@ -129,7 +129,7 @@ public class MainContainer extends AppCompatActivity
 
         tabIcons = new int[]{R.mipmap.ic_home, R.mipmap.ic_notifications, R.mipmap.ic_profile,};
         tabIconsColored = new int[]{R.mipmap.ic_home_c, R.mipmap.ic_notifications_c, R.mipmap.ic_profile_c,};
-        tabNames = new String[]{"Activities", "Notifications", "My Profile"};
+        tabNames = new String[]{"Walla", "Notifications", "My Profile"};
 
         getSupportActionBar().setTitle(tabNames[0]);
 
@@ -270,7 +270,6 @@ public class MainContainer extends AppCompatActivity
         tabLayout.getTabAt(0).setIcon(tabIconsColored[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
-
     }
 
 
