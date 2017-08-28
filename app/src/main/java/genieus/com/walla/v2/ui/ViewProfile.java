@@ -89,23 +89,27 @@ public class ViewProfile extends AppCompatActivity {
     }
 
     private void loadUserMoreInfo() {
-        // TODO(anesu): Add strings to R.strings
         moreInfoContainer.addView(
                 getMoreInfoView(getString(R.string.about_me), mUser.getDescription())
         );
 
-        // TODO(anesu): add field
         moreInfoContainer.addView(
-                getMoreInfoView(getString(R.string.why_school), "")
-        );
-
-        // TODO(anesu): add field
-        moreInfoContainer.addView(
-                getMoreInfoView(getString(R.string.want_to_meet), "")
+                getMoreInfoView(getString(R.string.why_school), mUser.getReasonSchool())
         );
 
         moreInfoContainer.addView(
-                getMoreInfoView("My 3 goals for this year are…", "")
+                getMoreInfoView(getString(R.string.want_to_meet), mUser.getWannaMeet())
+        );
+
+        String goals = null;
+        if (mUser.getGoal1() != null && !mUser.getGoal1().isEmpty()
+                && mUser.getGoal2() != null &&! mUser.getGoal2().isEmpty()
+                && mUser.getGoal2() != null && !mUser.getGoal2().isEmpty()) {
+            goals = String.format("1. %s\n2. %s\n3. %s",
+                    mUser.getGoal1(), mUser.getGoal2(), mUser.getGoal3());
+        }
+        moreInfoContainer.addView(
+                getMoreInfoView("My 3 goals for this year are…", goals)
         );
     }
 

@@ -64,11 +64,12 @@ public class EditProfile extends AppCompatActivity {
         sections.add(getLastHometown());
         sections.add(getPersonalDescription());
         sections.add(getSchoolChoiceReason());
+        sections.add(getPersonUserWantsToMeet());
         sections.add(getGoalHeader());
         sections.add(getGoal1());
         sections.add(getGoal2());
         sections.add(getGoal3());
-        sections.add(getEmoji());
+        //sections.add(getEmoji());
 
         render(sections);
     }
@@ -123,7 +124,7 @@ public class EditProfile extends AppCompatActivity {
             }
 
             if (section.getHintText().isPresent()) {
-                action.setHint(section.getHintText().get());
+                action.setText(section.getHintText().get());
             }
 
             action.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -234,15 +235,33 @@ public class EditProfile extends AppCompatActivity {
                 "Why did you choose to attend your school?",
                 Optional.<String>absent(),
                 true,
-                Optional.<String>absent(),
+                Optional.of(mUser.isPresent() ? mUser.get().getReasonSchool() : ""),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
-                        // TODO(anesu): add server call
+                        WallaApi.updateUserSchoolReason(auth.getCurrentUser().getUid(), data);
                     }
                 }
         );
     }
+
+    private EditProfileSection getPersonUserWantsToMeet() {
+        return new EditProfileSection(
+                "Who would you like to meet this year?",
+                Optional.<String>absent(),
+                true,
+                Optional.of(mUser.isPresent() ? mUser.get().getWannaMeet() : ""),
+                new EditProfileSection.Action() {
+                    @Override
+                    public void onFinishAction(String data) {
+                        WallaApi.updatePersonWannaMeet(
+                                FirebaseAuth.getInstance().getCurrentUser().getUid(), data
+                        );
+                    }
+                }
+        );
+    }
+
 
     private EditProfileSection getGoalHeader() {
         return new EditProfileSection(
@@ -259,7 +278,7 @@ public class EditProfile extends AppCompatActivity {
                 "Goal 1",
                 Optional.<String>absent(),
                 true,
-                Optional.<String>of("ex. Learn a martial art"),
+                Optional.of(mUser.isPresent() ? mUser.get().getGoal1() : ""),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
@@ -274,7 +293,7 @@ public class EditProfile extends AppCompatActivity {
                 "Goal 2",
                 Optional.<String>absent(),
                 true,
-                Optional.<String>of("ex. Become involved in student politics"),
+                Optional.of(mUser.isPresent() ? mUser.get().getGoal2() : ""),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {
@@ -289,7 +308,7 @@ public class EditProfile extends AppCompatActivity {
                 "Goal 3",
                 Optional.<String>absent(),
                 true,
-                Optional.<String>of("ex. Volunteer locally"),
+                Optional.of(mUser.isPresent() ? mUser.get().getGoal3() : ""),
                 new EditProfileSection.Action() {
                     @Override
                     public void onFinishAction(String data) {

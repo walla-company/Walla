@@ -92,7 +92,8 @@ public class Settings extends AppCompatActivity {
 
                     }
                 }));
-        mRootView.addView(getMenuRow("Change my passwordView", Optional.<String>absent(), new Action() {
+        /*
+        mRootView.addView(getMenuRow("Change my password", Optional.<String>absent(), new Action() {
             @Override
             public void call() {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(Settings.this);
@@ -127,6 +128,8 @@ public class Settings extends AppCompatActivity {
                 alert.show();
             }
         }));
+        */
+
         mRootView.addView(getHeaderTextView(""));
         mRootView.addView(getMenuRow("Log out", Optional.<String>absent(), new Action() {
             @Override

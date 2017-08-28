@@ -108,9 +108,11 @@ public class WallaApi {
     private static String delete_activity = "/api/delete_activity?";
     private static String update_notif_read = "/api/update_notification_read?";
     private static String update_intro_complete = "/api/user_intro_complete?";
-    private static String update_user_goal1 = "/api/update_user_goal1";
-    private static String update_user_goal2 = "/api/update_user_goal2";
-    private static String update_user_goal3 = "/api/update_user_goal3";
+    private static String update_user_goal1 = "/api/update_user_goal1?";
+    private static String update_user_goal2 = "/api/update_user_goal2?";
+    private static String update_user_goal3 = "/api/update_user_goal3?";
+    private static String update_user_wanna_meet = "/api/update_user_wanna_meet?";
+    private static String update_user_school_reason = "/api/update_user_reason_school?";
 
     public static String domain = "";
     private static RequestQueue queue;
@@ -321,6 +323,11 @@ public class WallaApi {
                     info.setDescription(response.getString("description"));
                     info.setEmail(response.getString("email"));
                     info.setVerified(response.getBoolean("verified"));
+                    info.setGoal1(response.getString("goal1"));
+                    info.setGoal2(response.getString("goal2"));
+                    info.setGoal3(response.getString("goal3"));
+                    info.setWannaMeet(response.getString("wanna_meet"));
+                    info.setReasonSchool(response.getString("reason_school"));
                 } catch (JSONException e) {
                     Log.d("readerror", e.toString());
                     e.printStackTrace();
@@ -1739,6 +1746,33 @@ public class WallaApi {
         queue.add(request);
     }
 
+    public static void updatePersonWannaMeet(String uid, String person){
+        final String url = site + update_user_wanna_meet + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("uid", uid);
+            params.put("wanna_meet", person);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //empty
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
     public static void updateUserGoal1(String uid, String goal){
         final String url = site + update_user_goal1 + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
 
@@ -1829,6 +1863,33 @@ public class WallaApi {
             params.put("notification_id", nuid);
             params.put("uid", uid);
             params.put("read", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //empty
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("jsonerror", url + " " + error.toString());
+            }
+        });
+
+        queue.add(request);
+    }
+
+    public static void updateUserSchoolReason(String uid, String reason){
+        final String url = site + update_user_school_reason + "token=" + token + "&school_identifier=" + domain + "&uid=" + uid;
+
+        JSONObject params = new JSONObject();
+        try {
+            params.put("school_identifier", domain);
+            params.put("reason_school", reason);
+            params.put("uid", uid);
         } catch (JSONException e) {
             e.printStackTrace();
         }

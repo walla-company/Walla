@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class ForgotPassword extends AppCompatActivity {
     EditText email;
 
     @BindView(R.id.confirm)
-    ImageButton confirm;
+    Button confirm;
 
     @BindView(R.id.back_btn)
     ImageButton back;
@@ -32,6 +33,9 @@ public class ForgotPassword extends AppCompatActivity {
 
     @BindView(R.id.confirmation_msg)
     TextView confirmation;
+
+    @BindView(R.id.email_label)
+    TextView emailLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +47,7 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
     private void initUi() {
-        email.setTypeface(Fonts.AzoSansRegular);
-        explanation.setTypeface(Fonts.AzoSansRegular);
-        confirmation.setTypeface(Fonts.AzoSansRegular);
-
+        Fonts.applyFont(Fonts.AzoSansRegular, email, explanation, confirmation, emailLabel);
         initPreConfirmState();
     }
 

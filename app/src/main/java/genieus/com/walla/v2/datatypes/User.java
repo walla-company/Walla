@@ -9,7 +9,39 @@ import java.util.List;
  */
 
 public class User {
-    private String name, year, profile_url, major, hometown, description, uid, first_name, last_name, email;
+    private String name;
+    private String year;
+    private String profile_url;
+    private String major;
+    private String hometown;
+    private String description;
+    private String uid;
+    private String first_name;
+    private String last_name;
+    private String email;
+    private String goal1;
+    private String goal2;
+    private String goal3;
+    private String wannaMeet;
+
+    public String getReasonSchool() {
+        return reasonSchool;
+    }
+
+    public void setReasonSchool(String reasonSchool) {
+        this.reasonSchool = reasonSchool;
+    }
+
+    private String reasonSchool;
+
+    public String getWannaMeet() {
+        return wannaMeet;
+    }
+
+    public void setWannaMeet(String wannaMeet) {
+        this.wannaMeet = wannaMeet;
+    }
+
     private List<String> interests, friends, groups, sent_requests, received_requests, calendar;
     private List<String> activities;
     private boolean verified, intro_complete;
@@ -172,5 +204,29 @@ public class User {
 
     public void setIntro_complete(boolean intro_complete) {
         this.intro_complete = intro_complete;
+    }
+
+    public String getGoal1() {
+        return goal1;
+    }
+
+    public void setGoal1(String goal1) {
+        this.goal1 = goal1;
+    }
+
+    public String getGoal2() {
+        return goal2;
+    }
+
+    public void setGoal2(String goal2) {
+        this.goal2 = goal2;
+    }
+
+    public String getGoal3() {
+        return goal3;
+    }
+
+    public void setGoal3(String goal3) {
+        this.goal3 = goal3;
     }
 }

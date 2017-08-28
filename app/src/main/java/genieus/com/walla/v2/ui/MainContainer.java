@@ -55,14 +55,12 @@ public class MainContainer extends AppCompatActivity
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private com.github.clans.fab.FloatingActionButton fab;
-    private static CircleImageView profile_pic;
-    private static TextView name;
+    private FabAction fabAction;
     private static User user;
 
     private Fonts fonts;
     private static WallaApi api;
     private static FirebaseAuth auth;
-    private static Context context;
 
     private int[] tabIcons, tabIconsColored;
     private String[] tabNames;
@@ -84,7 +82,6 @@ public class MainContainer extends AppCompatActivity
             finish();
         }
 
-        context = getApplicationContext();
         api = WallaApi.getInstance(this);
 
         Intent intent = new Intent(this, MyFirebaseInstanceidService.class);
@@ -141,22 +138,6 @@ public class MainContainer extends AppCompatActivity
         setupTabIcons();
     }
 
-    public static void refresh() {
-        api.getUserInfo(new WallaApi.OnDataReceived() {
-            @Override
-            public void onDataReceived(Object data, int call) {
-                user = (User) data;
-                name.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
-
-                if (user.getProfileUrl() != null && !user.getProfileUrl().equals("")) {
-                    Picasso.with(context) //Context
-                            .load(user.getProfileUrl()) //URL/FILE
-                            .into(profile_pic);//an ImageView Object to show the loaded image
-                }
-            }
-        }, auth.getCurrentUser().getUid());
-    }
-
     private void notifyUserOfSuspension() {
         Intent intent = new Intent(this, AccountSuspensionAlert.class);
         startActivity(intent);
@@ -186,19 +167,27 @@ public class MainContainer extends AppCompatActivity
     }
 
     private void setupFab() {
+        fabAction = new FabAction() {
+            @Override
+            public void action() {
+                startActivity(new Intent(MainContainer.this, CreateActivity.class));
+            }
+        };
+
         fab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_add);
         fab.setColorNormal(getResources().getColor(R.color.lightBlue));
         fab.setColorPressed(getResources().getColor(R.color.lightBlue));
         fab.setImageResource(R.drawable.ic_create);
+        fab.show(true);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainContainer.this, CreateActivity.class));
+                if (fabAction != null) {
+                    fabAction.action();
+                }
             }
         });
-
-        fab.hide(false);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -215,6 +204,7 @@ public class MainContainer extends AppCompatActivity
 
             @Override
             public void onPageSelected(int position) {
+                changeEditAction(position);
                 switchTabIcons(position);
                 changeActionBarTitle(position);
             }
@@ -225,6 +215,24 @@ public class MainContainer extends AppCompatActivity
         });
 
         viewPager.setAdapter(adapter);
+    }
+
+    private void changeEditAction(final int position) {
+        if (position == 0) {
+            fabAction = new FabAction() {
+                @Override
+                public void action() {
+                    startActivity(new Intent(MainContainer.this, CreateActivity.class));
+                }
+            };
+        } else if (position == 2) {
+            fabAction = new FabAction() {
+                @Override
+                public void action() {
+                    startActivity(new Intent(MainContainer.this, EditProfile.class));
+                }
+            };
+        }
     }
 
     private void changeActionBarTitle(int position) {
@@ -256,7 +264,7 @@ public class MainContainer extends AppCompatActivity
                 tabLayout.getTabAt(2).setIcon(tabIcons[2]);
                 break;
             case 2:
-                fab.hide(true);
+                fab.show(true);
                 tabLayout.getTabAt(0).setIcon(tabIcons[0]);
                 tabLayout.getTabAt(1).setIcon(tabIcons[1]);
                 tabLayout.getTabAt(2).setIcon(tabIconsColored[2]);
@@ -304,5 +312,9 @@ public class MainContainer extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    private interface FabAction {
+        void action();
     }
 }

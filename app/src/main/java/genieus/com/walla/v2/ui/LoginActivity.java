@@ -147,14 +147,14 @@ public class LoginActivity extends AppCompatActivity {
         emailLabel.setTypeface(Fonts.AzoSansRegular);
     }
 
-    private boolean isValidEmail(String email){
-        if(email == null || email.isEmpty()) return false;
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(email);
+    private boolean isValidEmail(String email) {
+        if (email == null || email.isEmpty()) return false;
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
         return matcher.find();
     }
 
-    private void attemptLoginWithEmail(String emailStr){
-        if(!isValidEmail(emailStr)){
+    private void attemptLoginWithEmail(String emailStr) {
+        if (!isValidEmail(emailStr)) {
             invalidLogin(EMAIL_INVALID);
             return;
         }
@@ -167,21 +167,21 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseAuth.getInstance()
                 .fetchProvidersForEmail(emailStr)
                 .addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
-            @Override
-            public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-                loadingDialog.cancel();
-                if(!task.isSuccessful()){
-                    invalidLogin(EMAIL_INVALID);
-                }else{
-                    List<String> providers = task.getResult().getProviders();
-                    if(providers.isEmpty()){
-                        invalidLogin(EMAIL_NOT_EXISTS);
-                    }else{
-                        successfulLogin();
+                    @Override
+                    public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+                        loadingDialog.cancel();
+                        if (!task.isSuccessful()) {
+                            invalidLogin(EMAIL_INVALID);
+                        } else {
+                            List<String> providers = task.getResult().getProviders();
+                            if (providers.isEmpty()) {
+                                invalidLogin(EMAIL_NOT_EXISTS);
+                            } else {
+                                successfulLogin();
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
     }
 
     private void invalidLogin(final int reason) {

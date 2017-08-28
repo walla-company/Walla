@@ -33,6 +33,9 @@ public class LoginScreenPassword extends AppCompatActivity {
     @BindView(R.id.explanation_msg)
     TextView explanation;
 
+    @BindView(R.id.password_label)
+    TextView passwordLabel;
+
     @BindView(R.id.password)
     EditText passwordView;
 
@@ -49,7 +52,7 @@ public class LoginScreenPassword extends AppCompatActivity {
     }
 
     private void initUi() {
-        Fonts.applyFont(Fonts.AzoSansRegular, passwordView, explanation);
+        Fonts.applyFont(Fonts.AzoSansRegular, passwordView, explanation, passwordLabel);
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
